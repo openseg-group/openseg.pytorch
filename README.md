@@ -3,13 +3,6 @@
 This repository provides source code for OCNet, FastOCNet, DeepLabv3, PSPNet on Cityscapes, ADE20K and LIP benchmarks
 
 
-## Implemented Methods
-    - FastOCNet
-    - OCNet
-    - PSPNet
-    - DeepLabV3
-    
-
 ## Performances with openseg.pytorch
 
 - Cityscapes (testing with single scale whole image)
