@@ -51,3 +51,7 @@ This repository provides source code for OCNet, FastOCNet, DeepLabv3, PSPNet on 
 | [CE2P+ASPOC]()      | [3x3-Res101]()  | - | - | 40 | 11W |
 | [CE2P+FastBaseOC]() | [3x3-Res101]()  | - | - | 40 | 11W |
 | [CE2P+FastAspOC]()  | [3x3-Res101]()  | - | - | 40 | 11W |
+
+
+## Acknowledgment
+This project is developed based on the [segbox.pytorch](https://github.com/donnyyou/segbox.pytorch) and the author of segbox.pytorch donnyyou retains all the copyright of the reproduced Deeplabv3, PSPNet related code. 
