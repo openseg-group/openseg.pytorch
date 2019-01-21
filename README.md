@@ -16,10 +16,10 @@ This repository provides source code for OCNet, FastOCNet, DeepLabv3, PSPNet on 
 | [BaseOCNet-v2]() | [3x3-Res101]() | 85.99 | 79.67 | - | 8 | 4W |
 | [AspOCNet]() | [3x3-Res101]() | 86.32,86.26 | 79.60,79.90  80.5(ms+flip)  |  81.27/81.38<br>(val+ohem+3xms) | 8 | 4W |
 | [AspOCNet-v3]() | [3x3-Res101]() | 86.30, | 79.53, 80.37(ohem) | 81.63(val+ohem+6xms) | 8 | 4W |
-| [FastBaseOCNet]()<br> | [3x3-Res101]() | 85.66,85.77 | 78.45,78.69 | - | 8 | 4W |
 | [FastBaseOCNet]()<br> | [3x3-Res101]() | 85.65,85.73 | 79.12,79.55 | - | 8 | 4W |
 | [FastAspOCNet]() | [3x3-Res101]() | 86.32,86.47 | 79.59,79.61 | 81.82(val+ohem+6xms) | 8 | 4W |
-
+| [FastBaseOCNet]()<br> | [3x3-Res101]() | - | - | - | 8 | 6W |
+| [FastAspOCNet]() | [3x3-Res101]() | - | - | - | 8 | 6W |
 
 - ADE20K (testing with single scale whole image)
 
