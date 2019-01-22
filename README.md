@@ -7,7 +7,7 @@ This repository provides source code for OCNet, FastOCNet, DeepLabv3, PSPNet on 
 
 - Cityscapes (testing with single scale whole image)
 
-| Checkpoints | Backbone | Train.  mIOU | Val. mIOU | Test. mIOU (8W Iters) | BS | Iters | 
+| Methods | Backbone | Train.  mIOU | Val. mIOU | Test. mIOU (8W Iters) | BS | Iters | 
 |--------|:---------:|:------:|:------:|:------:|:------:|:------:|
 | FCN-Stride8 | [3x3-Res101](https://drive.google.com/open?id=1bUzCKazlh8ElGVYWlABBAb0b0uIqFgtR) | 84.21,84.23 | 75.96,75.85 | - | 8 | 4W | -
 | [PSPNet]() | [3x3-Res101]() | 86.11,86.14 | 78.55,78.56 | - | 8 | 4W |
@@ -23,7 +23,7 @@ This repository provides source code for OCNet, FastOCNet, DeepLabv3, PSPNet on 
 
 - ADE20K (testing with single scale whole image)
 
-| Checkpoints | Backbone  | Val. mIOU | PixelACC | BS | Iters |
+| Methods | Backbone  | Val. mIOU | PixelACC | BS | Iters |
 |--------|:---------:|:------:|:------:|:------:|:------:|
 | [BaseOCNet]() | [3x3-Res50]() | - | - | 16 | 15W |
 | [AspOCNet]() | [3x3-Res50]()  | 42.76,42.59 | 80.62,80.59 | 16 | 15W |
@@ -37,7 +37,7 @@ This repository provides source code for OCNet, FastOCNet, DeepLabv3, PSPNet on 
 
 - LIP (testing with single scale whole image)
 
-| Checkpoints | Backbone  | Val. mIOU | PixelACC | BS | Iters |
+| Methods | Backbone  | Val. mIOU | PixelACC | BS | Iters |
 |--------|:---------:|:------:|:------:|:------:|:------:|
 | [CE2P+PSP]()        | [3x3-Res101]()  | - | - | 40 | 11W |
 | [CE2P+BaseOC]()     | [3x3-Res101]()  | - | - | 40 | 11W |
