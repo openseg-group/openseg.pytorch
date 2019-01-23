@@ -43,7 +43,7 @@ This repository provides source code for OCNet, FastOCNet, DeepLabv3, PSPNet on 
 | [CE2P+BaseOC]()     | [3x3-Res101]()  | - | - | 40 | 11W |
 | [CE2P+ASPOC]()      | [3x3-Res101]()  | - | - | 40 | 11W |
 | [CE2P+FastBaseOC]() | [3x3-Res101]()  | - | - | 40 | 11W |
-| [CE2P+FastAspOC]()  | [3x3-Res101]()  | 55.37 | - | 40 | 11W |
+| [CE2P+FastAspOC]()  | [3x3-Res101]()  | - | - | 40 | 11W |
 
 
 ## Acknowledgment
