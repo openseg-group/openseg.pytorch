@@ -24,7 +24,7 @@ You can achieve **82.0+** on the test set of Cityscapes easily with our codebase
 | [FastAspOCNet]() | [3x3-Res101]() | 86.32,86.47 | 79.59,79.61 | - | 8 | 4W |
 | [FastAspOCNet+OHEM+Val]() | [3x3-Res101]() | 88.57 | 88.44 | 81.82(ms+flip) | 8 | 8W |
 | [FastBaseOCNet+OHEM+Val]() | [3x3-Res101]() | 90.00 | 89.89 | 81.71(ms+flip) | 8 | 20W |
-| [FastAspOCNet+OHEM+Val]() | [3x3-Res101]() | 88.57 | 88.44 | **82.06**(ms+flip) | 8 | 20W |
+| [FastAspOCNet+OHEM+Val]() | [3x3-Res101]() | 90.94 | 90.64 | **82.06**(ms+flip) | 8 | 20W |
 
 - ADE20K (testing with single scale whole image)
 
