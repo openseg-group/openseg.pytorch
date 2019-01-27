@@ -1,6 +1,8 @@
 # openseg.pytorch
 
-This repository provides source code for OCNet, FastOCNet, DeepLabv3, PSPNet on Cityscapes, ADE20K and LIP benchmarks
+This repository provides source code for OCNet, FastOCNet, DeepLabv3, PSPNet on Cityscapes, ADE20K and LIP benchmarks.
+
+We will release all the check-points and training log for the below experiments.
 
 
 ## Performances with openseg.pytorch
