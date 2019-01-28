@@ -8,6 +8,8 @@ We will release all the check-points and training log for the below experiments.
 
 **45.5+** on the val set of ADE20K.
 
+**55.0+** on the val set of LIP.
+
 
 ## Performances with openseg.pytorch
 
