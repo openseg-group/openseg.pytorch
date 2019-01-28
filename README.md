@@ -6,6 +6,8 @@ We will release all the check-points and training log for the below experiments.
 
 You can achieve **82.0+** on the test set of Cityscapes with only Train-Fine + Val-Fine datasets easily with our codebase.
 
+You can achieve **45.5+** on the val set of ADE20K with our codebase.
+
 
 ## Performances with openseg.pytorch
 
