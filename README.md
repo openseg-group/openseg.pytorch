@@ -40,15 +40,14 @@ You can achieve **82.0+** on the test set of Cityscapes with only Train-Fine + V
 | [FastAspOCNet]() | [3x3-Res101]()  | 44.50,44.14 | 81.44,81.40 | 16 | 15W |
 
 
-- LIP (testing with single scale whole image)
+- LIP (testing with single scale whole image + left-right flip)
 
 | Methods | Backbone  | Val. mIOU | PixelACC | BS | Iters |
 |--------|:---------:|:------:|:------:|:------:|:------:|
-| [CE2P+PSP]()        | [3x3-Res101]()  | - | - | 40 | 11W |
-| [CE2P+BaseOC]()     | [3x3-Res101]()  | - | - | 40 | 11W |
-| [CE2P+ASPOC]()      | [3x3-Res101]()  | - | - | 40 | 11W |
-| [CE2P+FastBaseOC]() | [3x3-Res101]()  | - | - | 40 | 11W |
-| [CE2P+FastAspOC]()  | [3x3-Res101]()  | - | - | 40 | 11W |
+| [CE2P+BaseOC]()     | [3x3-Res101]()  | 87.45 | 54.05 | 40 | 11W |
+| [CE2P+ASPOC]()      | [3x3-Res101]()  | 87.73 | 54.72 | 40 | 11W |
+| [CE2P+FastBaseOC]() | [3x3-Res101]()  | 87.67 | 54.59 | 40 | 11W |
+| [CE2P+FastAspOC]()  | [3x3-Res101]()  | 87.82 | 55.29 | 40 | 11W |
 
 
 ## Acknowledgment
