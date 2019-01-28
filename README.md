@@ -44,10 +44,10 @@ You can achieve **82.0+** on the test set of Cityscapes with only Train-Fine + V
 
 | Methods | Backbone  | Val. mIOU | PixelACC | BS | Iters |
 |--------|:---------:|:------:|:------:|:------:|:------:|
-| [CE2P+BaseOC]()     | [3x3-Res101]()  | 87.45 | 54.05 | 40 | 11W |
-| [CE2P+ASPOC]()      | [3x3-Res101]()  | 87.73 | 54.72 | 40 | 11W |
-| [CE2P+FastBaseOC]() | [3x3-Res101]()  | 87.67 | 54.59 | 40 | 11W |
-| [CE2P+FastAspOC]()  | [3x3-Res101]()  | 87.82 | 55.29 | 40 | 11W |
+| [CE2P+BaseOC]()     | [3x3-Res101]()  | 54.05 | 87.45 | 40 | 11W |
+| [CE2P+ASPOC]()      | [3x3-Res101]()  | 54.72 | 87.73| 40 | 11W |
+| [CE2P+FastBaseOC]() | [3x3-Res101]()  | 54.59 | 87.67 | 40 | 11W |
+| [CE2P+FastAspOC]()  | [3x3-Res101]()  | 55.29 | 87.82 | 40 | 11W |
 
 
 ## Acknowledgment
