@@ -38,7 +38,7 @@ You can achieve **82.0+** on the test set of Cityscapes with only Train-Fine + V
 | [AspOCNet]() | [3x3-Res101]()  | 44.10,44.27 | 81.34,81.44 | 16 | 15W |
 | [FastBaseOCNet]() | [3x3-Res101]()  | - | - | 16 | 15W |
 | [FastAspOCNet]() | [3x3-Res101]()  | 44.50,44.14 | 81.44,81.40 | 16 | 15W |
-
+| [FastAspOCNet]() | [3x3-Res101]()  | **45.69**(ms+flip) | **82.04**(ms+flip) | 16 | 15W |
 
 - LIP (testing with single scale whole image + left-right flip)
 
