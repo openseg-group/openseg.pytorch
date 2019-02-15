@@ -40,7 +40,7 @@ We will release all the check-points and training log for the below experiments.
 | [FastAspOCNet]() | [3x3-Res50]()  | 42.83,42.99 | 80.70,80.67 | 16 | 15W |
 | [BaseOCNet]() | [3x3-Res101]()  | - | - | 16 | 15W |
 | [AspOCNet]() | [3x3-Res101]()  | 44.10,44.27 | 81.34,81.44 | 16 | 15W |
-| [FastBaseOCNet]() | [3x3-Res101]()  | - | - | 16 | 15W |
+| [FastBaseOCNet]() | [3x3-Res101]()  | 44.42 | 81.34 | 16 | 15W |
 | [FastAspOCNet]() | [3x3-Res101]()  | 44.50,44.14 | 81.44,81.40 | 16 | 15W |
 | [FastAspOCNet]() | [3x3-Res101]()  | **45.69**(ms+flip) | **82.04**(ms+flip) | 16 | 15W |
 
