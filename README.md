@@ -1,5 +1,11 @@
 # openseg.pytorch
 
+**Update on 2019/04/02.**
+
+We will support **six** different semantic segmentation benchmarks including:
+
+Cityscapes, ADE20K,  LIP, Pascal-Context, Pascal-VOC, COCO-stuff.
+
 This repository provides source code for OCNet, FastOCNet, DeepLabv3, PSPNet on Cityscapes, ADE20K and LIP benchmarks.
 
 We will release all the check-points and training log for the below experiments.
@@ -52,6 +58,15 @@ We will release all the check-points and training log for the below experiments.
 | [CE2P+ASPOC]()      | [3x3-Res101]()  | 54.72 | 87.73| 40 | 11W |
 | [CE2P+FastBaseOC]() | [3x3-Res101]()  | 54.59 | 87.67 | 40 | 11W |
 | [CE2P+FastAspOC]()  | [3x3-Res101]()  | **55.29** | **87.82** | 40 | 11W |
+
+
+- Pascal-VOC (testing with single scale whole image)
+
+- Pascal-Context (testing with single scale whole image)
+
+- COCO-Stuff-10K (testing with single scale whole image)
+
+- COCO-Stuff-16K (testing with single scale whole image)
 
 
 ## Acknowledgment
