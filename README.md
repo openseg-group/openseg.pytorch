@@ -4,7 +4,7 @@
 
 We will support **six** different semantic segmentation benchmarks including:
 
-Cityscapes, ADE20K,  LIP, Pascal-Context, Pascal-VOC, COCO-stuff.
+Cityscapes, ADE20K,  LIP, Pascal-Context, Pascal-VOC, COCO-Stuff.
 
 This repository provides source code for OCNet, FastOCNet, DeepLabv3, PSPNet on Cityscapes, ADE20K and LIP benchmarks.
 
