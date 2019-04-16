@@ -2,7 +2,7 @@
 
 **Update on 2019/04/02.**
 
-We will support **six** different semantic segmentation benchmarks including:
+**openseg.pytorch** achieves SOTA on **6** different semantic segmentation benchmarks including:
 
 Cityscapes, ADE20K,  LIP, Pascal-Context, Pascal-VOC, COCO-Stuff.
 
