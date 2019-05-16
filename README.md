@@ -1,6 +1,6 @@
 # openseg.pytorch
 
-**Update on 2019/04/02.**
+**Update on 2019/05/16.**
 
 **openseg.pytorch** achieves SOTA on **6** different semantic segmentation benchmarks including:
 
@@ -10,17 +10,17 @@ This repository provides source code for OCNet, FastOCNet, DeepLabv3, PSPNet on 
 
 We will release all the check-points and training log for the below experiments.
 
-**82.0+** on the test set of Cityscapes with only Train-Fine + Val-Fine datasets.
+**82.0%+** on the test set of Cityscapes with only Train-Fine + Val-Fine datasets.
 
-**45.5+** on the val set of ADE20K.
+**45.5%+** on the val set of ADE20K.
 
-**56.5+** on the val set of LIP.
+**56.5%+** on the val set of LIP.
 
-**56.0+** on the val set of Pascal-Context.
+**56.0%+** on the val set of Pascal-Context.
 
-**81.0+** on the val set of Pascal-VOC with ss test.
+**81.0%+** on the val set of Pascal-VOC with ss test.
 
-**40.0+** on the val set of COCO-Stuff.
+**40.0%+** on the val set of COCO-Stuff.
 
 
 ## Performances with openseg.pytorch
