@@ -66,7 +66,6 @@ We achieve SOTA on **6** different semantic segmentation benchmarks including: C
 
 - COCO-Stuff-10K (testing with single scale whole image)
 
-- COCO-Stuff-16K (testing with single scale whole image)
 
 
 ## Acknowledgment
