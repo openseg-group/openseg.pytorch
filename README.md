@@ -14,7 +14,13 @@ We will release all the check-points and training log for the below experiments.
 
 **45.5+** on the val set of ADE20K.
 
-**55.0+** on the val set of LIP.
+**56.5+** on the val set of LIP.
+
+**56.0+** on the val set of Pascal-Context.
+
+**81.0+** on the val set of Pascal-VOC with ss test.
+
+**40.0+** on the val set of COCO-Stuff.
 
 
 ## Performances with openseg.pytorch
