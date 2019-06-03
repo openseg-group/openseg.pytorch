@@ -4,7 +4,7 @@
 
 We achieve SOTA on **6** different semantic segmentation benchmarks including: Cityscapes, ADE20K,  LIP, Pascal-Context, Pascal-VOC, COCO-Stuff. We provide the source code for Fast OCNet(OCR), Sparse OCNet(ISA), OCNet on all the six benchmarks. More benchmarks will be supported latter. We will consider release all the check-points and training log for the below experiments.
 
-**82.0%+/83.0%+** on the test set of Cityscapes with only Train-Fine + Val-Fine datasets/Coarse datasets.
+**82.0%+/83.3%+** on the test set of Cityscapes with only Train-Fine + Val-Fine datasets/Coarse datasets.
 
 **45.5%+** on the val set of ADE20K.
 
