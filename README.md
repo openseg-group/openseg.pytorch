@@ -1,5 +1,9 @@
 # openseg.pytorch
 
+**Update on 2019/06/03.**
+
+We achieve **83.3116%+** on the lead board of Cityscapes based on HRNetV2 + OCR.
+
 **Update on 2019/05/27.**
 
 We achieve SOTA on **6** different semantic segmentation benchmarks including: Cityscapes, ADE20K,  LIP, Pascal-Context, Pascal-VOC, COCO-Stuff. We provide the source code for Fast OCNet(OCR), Sparse OCNet(ISA), OCNet on all the six benchmarks. More benchmarks will be supported latter. We will consider release all the check-points and training log for the below experiments.
