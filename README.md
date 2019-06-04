@@ -2,7 +2,7 @@
 
 **Update on 2019/06/03.**
 
-We achieve **83.3116%+** on the leaderboard of Cityscapes test set based on single model HRNetV2 + OCR.
+We achieve **83.3116%+** on the leaderboard of Cityscapes test set based on single model [HRNetV2](https://github.com/HRNet/HRNet-Semantic-Segmentation) + OCR.
 
 **Update on 2019/05/27.**
 
