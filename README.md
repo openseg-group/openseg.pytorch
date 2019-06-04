@@ -2,7 +2,7 @@
 
 **Update on 2019/06/03.**
 
-We achieve **83.3116%+** on the lead board of Cityscapes based on single model HRNetV2 + OCR.
+We achieve **83.3116%+** on the leaderboard of Cityscapes test set based on single model HRNetV2 + OCR.
 
 **Update on 2019/05/27.**
 
