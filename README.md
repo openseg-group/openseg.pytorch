@@ -18,7 +18,7 @@ We achieve SOTA on **6** different semantic segmentation benchmarks including: C
 
 **81.0%+** on the val set of Pascal-VOC with ss test. (DeepLabv3+ is 80.02% with only train-aug)
 
-**40.5%+** on the val set of COCO-Stuff.
+**40.5%+** on the val set of COCO-Stuff-10K.
 
 
 ## Performances with openseg.pytorch
