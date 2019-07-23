@@ -1,5 +1,10 @@
 # openseg.pytorch
 
+**Update on 2019/07/23.**
+
+We achieve Rank#1 on the leaderboard of Cityscapes the results will be public soon.
+
+
 **Update on 2019/06/19.**
 
 We achieve **83.3116%+** on the leaderboard of Cityscapes test set based on single model [HRNetV2](https://github.com/HRNet/HRNet-Semantic-Segmentation) + OCR. [Cityscapes leaderboard](https://www.cityscapes-dataset.com/benchmarks/#pixel-level-results)
