@@ -2,7 +2,7 @@
 
 **Delay of the release @ 2019/07/28**
 
-All of our 3 works are rejected by the CVPR-2019, ICCV-2019 by few reviewers that do not like our works (although some reviewers highly appreciate our works). We would like to re-submit our works for future conference and share all our implementation details once accept.
+All of our 3 works are rejected by the CVPR-2019, ICCV-2019 by a few reviewers that do not like our works (although some reviewers highly appreciate our works). We would like to re-submit our works for future conference and share all our implementation details once accept.
 We also would like to spend more efforts to improve our works and convince the future reviewers.
 
 
