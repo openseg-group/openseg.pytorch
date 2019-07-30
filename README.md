@@ -1,10 +1,5 @@
 # openseg.pytorch
 
-**Delay of the release @ 2019/07/28**
-
-All of our works are rejected by the CVPR-2019, ICCV-2019 by a few reviewers that do not like our works (although some reviewers highly appreciate our works). We would like to re-submit our works for future conference and share all of our implementation details once accept.
-We also would like to spend more efforts to improve our works and convince the future reviewers.
-
 
 **News!!! @ 2019/07/23.**
 
@@ -62,7 +57,7 @@ Please consider citing our work if you find it helps you,
 
 @article{huang2019isa,
   title={Interlaced Sparse Self-Attention for Semantic Segmentation},
-  author={Huang Lang and Yuan Yuhui and Guo Jianyuan and Zhang Chao and Chen Xilin and Jingdong Wang},
+  author={Huang Lang and Yuan Yuhui and Guo Jianyuan and Zhang Chao and Chen Xilin and Wang Jingdong},
   journal={arXiv preprint arXiv:1907.12273},
   year={2019}
 }
