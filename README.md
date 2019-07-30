@@ -60,8 +60,8 @@ Please consider citing our work if you find it helps you,
   year={2018}
 }
 
-@article{yuan2018ocnet,
-  title={Ocnet: Object context network for scene parsing},
+@article{huang2019isa,
+  title={Interlaced Sparse Self-Attention for Semantic Segmentation},
   author={Huang Lang and Yuan Yuhui and Guo Jianyuan and Zhang Chao and Chen Xilin and Jingdong Wang},
   journal={arXiv preprint arXiv:1907.12273},
   year={2019}
