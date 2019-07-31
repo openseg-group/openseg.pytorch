@@ -1,9 +1,12 @@
 # openseg.pytorch
 
+**News!!! 2019/07/31.**
 
-**News!!! @ 2019/07/23.**
+We have released the paper [ISA](https://arxiv.org/abs/1907.12273), which is very easy to use and implement while being much more efficient than the conventional self-attention based OCNet or DANet.
 
-We achieve **Rank#1** on the leaderboard of Cityscapes (with a single model) and the results will be public soon.
+**Update @ 2019/07/23.**
+
+We (HRNet + OCR w/ ASP) achieve **Rank#1** on the leaderboard of Cityscapes (with a single model) on 3 of 4 metrics.
 
 
 **Update @ 2019/06/19.**
