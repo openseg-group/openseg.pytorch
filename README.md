@@ -39,15 +39,19 @@ We achieve SOTA on **6** different semantic segmentation benchmarks including: *
 
 | Methods | Backbone | Train.  mIOU | Val. mIOU | Test. mIOU | BS | Iters | 
 |--------|:---------:|:------:|:------:|:------:|:------:|:------:|
+| [FCN]() | [MobileNetV2]() | - | - | - | - | - |
 | [FCN]() | [3x3-ResNet101]() | - | - | - | 8 | 4W |
 | [FCN]() | [Wide-ResNet38]() | - | - | - | 8 | 4W |
 | [FCN]() | [HRNetV2-48]() | - | - | - | 8 | 10W |
+| [OCNet]() | [MobileNetV2]() | - | - | - | - | - |
 | [OCNet]() | [3x3-ResNet101]() | - | - | - | 8 | 4W |
 | [OCNet]() | [Wide-ResNet38]() | - | - | - | 16 | 2W |
 | [OCNet]() | [HRNetV2-48]() | - | - | - | 8 | 10W |
+| [ISA]() | [MobileNetV2]() | - | - | - | - | - |
 | [ISA]() | [3x3-ResNet101]() | - | - | - | 8 | 4W |
 | [ISA]() | [Wide-ResNet38]() | - | - | - | 16 | 2W |
 | [ISA]() | [HRNetV2-48]() | - | - | - | 8 | 10W |
+| [OCR]() | [MobileNetV2]() | - | - | - | - | - |
 | [OCR]() | [3x3-ResNet101]() | - | - | - | 8 | 4W |  
 | [OCR]() | [Wide-ResNet38]() | - | - | - | 16 | 2W | 
 | [OCR]() | [HRNetV2-48]() | - | - | - | 8 | 10W |
