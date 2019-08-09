@@ -1,7 +1,7 @@
 # openseg.pytorch
 
 
-**News!!!  2019/08/09.**
+**News!!! @ 2019/08/09.**
 
 We would like to support various backbones such as MobileNetV2, ResNet-101, Wide-ResNet-38, HRNetV2-48.
 
