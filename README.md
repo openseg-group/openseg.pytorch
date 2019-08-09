@@ -37,7 +37,7 @@ We achieve SOTA on **6** different semantic segmentation benchmarks including: *
 
 - Cityscapes (testing with single scale whole image)
 
-| Methods | Backbone | Train.  mIOU | Val. mIOU | Test. mIOU (8W Iters) | BS | Iters | 
+| Methods | Backbone | Train.  mIOU | Val. mIOU | Test. mIOU | BS | Iters | 
 |--------|:---------:|:------:|:------:|:------:|:------:|:------:|
 | [FCN]() | [3x3-ResNet101]() | - | - | - | 8 | 4W |
 | [FCN]() | [Wide-ResNet38]() | - | - | - | 8 | 4W |
