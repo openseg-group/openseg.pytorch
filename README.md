@@ -2,10 +2,11 @@
 
 
 **News!!!  2019/08/09.**
+
 We would like to support various backbones such as MobileNetV2, ResNet-101, Wide-ResNet-38, HRNetV2-48.
 
 
-**2019/07/31.**
+**Update @ 2019/07/31.**
 
 We have released the paper [ISA](https://arxiv.org/abs/1907.12273), which is very easy to use and implement while being much more efficient than the conventional self-attention based OCNet or DANet.
 
