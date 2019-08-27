@@ -3,9 +3,9 @@
 
 ## Updates
 
-**News!!! @ 2019/08/09.**
+**Update @ 2019/08/09.**
 
-We would like to support various backbones such as MobileNetV2, ResNet-101, Wide-ResNet-38, HRNetV2-48.
+We would like to support various backbones such as ResNet-101, WideResNet-38, HRNetV2-48.
 
 
 **Update @ 2019/07/31.**
