@@ -10,7 +10,7 @@ We would like to support various backbones such as ResNet-101, WideResNet-38, HR
 
 **Update @ 2019/07/31.**
 
-We have released the paper [ISA](https://arxiv.org/abs/1907.12273), which is very easy to use and implement while being much more efficient than the conventional self-attention based OCNet or DANet.
+We have released the paper [ISA](https://arxiv.org/abs/1907.12273), which is very easy to use and implement while being much more efficient than OCNet or DANet based on conventional self-attention.
 
 **Update @ 2019/07/23.**
 
