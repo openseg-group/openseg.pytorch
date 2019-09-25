@@ -3,6 +3,12 @@
 
 ## Updates
 
+
+**Update @ 2019/09/25.**
+
+We have released the paper [OCR](https://arxiv.org/abs/1909.11065), which is method of our **Rank#2** entry to the leaderboard of Cityscapes.
+
+
 **Update @ 2019/08/09.**
 
 We would like to support various backbones such as ResNet-101, WideResNet-38, HRNetV2-48.
@@ -167,6 +173,13 @@ Please consider citing our work if you find it helps you,
   title={Interlaced Sparse Self-Attention for Semantic Segmentation},
   author={Huang Lang and Yuan Yuhui and Guo Jianyuan and Zhang Chao and Chen Xilin and Wang Jingdong},
   journal={arXiv preprint arXiv:1907.12273},
+  year={2019}
+}
+
+@article{yuan2019ocr,
+  title={Object-Contextual Representations for Semantic Segmentation},
+  author={Yuan Yuhui and Chen Xilin and Wang Jingdong},
+  journal={arXiv preprint arXiv:1909.11065},
   year={2019}
 }
 ```
