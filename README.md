@@ -46,6 +46,30 @@ We achieve SOTA on **6** different semantic segmentation benchmarks including: *
 
 **40.5%+** on the val set of COCO-Stuff-10K.
 
+## Citation
+Please consider citing our work if you find it helps you,
+```
+@article{yuan2018ocnet,
+  title={Ocnet: Object context network for scene parsing},
+  author={Yuan Yuhui and Wang Jingdong},
+  journal={arXiv preprint arXiv:1809.00916},
+  year={2018}
+}
+
+@article{huang2019isa,
+  title={Interlaced Sparse Self-Attention for Semantic Segmentation},
+  author={Huang Lang and Yuan Yuhui and Guo Jianyuan and Zhang Chao and Chen Xilin and Wang Jingdong},
+  journal={arXiv preprint arXiv:1907.12273},
+  year={2019}
+}
+
+@article{yuan2019ocr,
+  title={Object-Contextual Representations for Semantic Segmentation},
+  author={Yuan Yuhui and Chen Xilin and Wang Jingdong},
+  journal={arXiv preprint arXiv:1909.11065},
+  year={2019}
+}
+```
 
 ## Performances with openseg.pytorch
 
@@ -158,31 +182,6 @@ We achieve SOTA on **6** different semantic segmentation benchmarks including: *
 | [OCR]() | [HRNetV2-48]() | - | - |  16 | 6W |
 
 
-
-## Citation
-Please consider citing our work if you find it helps you,
-```
-@article{yuan2018ocnet,
-  title={Ocnet: Object context network for scene parsing},
-  author={Yuan Yuhui and Wang Jingdong},
-  journal={arXiv preprint arXiv:1809.00916},
-  year={2018}
-}
-
-@article{huang2019isa,
-  title={Interlaced Sparse Self-Attention for Semantic Segmentation},
-  author={Huang Lang and Yuan Yuhui and Guo Jianyuan and Zhang Chao and Chen Xilin and Wang Jingdong},
-  journal={arXiv preprint arXiv:1907.12273},
-  year={2019}
-}
-
-@article{yuan2019ocr,
-  title={Object-Contextual Representations for Semantic Segmentation},
-  author={Yuan Yuhui and Chen Xilin and Wang Jingdong},
-  journal={arXiv preprint arXiv:1909.11065},
-  year={2019}
-}
-```
 
 ## Acknowledgment
 This project is developed based on the [segbox.pytorch](https://github.com/donnyyou/segbox.pytorch) and the author of segbox.pytorch donnyyou retains all the copyright of the reproduced Deeplabv3, PSPNet related code. 
