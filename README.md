@@ -15,6 +15,7 @@
 ## News
 - 2019/11/19
 We have updated the paper [OCR](https://arxiv.org/abs/1909.11065).
+Currently, we can achieve **84.0%** with a novel yet simple model-agnostic post-processing scheme, which is still under progress.
 
 - 2019/09/25
 We have released the paper [OCR](https://arxiv.org/abs/1909.11065), which is method of our **Rank#2** entry to the leaderboard of Cityscapes.
