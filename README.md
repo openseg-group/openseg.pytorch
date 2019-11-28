@@ -13,6 +13,11 @@
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/object-contextual-representations-for/semantic-segmentation-on-cityscapes)](https://paperswithcode.com/sota/semantic-segmentation-on-cityscapes?p=object-contextual-representations-for)
 
 ## News
+
+- 2019/11/28
+We will release all of our code within the future week to provide a good baseline for the community.
+
+
 - 2019/11/19
 We have updated the paper [OCR](https://arxiv.org/abs/1909.11065).
 Our approach achieves **83.7%** and we can further achieve **84.0%** on Cityscapes test set with a novel yet simple model-agnostic post-processing scheme. Our model-agnostic post-processing scheme is a new work under progress, which can be applied to improve the results of any existing approaches without any re-training or fine-tuning.
