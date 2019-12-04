@@ -15,7 +15,7 @@
 ## News
 
 - 2019/11/28
-We will release all of our code within the future week to provide a good baseline for the community.
+We will release all of our code (with the training log and checkpoints) within the future week to provide a good baseline for the community. Thanks for your patience.
 Besides, we also provide the support of OCR on the [HRNet-Semantic-Segmentation](https://github.com/HRNet/HRNet-Semantic-Segmentation/tree/pytorch-v1.1) code base.
 
 
