@@ -107,3 +107,4 @@ venv.bak/
 
 .vscode
 pretrained_model
+nohup.out

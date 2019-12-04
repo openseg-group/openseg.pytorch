@@ -8,7 +8,6 @@ import torch.nn.functional as F
 import torch.backends.cudnn as cudnn
 from collections import Counter
 
-from lib.utils.helpers.offset_helper import DTOffsetConfig, DTOffsetHelper
 from lib.utils.tools.logger import Logger as Log
 from .base import _BaseEvaluator
 from . import tasks

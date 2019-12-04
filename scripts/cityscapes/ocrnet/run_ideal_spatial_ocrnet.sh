@@ -14,8 +14,8 @@ cd ../../../
 DATA_DIR="/msravcshare/dataset/cityscapes"
 SAVE_DIR="/msravcshare/dataset/seg_result/cityscapes/"
 BACKBONE="deepbase_resnet101_dilated8"
-CONFIGS="configs/cityscapes/${BACKBONE}.json"
-CONFIGS_TEST="configs/cityscapes/${BACKBONE}_test.json"
+CONFIGS="configs/cityscapes/R_101_D_8.json"
+CONFIGS_TEST="configs/cityscapes/R_101_D_8_test.json"
 
 MODEL_NAME="ideal_spatial_ocrnet"
 LOSS_TYPE="fs_auxce_loss"
@@ -33,7 +33,7 @@ if [ "$1"x == "train"x ]; then
                        --data_dir ${DATA_DIR} --loss_type ${LOSS_TYPE} --max_iters ${MAX_ITERS} \
                        --checkpoints_name ${CHECKPOINTS_NAME} --pretrained ${PRETRAINED_MODEL} \
                        --use_ground_truth \
-                       > ${LOG_FILE} 2>&1
+                      > ${LOG_FILE} 2>&1
 
 elif [ "$1"x == "resume"x ]; then
   ${PYTHON} -u main.py --configs ${CONFIGS} --drop_last y \

@@ -53,7 +53,6 @@ SEG_MODEL_DICT = {
     'isanet': ISANet,
     'asp_isanet': Asp_ISANet,
     # OCR series
-    'channel_ocrnet': ChannelOCRNet,
     'spatial_ocrnet': SpatialOCRNet,
     'spatial_asp_ocrnet': ASPOCRNet,
     # OCR series with ground-truth   
@@ -64,7 +63,6 @@ SEG_MODEL_DICT = {
     'ideal_distribute_ocrnet': IdealDistributeOCRNet,
     # HRNet series
     'hrnet_w48': HRNet_W48,
-    'hrnet_w48_b': HRNet_W48_B,
     'hrnet_w48_psp': HRNet_W48_PSP, 
     'hrnet_w48_aspp': HRNet_W48_ASPP, 
     'hrnet_w48_isa': HRNet_W48_ISA,

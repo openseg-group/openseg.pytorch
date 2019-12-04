@@ -10,7 +10,6 @@ from collections import Counter
 
 from lib.metrics import running_score as rslib
 from lib.metrics import F1_running_score as fscore_rslib
-from lib.utils.helpers.offset_helper import DTOffsetConfig, DTOffsetHelper
 from lib.utils.tools.logger import Logger as Log
 from .base import _BaseEvaluator
 
