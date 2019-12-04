@@ -89,7 +89,6 @@ if __name__ == "__main__":
     conv_3x3.eval()
     aspoc_infer.cuda()
     conv_3x3.cuda()
-    # params = baseoc_infer.state_dict()
 
     def count_parameters(model):
         return sum(p.numel() for p in model.parameters() if p.requires_grad)

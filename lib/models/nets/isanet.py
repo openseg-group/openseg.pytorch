@@ -19,7 +19,8 @@ from lib.models.tools.module_helper import ModuleHelper
 
 class ISANet(nn.Module):
     """
-    Interlaced Sparse Self-Attention for Semantic Segmentation
+    Interlaced Sparse Self-Attention for Semantic Segmentation,
+    Huang Lang and Yuan Yuhui and Guo Jianyuan and Zhang Chao and Chen Xilin and Wang Jingdong
     """
     def __init__(self, configer):
         self.inplanes = 128
@@ -58,7 +59,8 @@ class ISANet(nn.Module):
 
 class Asp_ISANet(nn.Module):
     """
-    OCNet: Object Context Network for Scene Parsing
+    Interlaced Sparse Self-Attention for Semantic Segmentation,
+    Huang Lang and Yuan Yuhui and Guo Jianyuan and Zhang Chao and Chen Xilin and Wang Jingdong
     """
     def __init__(self, configer):
         self.inplanes = 128
@@ -78,8 +80,8 @@ class Asp_ISANet(nn.Module):
             ModuleHelper.BNReLU(512, bn_type=self.configer.get('network', 'bn_type')),
             ASP_ISA_Module(512, 256, bn_type=self.configer.get('network', 'bn_type')),
         )
-        self.cls = nn.Conv2d(512, self.num_classes, kernel_size=1, stride=1, padding=0, bias=True)
-        self.dsn = nn.Sequential(
+        self.cls_head = nn.Conv2d(512, self.num_classes, kernel_size=1, stride=1, padding=0, bias=True)
+        self.dsn_head = nn.Sequential(
             nn.Conv2d(in_channels[0], 512, kernel_size=3, stride=1, padding=1),
             ModuleHelper.BNReLU(512, bn_type=self.configer.get('network', 'bn_type')),
             nn.Conv2d(512, self.num_classes, kernel_size=1, stride=1, padding=0, bias=True)
@@ -87,9 +89,9 @@ class Asp_ISANet(nn.Module):
 
     def forward(self, x_):
         x = self.backbone(x_)
-        aux_x = self.dsn(x[-2])
+        aux_x = self.dsn_head(x[-2])
         x = self.context(x[-1])
-        x = self.cls(x)
+        x = self.cls_head(x)
         aux_x = F.interpolate(aux_x, size=(x_.size(2), x_.size(3)), mode="bilinear", align_corners=True)
         x = F.interpolate(x, size=(x_.size(2), x_.size(3)), mode="bilinear", align_corners=True)
         return aux_x, x

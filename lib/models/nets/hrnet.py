@@ -139,18 +139,7 @@ class HRNet_W48_ISA(nn.Module):
             ISA_Module(in_channels=512, key_channels=256, value_channels=512, 
                 out_channels=512, down_factors=factors, dropout=0.05, bn_type=bn_type),
         )
-        
         self.cls_head = nn.Conv2d(512, self.num_classes, kernel_size=1, stride=1, padding=0, bias=False)
-
-        if os.environ.get('abs_pos_encode'):
-            self.pos_embedding = self.get_absolute_position_embedding(256, 128, in_channels)
-            self.pos_transform = nn.Conv2d(in_channels, in_channels, kernel_size=1, stride=1, padding=0, bias=True)
-        elif os.environ.get('rel_pos_encode'):
-            self.pos_embedding = self.get_relative_position_embedding(256, 128, 256, 128, 1, 1, in_channels)
-            self.pos_transform = nn.Conv2d(in_channels, in_channels, kernel_size=1, stride=1, padding=0, bias=True)
-        else:
-            pass
-
 
     def forward(self, x_):
         x = self.backbone(x_)
@@ -160,10 +149,6 @@ class HRNet_W48_ISA(nn.Module):
         feat3 = F.interpolate(x[2], size=(h, w), mode="bilinear", align_corners=True)
         feat4 = F.interpolate(x[3], size=(h, w), mode="bilinear", align_corners=True)
         feats = torch.cat([feat1, feat2, feat3, feat4], 1)
-
-        if os.environ.get('abs_pos_encode') or os.environ.get('rel_pos_encode'):
-            pos_feats = F.interpolate(self.pos_transform(self.pos_embedding), size=(feats.size(2), feats.size(3)), mode="bilinear", align_corners=True)
-            feats += pos_feats
 
         feats = self.isa_head(feats)
         out = self.cls_head(feats)
@@ -257,7 +242,6 @@ class HRNet_W48_OCR(nn.Module):
         feats = torch.cat([feat1, feat2, feat3, feat4], 1)
         out_aux = self.aux_head(feats)
 
-        # compute contrast feature
         feats = self.conv3x3(feats)
 
         context = self.ocr_gather_head(feats, out_aux)
@@ -311,7 +295,6 @@ class HRNet_W48_OCR_B(nn.Module):
         feats = torch.cat([feat1, feat2, feat3, feat4], 1)
         out_aux = self.aux_head(feats)
 
-        # compute contrast feature
         feats = self.conv3x3(feats)
 
         context = self.ocr_gather_head(feats, out_aux)
@@ -358,7 +341,6 @@ class HRNet_W48_OCR_C(nn.Module):
         feat4 = F.interpolate(x[3], size=(h, w), mode="bilinear", align_corners=True)
 
         feats = torch.cat([feat1, feat2, feat3, feat4], 1)
-        # compute contrast feature
         feats = self.conv3x3(feats)
 
         out_aux = self.aux_head(feats)
@@ -410,7 +392,6 @@ class HRNet_W48_OCR_D(nn.Module):
         feats = torch.cat([feat1, feat2, feat3, feat4], 1)
         out_aux = self.aux_head(feats)
 
-        # compute contrast feature
         feats = self.conv3x3(feats)
 
         context = self.ocr_gather_head(feats, out_aux)
@@ -421,70 +402,3 @@ class HRNet_W48_OCR_D(nn.Module):
         out_aux = F.interpolate(out_aux, size=(x_.size(2), x_.size(3)), mode="bilinear", align_corners=True)
         out = F.interpolate(out, size=(x_.size(2), x_.size(3)), mode="bilinear", align_corners=True)
         return out_aux, out
-
-
-
-def get_absolute_position_embedding(h, w, feat_dim):
-    h_idxs = torch.linspace(0, h-1, h).view(
-        h, 1, 1).repeat(1, w, feat_dim // 2)
-    w_idxs = torch.linspace(0, w-1, w).view(
-        1, w, 1).repeat(h, 1, feat_dim // 2)
-
-    vec = 1000 ** (2 * torch.floor(torch.arange(feat_dim // 2, dtype=torch.float) / 2) / (feat_dim // 2))
-    vec = vec.view(1, 1, -1).repeat(h, w, 1)
-    h_idxs = h_idxs / vec
-    w_idxs = w_idxs / vec
-    embedding = torch.cat([w_idxs, h_idxs], dim=2)
-
-    embedding[:, :, 0::2] = torch.sin(
-        embedding[:, :, 0::2])  # dim 2i
-    embedding[:, :, 1::2] = torch.cos(
-        embedding[:, :, 1::2])  # dim 2i+1
-    return nn.Parameter(embedding.permute(2, 0, 1).unsqueeze(0), requires_grad=False)
-
-
-def get_relative_position_embedding(h,
-                                    w,
-                                    h_kv,
-                                    w_kv,
-                                    q_stride,
-                                    kv_stride,
-                                    feat_dim,
-                                    wave_length=1000,
-                                    position_magnitude=1):
-        h_idxs = torch.linspace(0, h-1, h).cuda()
-        h_idxs = h_idxs.view((h, 1)) * q_stride
-
-        w_idxs = torch.linspace(0, w-1, w).cuda()
-        w_idxs = w_idxs.view((w, 1)) * q_stride
-
-        h_kv_idxs = torch.linspace(0, h_kv-1, h_kv).cuda()
-        h_kv_idxs = h_kv_idxs.view((h_kv, 1)) * kv_stride
-
-        w_kv_idxs = torch.linspace(0, w_kv-1, w_kv).cuda()
-        w_kv_idxs = w_kv_idxs.view((w_kv, 1)) * kv_stride
-
-        # (h, h_kv, 1)
-        h_diff = h_idxs.unsqueeze(1) - h_kv_idxs.unsqueeze(0)
-        h_diff *= position_magnitude
-
-        # (w, w_kv, 1)
-        w_diff = w_idxs.unsqueeze(1) - w_kv_idxs.unsqueeze(0)
-        w_diff *= position_magnitude
-
-        feat_range = torch.arange(0, feat_dim / 4).cuda()
-
-        dim_mat = torch.Tensor([wave_length]).cuda()
-        dim_mat = dim_mat**((4. / feat_dim) * feat_range)
-        dim_mat = dim_mat.view((1, 1, -1))
-
-        embedding_x = torch.cat(
-            ((w_diff / dim_mat).sin(), (w_diff / dim_mat).cos()), dim=2)
-
-        embedding_y = torch.cat(
-            ((h_diff / dim_mat).sin(), (h_diff / dim_mat).cos()), dim=2)
-
-        embedding_pos = torch.cat([embedding_x, embedding_x], dim=2)
-        
-        return nn.Parameter(embedding_pos.permute(2, 0, 1).unsqueeze(0), requires_grad=False)
-

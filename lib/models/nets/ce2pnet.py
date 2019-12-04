@@ -149,7 +149,6 @@ class CE2P_OCRNet(nn.Module):
         x = self.backbone(x_) # x: list output from conv2_x, conv3_x, conv4_x, conv5_x
         seg_dsn = self.dsn(x[-2])
         edge_out, edge_fea = self.edgelayer(x[-4], x[-3], x[-2])
-        # x5 = self.conv_3x3(x[-1])
         x5 = x[-1]
         context = self.spatial_context_head(x5, seg_dsn)
         x_hr = self.spatial_ocr_head(x5, context)
@@ -232,7 +231,6 @@ class CE2P_IdealOCRNet(nn.Module):
         x = self.backbone(x_) # x: list output from conv2_x, conv3_x, conv4_x, conv5_x
         seg_dsn = self.dsn(x[-2])
         edge_out, edge_fea = self.edgelayer(x[-4], x[-3], x[-2])
-        # x5 = self.conv_3x3(x[-1])
         x5 = x[-1]
 
         label = F.interpolate(input=label_.unsqueeze(1).type(torch.cuda.FloatTensor), size=(x5.size(2), x5.size(3)), mode="nearest")

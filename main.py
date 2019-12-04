@@ -201,22 +201,14 @@ if __name__ == "__main__":
         if configer.get('phase') == 'train':
             from segmentor.trainer import Trainer
             model = Trainer(configer)
-        elif configer.get('phase') == 'train_clean':
-            from segmentor.trainer_clean import Trainer
-            model = Trainer(configer)
         elif configer.get('phase') == 'test':
-            from segmentor.tester_multi import Tester 
-            model = Tester(configer)    
-        else:
-            from segmentor.tester_vis_offset import Tester   
+            from segmentor.tester import Tester 
             model = Tester(configer)    
     else:
         Log.error('Method: {} is not valid.'.format(configer.get('task')))
         exit(1)
 
     if configer.get('phase') == 'train':
-        model.train()
-    elif configer.get('phase') == 'train_clean':
         model.train()
     elif configer.get('phase') == 'test' and configer.get('network', 'resume') is not None:
         model.test()

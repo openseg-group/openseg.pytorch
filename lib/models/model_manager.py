@@ -18,10 +18,10 @@ from __future__ import print_function
 # Reproduce the approaches of other papers
 ##+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 from lib.models.nets.pspnet import PSPNet
-from lib.models.nets.deeplabv3 import DeepLabV3, DeepLabV3_CRF
+from lib.models.nets.deeplabv3 import DeepLabV3
 
 ##+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# Our approaches including FCN baseline, HRNet, OCNet, ISA, OCR, Offset Approch
+# Our approaches including FCN baseline, HRNet, OCNet, ISA, OCR
 ##+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # FCN baseline 
 from lib.models.nets.fcnet import FcnNet
@@ -73,6 +73,10 @@ SEG_MODEL_DICT = {
     'hrnet_w48_ocr_c': HRNet_W48_OCR_C,
     'hrnet_w48_ocr_d': HRNet_W48_OCR_D,
     'hrnet_w48_asp_ocr': HRNet_W48_ASPOCR,
+    # CE2P series
+    'ce2p_asp_ocrnet': CE2P_ASPOCR,
+    'ce2p_ocrnet': CE2P_OCRNet,
+    'ce2p_ideal_ocrnet': CE2P_IdealOCRNet, 
     # baseline series
     'fcnet': FcnNet,
     'pspnet': PSPNet,

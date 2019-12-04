@@ -15,7 +15,12 @@ from torch.nn import functional as F
 from lib.models.backbones.backbone_selector import BackboneSelector
 from lib.models.tools.module_helper import ModuleHelper
 
+
 class SpatialOCRNet(nn.Module):
+    """
+    Object-Contextual Representations for Semantic Segmentation,
+    Yuan, Yuhui and Chen, Xilin and Wang, Jingdong
+    """
     def __init__(self, configer):
         self.inplanes = 128
         super(SpatialOCRNet, self).__init__()
@@ -63,6 +68,10 @@ class SpatialOCRNet(nn.Module):
 
 
 class ASPOCRNet(nn.Module):
+    """
+    Object-Contextual Representations for Semantic Segmentation,
+    Yuan, Yuhui and Chen, Xilin and Wang, Jingdong
+    """
     def __init__(self, configer):
         self.inplanes = 128
         super(ASPOCRNet, self).__init__()

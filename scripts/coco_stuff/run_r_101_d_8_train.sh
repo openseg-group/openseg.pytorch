@@ -3,6 +3,7 @@
 # check the enviroment info
 nvidia-smi
 PYTHON="/root/miniconda3/bin/python"
+
 ${PYTHON} -m pip install yacs
 ${PYTHON} -m pip install torchcontrib
 ${PYTHON} -m pip install pydensecrf
@@ -14,12 +15,13 @@ cd ../../
 DATA_DIR="/msravcshare/dataset/coco_stuff_10k"
 SAVE_DIR="/msravcshare/dataset/seg_result/coco_stuff/"
 BACKBONE="deepbase_resnet101_dilated8"
-CONFIGS="configs/coco_stuff/${BACKBONE}_multi_grid.json"
-CONFIGS_TEST="configs/coco_stuff/${BACKBONE}_test.json"
 
-MODEL_NAME="spatial_ocrnet"
+CONFIGS="configs/coco_stuff/R_101_D_8.json"
+CONFIGS_TEST="configs/coco_stuff/R_101_D_8_TEST.json"
+
+MODEL_NAME="fcnet"
 LOSS_TYPE="fs_auxce_loss"
-CHECKPOINTS_NAME="${MODEL_NAME}_${BACKBONE}_multi_grid_"$2
+CHECKPOINTS_NAME="${MODEL_NAME}_${BACKBONE}_"$2
 LOG_FILE="./log/coco_stuff/${CHECKPOINTS_NAME}.log"
 
 PRETRAINED_MODEL="./pretrained_model/resnet101-imagenet.pth"
@@ -65,12 +67,8 @@ elif [ "$1"x == "resume"x ]; then
                         >> ${LOG_FILE} 2>&1
 
 
-elif [ "$1"x == "debug"x ]; then
-  ${PYTHON} -u main.py --configs ${CONFIGS} \
-                       --phase debug --gpu 0 --log_to_file n > ${LOG_FILE} 2>&1
-
 elif [ "$1"x == "val"x ]; then
-  ${PYTHON} -u main.py --configs ${CONFIGS} \
+  ${PYTHON} -u main.py --configs ${CONFIGS_TEST} \
                        --data_dir ${DATA_DIR} \
                        --backbone ${BACKBONE} \
                        --model_name ${MODEL_NAME} \
@@ -80,18 +78,31 @@ elif [ "$1"x == "val"x ]; then
                        --resume ./checkpoints/coco_stuff/${CHECKPOINTS_NAME}_latest.pth \
                        --test_dir ${DATA_DIR}/val/image \
                        --log_to_file n \
-                       --out_dir ${SAVE_DIR}${CHECKPOINTS_NAME}_val_ss
+                       --out_dir ${SAVE_DIR}${CHECKPOINTS_NAME}_val_ms
 
   cd lib/metrics
-  ${PYTHON} -u cocostuff_evaluator.py --configs ../../${CONFIGS} \
-                                   --pred_dir ${SAVE_DIR}${CHECKPOINTS_NAME}_val_ss/label \
+  ${PYTHON} -u ade20k_evaluator.py --configs ../../${CONFIGS_TEST} \
+                                   --pred_dir ${SAVE_DIR}${CHECKPOINTS_NAME}_val_ms/label \
                                    --gt_dir ${DATA_DIR}/val/label  
 
+
 elif [ "$1"x == "test"x ]; then
-  ${PYTHON} -u main.py --configs ${CONFIGS} \
-                       --backbone ${BACKBONE} --model_name ${MODEL_NAME} --checkpoints_name ${CHECKPOINTS_NAME} \
-                       --phase test --gpu 0 --resume ./checkpoints/coco_stuff/${CHECKPOINTS_NAME}_latest.pth \
-                       --test_dir ${DATA_DIR}/test --log_to_file n --out_dir test >> ${LOG_FILE} 2>&1
+  if [ "$3"x == "ss"x ]; then
+    echo "[single scale] test"
+    ${PYTHON} -u main.py --configs ${CONFIGS} --drop_last y \
+                         --backbone ${BACKBONE} --model_name ${MODEL_NAME} --checkpoints_name ${CHECKPOINTS_NAME} \
+                         --phase test --gpu 0 1 2 3 --resume ./checkpoints/coco_stuff/${CHECKPOINTS_NAME}_latest.pth \
+                         --test_dir ${DATA_DIR}/test --log_to_file n \
+                         --out_dir ${SAVE_DIR}${CHECKPOINTS_NAME}_test_ss
+  else
+    echo "[multiple scale + flip] test"
+    ${PYTHON} -u main.py --configs ${CONFIGS_TEST} --drop_last y \
+                         --backbone ${BACKBONE} --model_name ${MODEL_NAME} --checkpoints_name ${CHECKPOINTS_NAME} \
+                         --phase test --gpu 0 1 2 3 --resume ./checkpoints/coco_stuff/${CHECKPOINTS_NAME}_latest.pth \
+                         --test_dir ${DATA_DIR}/test --log_to_file n \
+                         --out_dir ${SAVE_DIR}${CHECKPOINTS_NAME}_test_ms
+  fi
+
 
 else
   echo "$1"x" is invalid..."

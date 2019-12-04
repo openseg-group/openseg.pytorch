@@ -105,7 +105,6 @@ if __name__ == "__main__":
 
     aspp_infer.eval()
     aspp_infer.cuda()
-    # params = baseoc_infer.state_dict()
 
     def count_parameters(model):
         return sum(p.numel() for p in model.parameters() if p.requires_grad)
