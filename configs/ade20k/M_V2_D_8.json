@@ -1,0 +1,154 @@
+{
+    "dataset": "ade20k",
+    "method": "fcn_segmentor",
+    "data": {
+      "image_tool": "cv2",
+      "input_mode": "BGR",
+      "num_classes": 150,
+      "reduce_zero_label": true,
+      "data_dir": "~/DataSet/ADE20K",
+      "workers": 8
+    },
+   "train": {
+      "batch_size": 16,
+      "data_transformer": {
+        "size_mode": "fix_size",
+        "input_size": [520, 520],
+        "align_method": "only_pad"
+      }
+    },
+    "val": {
+      "batch_size": 4,
+      "mode": "ss_test",
+      "data_transformer": {
+        "size_mode": "diverse_size",
+        "fit_stride": 8,
+        "align_method": "only_pad",
+        "pad_mode": "pad_right_down"
+      }
+    },
+    "test": {
+      "mode": "ms_test",
+      "min_side_length": 500,
+      "max_side_length": 1000,
+      "fit_stride": 8,
+      "scale_search": [0.6, 0.8, 1, 1.2, 1.4, 1.6]
+    },
+    "train_trans": {
+      "trans_seq": ["random_hflip", "resize", "random_resize", "random_crop", "random_brightness"],
+      "random_brightness": {
+        "ratio": 1.0,
+        "shift_value": 10
+      },
+      "resize": {
+        "min_side_length": 520
+      },
+      "random_hflip": {
+        "ratio": 0.5,
+        "swap_pair": []
+      },
+      "random_resize": {
+        "ratio": 1.0,
+        "method": "random",
+        "scale_range": [0.5, 2.0],
+        "aspect_range": [0.9, 1.1]
+      },
+      "random_rotate": {
+        "ratio": 1.0,
+        "rotate_degree": 10
+      },
+      "random_crop":{
+        "ratio": 1.0,
+        "crop_size": [520, 520],
+        "method": "random",
+        "allow_outside_center": false
+      }
+    },
+    "val_trans": {
+      "trans_seq": ["resize"],
+      "resize": {
+        "min_side_length": 520
+      },
+      "random_crop": {
+        "ratio": 1.0,
+        "crop_size": [520, 520],
+        "method": "center",
+        "allow_outside_center": false
+      }
+    },
+    "normalize": {
+      "div_value": 1.0,
+      "mean_value": [103, 116, 123],
+      "mean": [102.9801, 115.9465, 122.7717],
+      "std": [1.0, 1.0, 1.0]
+    },
+    "details": {
+      "color_list": [[128, 64, 128], [244, 35, 232], [70, 70, 70], [102, 102, 156], [190, 153, 153],
+                     [153, 153, 153], [250, 170, 30], [220, 220, 0], [107, 142, 35], [152, 251, 152],
+                     [70, 130, 180], [220, 20, 60], [255, 0, 0], [0, 0, 142], [0, 0, 70], [0, 60, 100],
+                     [0, 80, 100], [0, 0, 230], [119, 11, 32]]
+    },
+    "checkpoints": {
+      "checkpoints_name": "fs_aspocnet_ade20k_seg",
+      "checkpoints_dir": "./checkpoints/ade20k",
+      "save_iters": 1000
+    },
+    "network":{
+      "backbone": "mobilenetv2_dilated8",
+      "model_name": "asp_ocnet",
+      "bn_type": "inplace_abn",
+      "stride": 8,
+      "factors": [[8, 8]],
+      "loss_weights": {
+        "aux_loss": 0.4,
+        "seg_loss": 1.0
+      }
+    },
+    "logging": {
+      "logfile_level": "info",
+      "stdout_level": "info",
+      "log_file": "./log/ade20k/fs_aspocnet_ade20k_seg.log",
+      "log_format": "%(asctime)s %(levelname)-7s %(message)s",
+      "rewrite": true
+    },
+    "lr": {
+      "base_lr": 0.02,
+      "metric": "iters",
+      "lr_policy": "lambda_poly",
+      "warm": {
+        "warm_iters": 1000,
+        "freeze_backbone": false
+      },
+      "step": {
+        "gamma": 0.5,
+        "step_size": 100
+      }
+    },
+    "solver": {
+      "display_iter": 10,
+      "test_interval": 10000,
+      "max_iters": 150000
+    },
+    "optim": {
+      "optim_method": "sgd",
+      "adam": {
+        "betas": [0.9, 0.999],
+        "eps": 1e-08,
+        "weight_decay": 0.0001
+      },
+      "sgd":{
+        "weight_decay": 0.0001,
+        "momentum": 0.9,
+        "nesterov": false
+      }
+    },
+    "loss": {
+      "loss_type": "fs_auxce_loss",
+      "params": {
+        "ce_reduction": "elementwise_mean",
+        "ce_ignore_index": -1,
+        "ohem_minkeep": 100000,
+        "ohem_thresh": 0.7
+      }
+    }
+}

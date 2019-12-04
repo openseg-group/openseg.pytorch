@@ -54,6 +54,7 @@ coverage.xml
 
 # Django stuff:
 *.log
+!/release_files/**/*
 local_settings.py
 db.sqlite3
 
@@ -103,3 +104,6 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+.vscode
+pretrained_model
