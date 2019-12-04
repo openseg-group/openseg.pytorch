@@ -1,3 +1,13 @@
+##+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+## Created by: RainbowSecret, HuangLang
+## Microsoft Research
+## yuyua@microsoft.com
+## Copyright (c) 2019
+##
+## This source code is licensed under the MIT-style license found in the
+## LICENSE file in the root directory of this source tree 
+##+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 import torch
 import math
 import pdb
@@ -7,6 +17,7 @@ from torch.nn import functional as F
 import numpy as np
 
 from lib.models.tools.module_helper import ModuleHelper
+
 
 class _SelfAttentionBlock(nn.Module):
     '''
@@ -317,84 +328,6 @@ class ISA_SHORT_Module(nn.Module):
             context = torch.cat(priors, dim=1)
             x = self.up_conv(x)
         return self.conv_bn(torch.cat([x, context], dim=1))
-
-
-class PyramidLongShortSelfAttention(nn.Module):
-    def __init__(self, in_channels, key_channels, value_channels, out_channels, size=[1, 1], down_factor=[8, 8], bn_type=None):
-        super(PyramidLongShortSelfAttention, self).__init__()
-        assert isinstance(down_factor, (tuple, list)) and len(down_factor) == 2
-        self.size = size
-        self.out_channels = out_channels
-        self.isa = LongShortSelfAttention(in_channels, key_channels, value_channels, out_channels, down_factor=down_factor, bn_type=bn_type)
-    
-    def forward(self, x):
-        n, c, h, w = x.size()
-        sh, sw = self.size # size of h and w, respectively
-        bh, bw = math.ceil(h / sh), math.ceil(w / sw) # size of each bin
-        
-        # padding and reshape
-        pad_h, pad_w = sh * bh - h, sw * bw - w
-        if pad_h > 0 or pad_w > 0:
-            feats = F.pad(x, (pad_w//2, pad_w - pad_w//2, pad_h//2, pad_h - pad_h//2))
-        else:
-            feats = x
-        
-        # [n x c x h x w] ===> [(n x sh x sw) x c x bh x bw]
-        feats = feats.view(-1, c, sh, bh, sw, bw).permute(0, 2, 4, 1, 3, 5)
-        feats = feats.reshape(-1, c, bh, bw)
-
-        # isa
-        feats = self.isa(feats)
-        c = self.out_channels
-
-        # concat sliced feature map
-        # [n x sh x sw x c x dh x dw] ===> [n x c x sh x bh x sw x bw]
-        feats = feats.view(n, sh, sw, c, bh, bw).permute(0, 3, 1, 4, 2, 5)
-        feats = feats.reshape(n, c, sh * bh, sw * bw)
-
-        if pad_h > 0 or pad_w > 0:
-            feats = feats[:, :, pad_h//2:pad_h//2 + h, pad_w//2:pad_w//2 + w]
-        
-        return feats
-
-
-class Pyramid_ISA_Module(nn.Module):
-    def __init__(self, features, out_features=512, sizes=(1, 2, 3, 6), down_factor=[8, 8], bn_type=None):
-        super(Pyramid_ISA_Module, self).__init__()
-        self.down_factor = down_factor
-        
-        self.reduction = nn.Sequential(
-            nn.Conv2d(features, out_features, kernel_size=3, padding=1, dilation=1, bias=False),
-            ModuleHelper.BNReLU(out_features, bn_type=bn_type),
-        )
-        # ISA
-        self.stages = nn.ModuleList([self._make_stage(out_features, out_features, size, bn_type) for size in sizes])
-        self.conv_bn = nn.Sequential(
-            nn.Conv2d(len(sizes) * out_features * 2, out_features, kernel_size=1, padding=0, bias=False),
-            ModuleHelper.BNReLU(out_features, bn_type=bn_type),
-        )
-
-        for m in self.modules():
-            if isinstance(m, nn.Conv2d):
-                n = m.kernel_size[0] * m.kernel_size[1] * m.out_channels
-                m.weight.data.normal_(0, math.sqrt(2. / n))
-
-    def _make_stage(self, features, out_features, size, bn_type):
-        if not isinstance(size, (tuple, list)):
-            size = [size] * 2
-        assert len(size) == 2
-        # adjust factor according to size
-        factor = [math.ceil(df / math.sqrt(sz)) for df, sz in zip(self.down_factor, size)]
-        print("Pyramid size = {}, factor = {}".format(size, factor))
-        return PyramidLongShortSelfAttention(features, out_features//2, out_features, out_features, 
-                    size=size, down_factor=factor, bn_type=bn_type)
-
-    def forward(self, feats, ori_feats):
-        feats = self.reduction(feats)
-        priors = [stage(feats) for stage in self.stages]
-        priors += [ori_feats]
-        out = self.conv_bn(torch.cat(priors, dim=1))
-        return out
 
 
 class ASP_ISA_Module(nn.Module):

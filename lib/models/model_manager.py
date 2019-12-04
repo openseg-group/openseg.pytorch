@@ -20,7 +20,6 @@ from __future__ import print_function
 from lib.models.nets.pspnet import PSPNet
 from lib.models.nets.deeplabv3 import DeepLabV3, DeepLabV3_CRF
 
-
 ##+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # Our approaches including FCN baseline, HRNet, OCNet, ISA, OCR, Offset Approch
 ##+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -28,38 +27,41 @@ from lib.models.nets.deeplabv3 import DeepLabV3, DeepLabV3_CRF
 from lib.models.nets.fcnet import FcnNet
 
 # OCR
-from lib.models.nets.ocrnet import SpatialOCRNet, SpatialOCRNet_GTOffset, ChannelOCRNet, RegionSpatialOCRNet
-from lib.models.nets.ocrnet import SpatialOCRNetB
-from lib.models.nets.ocrnet import ASPOCRNet
+from lib.models.nets.ocrnet import SpatialOCRNet, ASPOCRNet
+from lib.models.nets.ideal_ocrnet import IdealSpatialOCRNet, IdealSpatialOCRNetB, IdealSpatialOCRNetC, IdealGatherOCRNet, IdealDistributeOCRNet
 
 # HRNet
-from lib.models.nets.hrnet import HRNet_W48, HRNet_W48_B, HRNet_W48_PSP, HRNet_W48_ASPP
+from lib.models.nets.hrnet import HRNet_W48, HRNet_W48_PSP, HRNet_W48_ASPP
 from lib.models.nets.hrnet import HRNet_W48_OCR, HRNet_W48_ISA, HRNet_W48_ASPOCR, HRNet_W48_OCR_B, HRNet_W48_OCR_C, HRNet_W48_OCR_D
 
 # OCNet
-from lib.models.nets.ocnet import BaseOCNet, BaseNOCNet, PyramidOCNet, AspOCNet
+from lib.models.nets.ocnet import BaseOCNet, AspOCNet
 
 # ISA
-from lib.models.nets.isanet import ISANet, Pyramid_ISANet, Asp_ISANet
+from lib.models.nets.isanet import ISANet, Asp_ISANet
 
-# Fast-OCNet
-from lib.models.nets.fast_ocnet import FastBaseOCNet, FastBaseNOCNet
+# CE2P
+from lib.models.nets.ce2pnet import CE2P_OCRNet, CE2P_IdealOCRNet, CE2P_ASPOCR
 
 from lib.utils.tools.logger import Logger as Log
 
 SEG_MODEL_DICT = {
     # OCNet series
     'base_ocnet': BaseOCNet,
-    'base_nocnet': BaseNOCNet,
-    'pyramid_ocnet': PyramidOCNet,
     'asp_ocnet': AspOCNet,
     # ISA series
     'isanet': ISANet,
-    'pyramid_isanet': Pyramid_ISANet,
     'asp_isanet': Asp_ISANet,
+    # OCR series
     'channel_ocrnet': ChannelOCRNet,
     'spatial_ocrnet': SpatialOCRNet,
     'spatial_asp_ocrnet': ASPOCRNet,
+    # OCR series with ground-truth   
+    'ideal_spatial_ocrnet': IdealSpatialOCRNet,
+    'ideal_spatial_ocrnet_b': IdealSpatialOCRNetB,
+    'ideal_spatial_ocrnet_c': IdealSpatialOCRNetC, 
+    'ideal_gather_ocrnet': IdealGatherOCRNet,
+    'ideal_distribute_ocrnet': IdealDistributeOCRNet,
     # HRNet series
     'hrnet_w48': HRNet_W48,
     'hrnet_w48_b': HRNet_W48_B,

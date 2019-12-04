@@ -52,52 +52,6 @@ class HRNet_W48(nn.Module):
         return out
 
 
-class HRNet_W48_B(nn.Module):
-    """
-    deep high-resolution representation learning for human pose estimation, CVPR2019
-    We keep the classification head to extract better features.
-    """
-    def __init__(self, configer):
-        super(HRNet_W48_B, self).__init__()
-        self.configer = configer
-        self.num_classes = self.configer.get('data', 'num_classes')
-        self.backbone = BackboneSelector(configer).get_backbone()
-
-        # extra added layers
-        in_channels = 1152 # 128 + 256 + 512 + 256
-        mid_channels = 256
-
-        from lib.models.modules.aspp_block import ASPPModule
-        self.aspp_head = ASPPModule(2048, 
-                                    256, 
-                                    256, 
-                                    dilations=(3, 6, 9), 
-                                    bn_type=self.configer.get('network', 'bn_type'),
-                                    dropout=0)
-
-        self.cls_head = nn.Sequential(
-        	nn.Conv2d(in_channels, mid_channels, kernel_size=1, stride=1, padding=0, bias=False),
-            ModuleHelper.BNReLU(mid_channels, bn_type=self.configer.get('network', 'bn_type')),
-            nn.Dropout2d(0.10),
-            nn.Conv2d(mid_channels, self.num_classes, kernel_size=1, stride=1, padding=0, bias=False)
-        )
-
-    def forward(self, x_):
-        x = self.backbone(x_)
-        _, _, h, w = x[0].size()
-        feat1 = x[0]
-        feat2 = F.interpolate(x[1], size=(h, w), mode="bilinear", align_corners=True)
-        feat3 = F.interpolate(x[2], size=(h, w), mode="bilinear", align_corners=True)
-        feat4 = self.aspp_head(x[3])
-        feat4 = F.interpolate(feat4, size=(h, w), mode="bilinear", align_corners=True)
-
-        feats = torch.cat([feat1, feat2, feat3, feat4], 1)
-
-        out = self.cls_head(feats)
-        out = F.interpolate(out, size=(x_.size(2), x_.size(3)), mode="bilinear", align_corners=True)
-        return out
-
-
 class HRNet_W48_PSP(nn.Module):
     def __init__(self, configer):
         super(HRNet_W48_PSP, self).__init__()

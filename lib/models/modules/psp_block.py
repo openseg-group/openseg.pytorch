@@ -1,7 +1,12 @@
-#!/usr/bin/env python
-# -*- coding:utf-8 -*-
-# Author: speedinghzl
-# deeplabv3 res101 (synchronized BN version)
+##+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+## Created by: RainbowSecret
+## Microsoft Research
+## yuyua@microsoft.com
+## Copyright (c) 2019
+##
+## This source code is licensed under the MIT-style license found in the
+## LICENSE file in the root directory of this source tree 
+##+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 import os
 import torch

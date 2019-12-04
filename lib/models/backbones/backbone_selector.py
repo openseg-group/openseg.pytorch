@@ -15,7 +15,6 @@ from __future__ import print_function
 
 from lib.models.backbones.resnet.resnet_backbone import ResNetBackbone
 from lib.models.backbones.hrnet.hrnet_backbone import HRNetBackbone
-from lib.models.backbones.hrnet.dilated_hrnet_backbone import DilatedHRNetBackbone
 from lib.utils.tools.logger import Logger as Log
 
 
@@ -31,11 +30,8 @@ class BackboneSelector(object):
         if ('resnet' in backbone or 'resnext' in backbone) and 'senet' not in backbone:
             model = ResNetBackbone(self.configer)(**params)
 
-        elif 'hrnet' in backbone or 'hrnext' in backbone:
-            if 'dilated_hrnet' in backbone:
-                model = DilatedHRNetBackbone(self.configer)(**params)
-            else:
-                model = HRNetBackbone(self.configer)(**params)
+        elif 'hrnet' in backbone:
+            model = HRNetBackbone(self.configer)(**params)
 
         else:
             Log.error('Backbone {} is invalid.'.format(backbone))

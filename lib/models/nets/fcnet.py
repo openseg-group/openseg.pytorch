@@ -60,13 +60,6 @@ class FcnNet(nn.Module):
                 nn.Conv2d(128, self.num_classes, kernel_size=1, stride=1, padding=0, bias=False)
             )
 
-        # regularize the classifier 
-        # U, S, V = torch.svd(self.cls_head[-1].weight.squeeze(-1).squeeze(-1))
-        # self.cls_head[-1].weight = nn.Parameter(V.t().unsqueeze(-1).unsqueeze(-1))
-        # # regularize the dsn-classifier 
-        # U, S, V = torch.svd(self.dsn_head[-1].weight.squeeze(-1).squeeze(-1))
-        # self.dsn_head[-1].weight = nn.Parameter(V.t().unsqueeze(-1).unsqueeze(-1))
-
     def forward(self, x_):
         x = self.backbone(x_)
         aux_x = self.dsn_head(x[-2])
