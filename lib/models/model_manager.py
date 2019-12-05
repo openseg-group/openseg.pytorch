@@ -37,9 +37,6 @@ from lib.models.nets.hrnet import HRNet_W48_OCR, HRNet_W48_ISA, HRNet_W48_ASPOCR
 # OCNet
 from lib.models.nets.ocnet import BaseOCNet, AspOCNet
 
-# ISA
-from lib.models.nets.isanet import ISANet, Asp_ISANet
-
 # CE2P
 from lib.models.nets.ce2pnet import CE2P_OCRNet, CE2P_IdealOCRNet, CE2P_ASPOCR
 
@@ -49,9 +46,6 @@ SEG_MODEL_DICT = {
     # OCNet series
     'base_ocnet': BaseOCNet,
     'asp_ocnet': AspOCNet,
-    # ISA series
-    'isanet': ISANet,
-    'asp_isanet': Asp_ISANet,
     # OCR series
     'spatial_ocrnet': SpatialOCRNet,
     'spatial_asp_ocrnet': ASPOCRNet,
@@ -77,8 +71,6 @@ SEG_MODEL_DICT = {
     'ce2p_ideal_ocrnet': CE2P_IdealOCRNet, 
     # baseline series
     'fcnet': FcnNet,
-    'pspnet': PSPNet,
-    'deeplabv3': DeepLabV3,
 }
 
 
