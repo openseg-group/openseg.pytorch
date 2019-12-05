@@ -64,7 +64,7 @@ Performance on the Cityscapes dataset. The models are trained and tested with in
 Checkpoints should be put under `~/checkpoints/cityscapes`.
 
 Methods | Backbone | Train Set | Test Set | Iterations | Batch Size | OHEM | Multi-scale | Flip | mIoU | Link | Script |
-| :----: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
+| :----: | :----: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
 Base-OC | ResNet-101 | Train | Val | 40000 | 8 | No | No | No | 79.49 |  | scripts/cityscapes/ocnet/run_r_101_d_8_baseoc_train.sh |
 OCR | ResNet-101 | Train | Val | 40000 | 8 | No | No | No | 79.63 |  | scripts/cityscapes/hrnet/run_h_48_d_4_ocr.sh |
 ASP-OCR | ResNet-101 | Train | Val | 40000 | 8 | No | No | No | 79.89 |  | scripts/cityscapes/hrnet/run_hrnet48_aspocr_cityscapes.sh |
@@ -77,7 +77,7 @@ The models are trained with the input size of 520x520, and tested with original 
 Checkpoints should be put under `~/checkpoints/pascal_context`.
 
 Methods | Backbone | Train Set | Test Set | Iterations | Batch Size | OHEM | Multi-scale | Flip | mIoU | Link | Script |
-| :----: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
+| :----: | :----: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
 OCR | HRNet-W48 | Train | Val | 60000 | 16 | No | No | No | 55.11 |  | scripts/pascal_context/run_h_48_d_4_ocr_train.sh |
 
 ## LIP
@@ -87,5 +87,5 @@ The models are trained and tested with input size of 473x473.
 Checkpoints should be put under `~/checkpoints/lip`.
 
 Methods | Backbone | Train Set | Test Set | Iterations | Batch Size | OHEM | Multi-scale | Flip | mIoU | Link | Script |
-| :----: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
+| :----: | :----: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
 OCR | HRNet-W48 | Train | Val | 100000 | 32 | No | No | Yes | 56.72 |  | scripts/lip/run_h_48_d_4_ocr_train.sh |
