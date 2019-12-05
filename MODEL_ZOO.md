@@ -55,7 +55,7 @@ and finally, the dataset directory should look like:
 
 # Segmentation Results
 
-The following tables listed segmentation results on various datasets. To perform the validation, simply download and put checkpoints to corresponding directories, and run the script. For example, to evaluate `HRNet-W48 + OCR` on Cityscapes, you should download `ocnet/Cityscapes/base_ocnet_deepbase_resnet101_dilated8_1_latest.pth` and put it under `~/checkpoints/cityscapes`, then go to `scripts/cityscapes/hrnet/` and run `bash run_h_48_d_4_ocr.sh val 1` to start validation.
+The following tables listed segmentation results on various datasets. To perform the validation, simply download and put checkpoints to corresponding directories, and run the script. For example, to evaluate `HRNet-W48 + OCR` on Cityscapes, you should download `ocnet/Cityscapes/hrnet_w48_ocr_1_latest.pth` and put it under `~/checkpoints/cityscapes`, then go to `scripts/cityscapes/hrnet/` and run `bash run_h_48_d_4_ocr.sh val 1` to start validation.
 
 ## Cityscapes
 
@@ -66,9 +66,9 @@ Checkpoints should be put under `~/checkpoints/cityscapes`.
 Methods | Backbone | Train Set | Test Set | Iterations | Batch Size | OHEM | Multi-scale | Flip | mIoU | Link | Script |
 | :----: | :----: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
 Base-OC | ResNet-101 | Train | Val | 40000 | 8 | No | No | No | 79.49 |  | scripts/cityscapes/ocnet/run_r_101_d_8_baseoc_train.sh |
-OCR | ResNet-101 | Train | Val | 40000 | 8 | No | No | No | 79.63 |  | scripts/cityscapes/hrnet/run_h_48_d_4_ocr.sh |
-ASP-OCR | ResNet-101 | Train | Val | 40000 | 8 | No | No | No | 79.89 |  | scripts/cityscapes/hrnet/run_hrnet48_aspocr_cityscapes.sh |
-OCR | HRNet-W48 | Train | Val | 80000 | 8 | No | No | No | 81.09 |  | TODO |
+OCR | ResNet-101 | Train | Val | 40000 | 8 | No | No | No | 79.63 |  | scripts/cityscapes/ocrnet/run_r_101_d_8_ocrnet_train.sh |
+ASP-OCR | ResNet-101 | Train | Val | 40000 | 8 | No | No | No | 79.89 |  | scripts/cityscapes/ocrnet/run_r_101_d_8_asp_ocrnet_train.sh |
+OCR | HRNet-W48 | Train | Val | 80000 | 8 | No | No | No | 81.09 |  | scripts/cityscapes/hrnet/run_h_48_d_4_ocr.sh |
 
 ## PASCAL-Context
 
