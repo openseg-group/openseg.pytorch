@@ -13,13 +13,6 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-
-##+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# Reproduce the approaches of other papers
-##+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-from lib.models.nets.pspnet import PSPNet
-from lib.models.nets.deeplabv3 import DeepLabV3
-
 ##+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # Our approaches including FCN baseline, HRNet, OCNet, ISA, OCR
 ##+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -31,8 +24,8 @@ from lib.models.nets.ocrnet import SpatialOCRNet, ASPOCRNet
 from lib.models.nets.ideal_ocrnet import IdealSpatialOCRNet, IdealSpatialOCRNetB, IdealSpatialOCRNetC, IdealGatherOCRNet, IdealDistributeOCRNet
 
 # HRNet
-from lib.models.nets.hrnet import HRNet_W48, HRNet_W48_PSP, HRNet_W48_ASPP
-from lib.models.nets.hrnet import HRNet_W48_OCR, HRNet_W48_ISA, HRNet_W48_ASPOCR, HRNet_W48_OCR_B
+from lib.models.nets.hrnet import HRNet_W48
+from lib.models.nets.hrnet import HRNet_W48_OCR, HRNet_W48_ASPOCR, HRNet_W48_OCR_B
 
 # OCNet
 from lib.models.nets.ocnet import BaseOCNet, AspOCNet
@@ -57,9 +50,6 @@ SEG_MODEL_DICT = {
     'ideal_distribute_ocrnet': IdealDistributeOCRNet,
     # HRNet series
     'hrnet_w48': HRNet_W48,
-    'hrnet_w48_psp': HRNet_W48_PSP, 
-    'hrnet_w48_aspp': HRNet_W48_ASPP, 
-    'hrnet_w48_isa': HRNet_W48_ISA,
     'hrnet_w48_ocr': HRNet_W48_OCR,
     'hrnet_w48_ocr_b': HRNet_W48_OCR_B,
     'hrnet_w48_asp_ocr': HRNet_W48_ASPOCR,
