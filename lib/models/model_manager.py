@@ -32,7 +32,7 @@ from lib.models.nets.ideal_ocrnet import IdealSpatialOCRNet, IdealSpatialOCRNetB
 
 # HRNet
 from lib.models.nets.hrnet import HRNet_W48, HRNet_W48_PSP, HRNet_W48_ASPP
-from lib.models.nets.hrnet import HRNet_W48_OCR, HRNet_W48_ISA, HRNet_W48_ASPOCR, HRNet_W48_OCR_B, HRNet_W48_OCR_C, HRNet_W48_OCR_D
+from lib.models.nets.hrnet import HRNet_W48_OCR, HRNet_W48_ISA, HRNet_W48_ASPOCR, HRNet_W48_OCR_B
 
 # OCNet
 from lib.models.nets.ocnet import BaseOCNet, AspOCNet
@@ -62,8 +62,6 @@ SEG_MODEL_DICT = {
     'hrnet_w48_isa': HRNet_W48_ISA,
     'hrnet_w48_ocr': HRNet_W48_OCR,
     'hrnet_w48_ocr_b': HRNet_W48_OCR_B,
-    'hrnet_w48_ocr_c': HRNet_W48_OCR_C,
-    'hrnet_w48_ocr_d': HRNet_W48_OCR_D,
     'hrnet_w48_asp_ocr': HRNet_W48_ASPOCR,
     # CE2P series
     'ce2p_asp_ocrnet': CE2P_ASPOCR,

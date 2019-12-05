@@ -50,7 +50,6 @@ if [ "$1"x == "train"x ]; then
 elif [ "$1"x == "resume"x ]; then
   ${PYTHON} -u main.py --configs ${CONFIGS} \
                        --drop_last y \
-                       --include_val y  \
                        --phase train \
                        --gathered n \
                        --loss_balance y \
