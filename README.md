@@ -14,9 +14,8 @@
 
 ## News
 
-- 2019/12/04
-We will release all of our code (with the training log and checkpoints) within the future week to provide a good baseline for the community. Thanks for your patience.
-
+- 2019/01/02
+Please email us (yuyua@microsoft.com) if you need the code for our OCR module and we would like to share it with you ASAP.
 
 - 2019/11/19
 We have updated the paper [OCR](https://arxiv.org/abs/1909.11065).
