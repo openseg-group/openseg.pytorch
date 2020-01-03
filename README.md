@@ -14,6 +14,9 @@
 
 ## News
 
+- 2020/01/03
+"HRNet+OCR" will be made open-source in the code-base [HRNet-Semantic-Segmentation](https://github.com/HRNet/HRNet-Semantic-Segmentation) very soon, thanks for your patience.
+
 - 2020/01/02
 Please email us (yuyua@microsoft.com) if you need the code for our OCR module and we would like to share it with you ASAP.
 
