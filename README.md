@@ -15,7 +15,7 @@
 ## News
 
 - 2020/01/07
-"HRNet+OCR[Mapillary+Coarse]" currently achieves **84.26%** on Cityscapes test with better Mapillary pretraining, where we pretrain the HRNet+OCR model on the original Mapillary train and achieve **50.8%** on Mapillary val. Our training settings on Mapillary are listed as below: 500,000 iterations, batch-size 16 and crop size 1024x1024 while the training settings on Cityscapes are kept the same as previously. We believe our approach can futher benefit from more expensive training settings as in the recent Panoptic-DeepLab. We can expect higher performance with our novel post-processing mechanism.
+"HRNet+OCR[Mapillary+Coarse]" currently achieves **84.26%** on Cityscapes test with better Mapillary pretraining, where we pretrain the HRNet+OCR model on the original Mapillary train and achieve **50.8%** on Mapillary val. We believe our approach can futher benefit from more expensive training settings as in the recent Panoptic-DeepLab. We can expect higher performance with our novel post-processing mechanism.
 
 - 2020/01/03
 "HRNet+OCR" will be made open-source in the code-base [HRNet-Semantic-Segmentation](https://github.com/HRNet/HRNet-Semantic-Segmentation) very soon, thanks for your patience.
