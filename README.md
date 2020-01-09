@@ -15,7 +15,7 @@
 ## News
 
 - 2020/01/09
-"HRNet + OCR + SegFix" achieves **Rank#1** on Cityscapes leaderboard. 
+"HRNet + OCR + SegFix" achieves **Rank#1** on Cityscapes leaderboard with mIoU as **84.5%**. 
 
 - 2020/01/07
 "HRNet+OCR[Mapillary+Coarse]" currently achieves **84.26%** on Cityscapes test with better Mapillary pretraining, where we pretrain the HRNet+OCR model on the original Mapillary training set and achieve **50.8%** on Mapillary val set. We can expect higher performance with various improvements, e.g., ASP-OCR, larger batch size/crop size (as in Panoptic-DeepLab) and our novel post-processing mechanism.
