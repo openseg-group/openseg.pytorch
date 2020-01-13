@@ -14,6 +14,9 @@
 
 ## News
 
+- 2020/01/13
+The reproduced [HRNet+OCR](https://github.com/HRNet/HRNet-Semantic-Segmentation/tree/HRNet-OCR) has been made public.
+
 - 2020/01/09
 "HRNet + OCR + SegFix" achieves **Rank#1** on Cityscapes leaderboard with mIoU as **84.5%**. 
 
