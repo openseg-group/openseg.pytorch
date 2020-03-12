@@ -14,6 +14,9 @@
 
 ## News
 
+- 2020/03/12
+Our SegFix could be used to improve the performance of various SOTA methods on both semantic segmentation and instance segmentation, e.g., "PolyTransform + SegFix" achieves **Rank#2** on Cityscapes leaderboard (instance segmentation track) with performance as 41.2%.
+
 - 2020/01/13
 The source code for reproduced [HRNet+OCR](https://github.com/HRNet/HRNet-Semantic-Segmentation/tree/HRNet-OCR) has been made public.
 
