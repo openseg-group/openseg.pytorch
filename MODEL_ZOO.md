@@ -15,7 +15,7 @@ python lib/datasets/preprocess/pascal_context/pascal_context_generator.py \
 and finally, the dataset directory should look like:
 
 ```
-/path/to/data/
+$DATA_ROOT
 ├── cityscapes
 │   ├── coarse
 │   │   ├── image
@@ -52,10 +52,16 @@ and finally, the dataset directory should look like:
 │   │   └── label
 ```
 
+# Configuration
+
+Before executing any scripts, your should first fill up the config file `config.profile` at project root directory. There are two items you should specify:
+
+ + `PYTHON`, identifying your python executable.
+ + `DATA_ROOT`, the root directory of your data. It should be the parent directory of `cityscapes`.
 
 # Segmentation Results
 
-The following tables listed segmentation results on various datasets. To perform the validation, simply download and put checkpoints to corresponding directories, and run the script. For example, to evaluate `HRNet-W48 + OCR` on Cityscapes, you should download `ocnet/Cityscapes/hrnet_w48_ocr_1_latest.pth` and put it under `~/checkpoints/cityscapes`, then go to `scripts/cityscapes/hrnet/` and run `bash run_h_48_d_4_ocr.sh val 1` to start validation.
+The following tables listed segmentation results on various datasets. To perform the validation, simply download and put checkpoints to corresponding directories, and run the script. For example, to evaluate `HRNet-W48 + OCR` on Cityscapes, you should download `ocr/Cityscapes/hrnet_w48_ocr_1_latest.pth` and put it under `~/checkpoints/cityscapes`, then run `bash scripts/cityscapes/hrnet/run_h_48_d_4_ocr.sh val 1` to start validation.
 
 ## Cityscapes
 
@@ -65,10 +71,14 @@ Checkpoints should be put under `~/checkpoints/cityscapes`.
 
 Methods | Backbone | Train Set | Test Set | Iterations | Batch Size | OHEM | Multi-scale | Flip | mIoU | Link | Script |
 | :----: | :----: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
-Base-OC | ResNet-101 | Train | Val | 40000 | 8 | No | No | No | 79.49 |  | scripts/cityscapes/ocnet/run_r_101_d_8_baseoc_train.sh |
-OCR | ResNet-101 | Train | Val | 40000 | 8 | No | No | No | 79.63 |  | scripts/cityscapes/ocrnet/run_r_101_d_8_ocrnet_train.sh |
-ASP-OCR | ResNet-101 | Train | Val | 40000 | 8 | No | No | No | 79.89 |  | scripts/cityscapes/ocrnet/run_r_101_d_8_asp_ocrnet_train.sh |
-OCR | HRNet-W48 | Train | Val | 80000 | 8 | No | No | No | 81.09 |  | scripts/cityscapes/hrnet/run_h_48_d_4_ocr.sh |
+Base-OC | ResNet-101 | Train | Val | 40000 | 8 | No | No | No | 79.49 | [Log](https://drive.google.com/open?id=1bdO_yyuUH63fBP8AE0DO_9OJmJiuvPvw) / [Model](https://drive.google.com/open?id=1AyfnfIt_Aci3CoKup0uVY0UczJS3BiS7) | scripts/cityscapes/ocnet/run_r_101_d_8_baseoc_train.sh |
+OCR | ResNet-101 | Train | Val | 40000 | 8 | No | No | No | 79.63 | [Log](https://drive.google.com/open?id=1mKUM15UQXj5QYwvW6gJ6wQ0KDhJkWbFA) / [Model](https://drive.google.com/open?id=1bUCC3PEvuTBgfUpJlswEjdSJ_iGvg-Px) | scripts/cityscapes/ocrnet/run_r_101_d_8_ocrnet_train.sh |
+ASP-OCR | ResNet-101 | Train | Val | 40000 | 8 | No | No | No | 79.89 | [Log](https://drive.google.com/open?id=1pT2OaCU6uGhNKH3TOJWvgvELYWV-0Fyd) / [Model](https://drive.google.com/open?id=1PXg7RK0LOOmTUNhjFOQXRswx0RAwCw2a) | scripts/cityscapes/ocrnet/run_r_101_d_8_asp_ocrnet_train.sh |
+OCR | HRNet-W48 | Train | Val | 80000 | 8 | No | No | No | 81.09 | [Log](https://drive.google.com/open?id=1rHzUdSmLjvKsVkG-XpRzEpNX2zzU0hZc) / [Model](https://drive.google.com/open?id=1SJAgAhFODCqm_6L8KRkFFFr7dB2l6aC_) | scripts/cityscapes/hrnet/run_h_48_d_4_ocr.sh |
+
+### SegFix
+
+On Cityscapes, we can use SegFix scheme to further refine the boundary of segmentation results. To apply SegFix, you should first download [offset_semantic.zip](https://drive.google.com/open?id=1iDP2scYmy51XJww-888oouNpRBksmrkv) to `$DATA_ROOT/cityscapes`, then unzip the archive. Take HRNet-W48 based OCR as an example. To refine the results on Cityscapes val set, you should first run `bash scripts/cityscapes/hrnet/run_h_48_d_4_ocr.sh val 1` to obtain the baseline results, then run `bash scripts/cityscapes/hrnet/run_h_48_d_4_ocr.sh segfix 1 val` to apply SegFix.
 
 ## PASCAL-Context
 
@@ -78,7 +88,7 @@ Checkpoints should be put under `~/checkpoints/pascal_context`.
 
 Methods | Backbone | Train Set | Test Set | Iterations | Batch Size | OHEM | Multi-scale | Flip | mIoU | Link | Script |
 | :----: | :----: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
-OCR | HRNet-W48 | Train | Val | 60000 | 16 | No | No | No | 55.11 |  | scripts/pascal_context/run_h_48_d_4_ocr_train.sh |
+OCR | HRNet-W48 | Train | Val | 60000 | 16 | No | No | No | 55.11 | [Log](https://drive.google.com/open?id=1cJcI3hL0MA4bxWQOCViV0J2ispIgYteV) / [Model](https://drive.google.com/open?id=1hJhlOFh2Vltuy8ebNVy3IX037UAptvgE) | scripts/pascal_context/run_h_48_d_4_ocr_train.sh |
 
 ## LIP
 
@@ -88,4 +98,4 @@ Checkpoints should be put under `~/checkpoints/lip`.
 
 Methods | Backbone | Train Set | Test Set | Iterations | Batch Size | OHEM | Multi-scale | Flip | mIoU | Link | Script |
 | :----: | :----: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
-OCR | HRNet-W48 | Train | Val | 100000 | 32 | No | No | Yes | 56.72 |  | scripts/lip/run_h_48_d_4_ocr_train.sh |
+OCR | HRNet-W48 | Train | Val | 100000 | 32 | No | No | Yes | 56.72 | [Log](https://drive.google.com/open?id=1o6hOZWBJNk2LHxVJCtT7bW3u8SdHZb4f) / [Model](https://drive.google.com/open?id=1jlcJ_FwsadgxR1QrDw5Cxy2_9me86hUh) | scripts/lip/run_h_48_d_4_ocr_train.sh |
