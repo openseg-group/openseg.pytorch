@@ -14,6 +14,9 @@
 
 ## News
 
+- 2020/04/14
+We would like to release some of our checkpoints/logs of OCNet, OCR and SegFix soon. Thanks for your patience.
+
 - 2020/03/12
 Our SegFix could be used to improve the performance of various SOTA methods on both semantic segmentation and instance segmentation, e.g., "PolyTransform + SegFix" achieves **Rank#2** on Cityscapes leaderboard (instance segmentation track) with performance as 41.2%.
 
@@ -79,113 +82,6 @@ Please consider citing our work if you find it helps you,
 
 ## Performances with openseg.pytorch
 
-- Cityscapes (testing with single scale whole image)
-
-| Methods | Backbone | Train.  mIOU | Val. mIOU | Test. mIOU | BS | Iters | 
-|--------|:---------:|:------:|:------:|:------:|:------:|:------:|
-| [FCN]() | [MobileNetV2]() | - | - | - | - | - |
-| [FCN]() | [3x3-ResNet101]() | - | - | - | 8 | 4W |
-| [FCN]() | [Wide-ResNet38]() | - | - | - | 8 | 4W |
-| [FCN]() | [HRNetV2-48]() | - | - | - | 8 | 10W |
-| [OCNet]() | [MobileNetV2]() | - | - | - | - | - |
-| [OCNet]() | [3x3-ResNet101]() | - | - | - | 8 | 4W |
-| [OCNet]() | [Wide-ResNet38]() | - | - | - | 16 | 2W |
-| [OCNet]() | [HRNetV2-48]() | - | - | - | 8 | 10W |
-| [ISA]() | [MobileNetV2]() | - | - | - | - | - |
-| [ISA]() | [3x3-ResNet101]() | - | - | - | 8 | 4W |
-| [ISA]() | [Wide-ResNet38]() | - | - | - | 16 | 2W |
-| [ISA]() | [HRNetV2-48]() | - | - | - | 8 | 10W |
-| [OCR]() | [MobileNetV2]() | - | - | - | - | - |
-| [OCR]() | [3x3-ResNet101]() | - | - | - | 8 | 4W |  
-| [OCR]() | [Wide-ResNet38]() | - | - | - | 16 | 2W | 
-| [OCR]() | [HRNetV2-48]() | - | - | - | 8 | 10W |
-
-
-- ADE20K (testing with single scale whole image)
-
-| Methods | Backbone  | Val. mIOU | PixelACC | BS | Iters |
-|--------|:---------:|:------:|:------:|:------:|:------:|
-| [FCN]() | [3x3-ResNet101]() | - | - | 16 | 15W |
-| [FCN]() | [Wide-ResNet38]() | - | - | 16 | 15W |
-| [FCN]() | [HRNetV2-48]() | - | - | 16 | 15W |
-| [OCNet]() | [3x3-ResNet101]() | - | - |  16 | 15W |
-| [OCNet]() | [Wide-ResNet38]() | - | - |  16 | 15W |
-| [OCNet]() | [HRNetV2-48]() | - | - |  16 | 15W |
-| [ISA]() | [3x3-ResNet101]() | - | - |  16 | 15W |
-| [ISA]() | [Wide-ResNet38]() | - | - |  16 | 15W |
-| [ISA]() | [HRNetV2-48]() | - | - |  16 | 15W |
-| [OCR]() | [3x3-ResNet101]() | - | - |  16 | 15W |
-| [OCR]() | [Wide-ResNet38]() | - | - |  16 | 15W |
-| [OCR]() | [HRNetV2-48]() | - | - |  16 | 15W |
-
-- LIP (testing with single scale whole image + left-right flip)
-
-| Methods | Backbone  | Val. mIOU | PixelACC | BS | Iters |
-|--------|:---------:|:------:|:------:|:------:|:------:|
-| [FCN]() | [3x3-ResNet101]() | - | - | 32 | 10W |
-| [FCN]() | [Wide-ResNet38]() | - | - | 32 | 10W |
-| [FCN]() | [HRNetV2-48]() | - | - | 32 | 10W |
-| [OCNet]() | [3x3-ResNet101]() | - | - |  32 | 10W |
-| [OCNet]() | [Wide-ResNet38]() | - | - |  32 | 10W |
-| [OCNet]() | [HRNetV2-48]() | - | - |  32 | 10W |
-| [ISA]() | [3x3-ResNet101]() | - | - |  32 | 10W |
-| [ISA]() | [Wide-ResNet38]() | - | - |  32 | 10W |
-| [ISA]() | [HRNetV2-48]() | - | - |  32 | 10W |
-| [OCR]() | [3x3-ResNet101]() | - | - |  32 | 10W |
-| [OCR]() | [Wide-ResNet38]() | - | - |  32 | 10W |
-| [OCR]() | [HRNetV2-48]() | - | - |  32 | 10W |
-
-
-- Pascal-VOC (testing with single scale whole image)
-
-| Methods | Backbone  | Val. mIOU | PixelACC | BS | Iters |
-|--------|:---------:|:------:|:------:|:------:|:------:|
-| [FCN]() | [3x3-ResNet101]() | - | - | 16 | 6W |
-| [FCN]() | [Wide-ResNet38]() | - | - | 16 | 6W |
-| [FCN]() | [HRNetV2-48]() | - | - | 16 | 6W |
-| [OCNet]() | [3x3-ResNet101]() | - | - |  16 | 6W |
-| [OCNet]() | [Wide-ResNet38]() | - | - |  16 | 6W |
-| [OCNet]() | [HRNetV2-48]() | - | - |  16 | 6W |
-| [ISA]() | [3x3-ResNet101]() | - | - |  16 | 6W |
-| [ISA]() | [Wide-ResNet38]() | - | - |  16 | 6W |
-| [ISA]() | [HRNetV2-48]() | - | - |  16 | 6W |
-| [OCR]() | [3x3-ResNet101]() | - | - |  16 | 6W |
-| [OCR]() | [Wide-ResNet38]() | - | - |  16 | 6W |
-| [OCR]() | [HRNetV2-48]() | - | - |  16 | 6W |
-
-- Pascal-Context (testing with single scale whole image)
-
-| Methods | Backbone  | Val. mIOU | PixelACC | BS | Iters |
-|--------|:---------:|:------:|:------:|:------:|:------:|
-| [FCN]() | [3x3-ResNet101]() | - | - | 16 | 3W |
-| [FCN]() | [Wide-ResNet38]() | - | - | 16 | 3W |
-| [FCN]() | [HRNetV2-48]() | - | - | 16 | 3W |
-| [OCNet]() | [3x3-ResNet101]() | - | - |  16 | 3W |
-| [OCNet]() | [Wide-ResNet38]() | - | - |  16 | 3W |
-| [OCNet]() | [HRNetV2-48]() | - | - |  16 | 3W |
-| [ISA]() | [3x3-ResNet101]() | - | - |  16 | 3W |
-| [ISA]() | [Wide-ResNet38]() | - | - |  16 | 3W |
-| [ISA]() | [HRNetV2-48]() | - | - |  16 | 3W |
-| [OCR]() | [3x3-ResNet101]() | - | - |  16 | 3W |
-| [OCR]() | [Wide-ResNet38]() | - | - |  16 | 3W |
-| [OCR]() | [HRNetV2-48]() | - | - |  16 | 3W |
-
-- COCO-Stuff-10K (testing with single scale whole image)
-
-| Methods | Backbone  | Val. mIOU | PixelACC | BS | Iters |
-|--------|:---------:|:------:|:------:|:------:|:------:|
-| [FCN]() | [3x3-ResNet101]() | - | - | 16 | 6W |
-| [FCN]() | [Wide-ResNet38]() | - | - | 16 | 6W |
-| [FCN]() | [HRNetV2-48]() | - | - | 16 | 6W |
-| [OCNet]() | [3x3-ResNet101]() | - | - |  16 | 6W |
-| [OCNet]() | [Wide-ResNet38]() | - | - |  16 | 6W |
-| [OCNet]() | [HRNetV2-48]() | - | - |  16 | 6W |
-| [ISA]() | [3x3-ResNet101]() | - | - |  16 | 6W |
-| [ISA]() | [Wide-ResNet38]() | - | - |  16 | 6W |
-| [ISA]() | [HRNetV2-48]() | - | - |  16 | 6W |
-| [OCR]() | [3x3-ResNet101]() | - | - |  16 | 6W |
-| [OCR]() | [Wide-ResNet38]() | - | - |  16 | 6W |
-| [OCR]() | [HRNetV2-48]() | - | - |  16 | 6W |
 
 
 
