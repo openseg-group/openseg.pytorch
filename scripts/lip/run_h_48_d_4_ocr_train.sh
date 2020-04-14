@@ -79,23 +79,6 @@ elif [ "$1"x == "val"x ]; then
   ${PYTHON} -u cityscapes_evaluator.py --pred_dir ${SAVE_DIR}${CHECKPOINTS_NAME}_val/label  \
                                        --gt_dir ${DATA_DIR}/val/label
 
-elif [ "$1"x == "segfix"x ]; then
-  if [ "$3"x == "test"x ]; then
-    DIR=${SAVE_DIR}${CHECKPOINTS_NAME}_test_ss/label
-    echo "Applying SegFix for $DIR"
-    ${PYTHON} scripts/cityscapes/segfix.py \
-      --input $DIR \
-      --split test \
-      --offset ${DATA_ROOT}/cityscapes/test_offset/semantic/offset_hrnext/
-  elif [ "$3"x == "val"x ]; then
-    DIR=${SAVE_DIR}${CHECKPOINTS_NAME}_val/label
-    echo "Applying SegFix for $DIR"
-    ${PYTHON} scripts/cityscapes/segfix.py \
-      --input $DIR \
-      --split val \
-      --offset ${DATA_ROOT}/cityscapes/val/offset_pred/semantic/offset_hrnext/
-  fi
-
 elif [ "$1"x == "test"x ]; then
   if [ "$3"x == "ss"x ]; then
     echo "[single scale] test"
