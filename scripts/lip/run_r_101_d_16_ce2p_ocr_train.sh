@@ -19,6 +19,8 @@ MODEL_NAME="ce2p_ocrnet"
 LOSS_TYPE="ce2p_auxce_loss"
 CHECKPOINTS_NAME="${MODEL_NAME}_${BACKBONE}_"$2
 LOG_FILE="./log/lip/${CHECKPOINTS_NAME}.log"
+echo "Logging to $LOG_FILE"
+mkdir -p `dirname $LOG_FILE`
 
 PRETRAINED_MODEL="./pretrained_model/resnet101-imagenet.pth"
 MAX_ITERS=100000

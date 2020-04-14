@@ -21,6 +21,8 @@ MODEL_NAME="hrnet_w48"
 LOSS_TYPE="fs_ce_loss"
 CHECKPOINTS_NAME="${MODEL_NAME}_"$2
 LOG_FILE="./log/lip/${CHECKPOINTS_NAME}.log"
+echo "Logging to $LOG_FILE"
+mkdir -p `dirname $LOG_FILE`
 
 PRETRAINED_MODEL="./pretrained_model/hrnetv2_w48_imagenet_pretrained.pth"
 MAX_ITERS=100000

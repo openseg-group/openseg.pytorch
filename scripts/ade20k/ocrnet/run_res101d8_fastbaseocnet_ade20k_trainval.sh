@@ -23,6 +23,8 @@ PRETRAINED_MODEL="./checkpoints/ade20k/fast_base_ocnet_deepbase_resnet101_dilate
 MAX_ITERS=50000
 
 LOG_FILE="./log/ade20k/${CHECKPOINTS_NAME}.log"
+echo "Logging to $LOG_FILE"
+mkdir -p `dirname $LOG_FILE`
 
 if [ "$1"x == "train"x ]; then
   ${PYTHON} -u main.py --configs ${CONFIGS} \

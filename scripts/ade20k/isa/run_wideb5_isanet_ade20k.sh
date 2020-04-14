@@ -24,6 +24,8 @@ PRETRAINED_MODEL="./pretrained_model/wide_resnet38_ipabn_lr_256.pth.tar"
 MAX_ITERS=150000
 
 LOG_FILE="./log/ade20k/${CHECKPOINTS_NAME}.log"
+echo "Logging to $LOG_FILE"
+mkdir -p `dirname $LOG_FILE`
 
 if [ "$1"x == "train"x ]; then
   ${PYTHON} -u main.py --configs ${CONFIGS} --drop_last y \

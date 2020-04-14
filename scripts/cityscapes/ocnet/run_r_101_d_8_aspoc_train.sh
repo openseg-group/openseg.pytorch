@@ -21,6 +21,8 @@ MODEL_NAME="asp_ocnet"
 LOSS_TYPE="fs_auxce_loss"
 CHECKPOINTS_NAME="${MODEL_NAME}_${BACKBONE}_"$2
 LOG_FILE="./log/cityscapes/${CHECKPOINTS_NAME}.log"
+echo "Logging to $LOG_FILE"
+mkdir -p `dirname $LOG_FILE`
 
 PRETRAINED_MODEL="./pretrained_model/resnet101-imagenet.pth"
 MAX_ITERS=40000

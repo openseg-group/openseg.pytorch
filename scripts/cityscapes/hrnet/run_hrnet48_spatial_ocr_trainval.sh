@@ -21,6 +21,8 @@ MODEL_NAME="hrnet48_spatial_ocr"
 LOSS_TYPE="fs_auxohemce_loss"
 CHECKPOINTS_NAME="${MODEL_NAME}_${BACKBONE}_${BATCH_SIZE}_${MAX_ITERS}_trainval_"$2
 LOG_FILE="./log/cityscapes/${CHECKPOINTS_NAME}.log"
+echo "Logging to $LOG_FILE"
+mkdir -p `dirname $LOG_FILE`
 
 PRETRAINED_MODEL="./pretrained_model/hrnetv2_w48_imagenet_pretrained.pth"
 

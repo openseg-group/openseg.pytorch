@@ -21,6 +21,8 @@ MODEL_NAME="hrnet48_ocr"
 LOSS_TYPE="fs_auxohemce_loss"
 CHECKPOINTS_NAME="${MODEL_NAME}_${BACKBONE}_val_ohem_mapillary_5w_coarse_5w_fine_1w_"$2
 LOG_FILE="./log/cityscapes/${CHECKPOINTS_NAME}.log"
+echo "Logging to $LOG_FILE"
+mkdir -p `dirname $LOG_FILE`
 
 # PRETRAINED_MODEL="./checkpoints/cityscapes/hrnet48_ocr_hrnet48__8_50000_val_ohem_mapillary_1_latest.pth"
 PRETRAINED_MODEL="./checkpoints/cityscapes/hrnet48_ocr_hrnet48_val_ohem_mapillary_5w_coarse_5w_1_latest.pth"
