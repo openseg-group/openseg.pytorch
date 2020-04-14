@@ -1,18 +1,19 @@
 #!/usr/bin/env bash
+SCRIPTPATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
+cd $SCRIPTPATH
+cd ../../../
+. config.profile
 
 # check the enviroment info
 nvidia-smi
-PYTHON="/root/miniconda3/bin/python"
 
 ${PYTHON} -m pip install torchcontrib
 ${PYTHON} -m pip install pydensecrf
 
-export PYTHONPATH="/msravcshare/yuyua/code/segmentation/openseg.pytorch":$PYTHONPATH
+export PYTHONPATH="$PWD":$PYTHONPATH
 
-cd ../../../
-
-DATA_DIR="/msravcshare/dataset/ade20k"
-SAVE_DIR="/msravcshare/dataset/seg_result/ade20k/"
+DATA_DIR="${DATA_ROOT}/ade20k"
+SAVE_DIR="${DATA_ROOT}/seg_result/ade20k/"
 BACKBONE="deepbase_resnet101_dilated8"
 CONFIGS="configs/ade20k/${BACKBONE}.json"
 CONFIGS="configs/ade20k/deepbase_resnet101_dilated8_test.json"

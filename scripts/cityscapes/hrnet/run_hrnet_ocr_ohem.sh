@@ -1,16 +1,15 @@
 #!/usr/bin/env bash
-
-# check the enviroment info
-nvidia-smi
-PYTHON="/root/miniconda3/bin/python"
-${PYTHON} -m pip install yacs
-
-export PYTHONPATH="/msravcshare/yuyua/code/segmentation/openseg.pytorch":$PYTHONPATH
-
+SCRIPTPATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
+cd $SCRIPTPATH
 cd ../../../
+. config.profile
+# check the enviroment info
+nvidia-smi${PYTHON} -m pip install yacs
 
-DATA_DIR="/msravcshare/dataset/cityscapes"
-SAVE_DIR="/msravcshare/dataset/seg_result/cityscapes/"
+export PYTHONPATH="$PWD":$PYTHONPATH
+
+DATA_DIR="${DATA_ROOT}/cityscapes"
+SAVE_DIR="${DATA_ROOT}/seg_result/cityscapes/"
 BACKBONE="hrnet48"
 CONFIGS="configs/cityscapes/${BACKBONE}.json"
 

@@ -1,15 +1,14 @@
 #!/usr/bin/env bash
-
+SCRIPTPATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
+cd $SCRIPTPATH
+cd ../../../
+. config.profile
 # check the enviroment info
 nvidia-smi
-PYTHON="/root/miniconda3/bin/python"
+export PYTHONPATH="$PWD":$PYTHONPATH
 
-export PYTHONPATH="/msravcshare/yuyua/code/segmentation/openseg.pytorch":$PYTHONPATH
-
-cd ../../../
-
-DATA_DIR="/msravcshare/dataset/cityscapes"
-SAVE_DIR="/msravcshare/dataset/seg_result/cityscapes/"
+DATA_DIR="${DATA_ROOT}/cityscapes"
+SAVE_DIR="${DATA_ROOT}/seg_result/cityscapes/"
 BACKBONE="deepbase_resnet101_dilated8"
 CONFIGS="configs/cityscapes/${BACKBONE}_ohem.json"
 CONFIGS_TEST="configs/cityscapes/${BACKBONE}_test.json"

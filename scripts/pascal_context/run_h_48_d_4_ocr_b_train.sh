@@ -1,19 +1,20 @@
 #!/usr/bin/env bash
+SCRIPTPATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
+cd $SCRIPTPATH
+cd ../../
+. config.profile
 
 # check the enviroment info
 nvidia-smi
-PYTHON="/root/miniconda3/bin/python"
 
 ${PYTHON} -m pip install yacs
 ${PYTHON} -m pip install torchcontrib
 ${PYTHON} -m pip install pydensecrf
 
-export PYTHONPATH="/msravcshare/yuyua/code/segmentation/openseg.pytorch":$PYTHONPATH
+export PYTHONPATH="$PWD":$PYTHONPATH
 
-cd ../../
-
-DATA_DIR="/msravcshare/dataset/pascal_context"
-SAVE_DIR="/msravcshare/dataset/seg_result/pascal_context/"
+DATA_DIR="${DATA_ROOT}/pascal_context"
+SAVE_DIR="${DATA_ROOT}/seg_result/pascal_context/"
 BACKBONE="hrnet48"
 
 CONFIGS="configs/pascal_context/H_48_D_4.json"

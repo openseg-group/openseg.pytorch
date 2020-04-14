@@ -1,18 +1,17 @@
 #!/usr/bin/env bash
-
+SCRIPTPATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
+cd $SCRIPTPATH
+cd ../../../
+. config.profile
 # check the enviroment info
-nvidia-smi
-PYTHON="/root/miniconda3/bin/python"
-${PYTHON} -m pip install yacs
+nvidia-smi${PYTHON} -m pip install yacs
 ${PYTHON} -m pip install torchcontrib
 ${PYTHON} -m pip install pydensecrf
 
-export PYTHONPATH="/msravcshare/yuyua/code/segmentation/openseg.pytorch":$PYTHONPATH
+export PYTHONPATH="$PWD":$PYTHONPATH
 
-cd ../../../
-
-DATA_DIR="/msravcshare/dataset/cityscapes"
-SAVE_DIR="/msravcshare/dataset/seg_result/cityscapes/"
+DATA_DIR="${DATA_ROOT}/cityscapes"
+SAVE_DIR="${DATA_ROOT}/seg_result/cityscapes/"
 BACKBONE="hrnet48"
 CONFIGS="configs/cityscapes/${BACKBONE}.json"
 # CONFIGS_TEST="configs/cityscapes/${BACKBONE}_test.json"

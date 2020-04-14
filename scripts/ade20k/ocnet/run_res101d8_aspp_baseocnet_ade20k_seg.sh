@@ -1,14 +1,17 @@
 #!/usr/bin/env bash
+SCRIPTPATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
+cd $SCRIPTPATH
+cd ../../../
+. config.profile
 
 # check the enviroment info
 nvidia-smi
-PYTHON="/root/miniconda3/bin/python"
 
-export PYTHONPATH="/msravcshare/yuyua/code/segmentation/openseg.pytorch":$PYTHONPATH
+export PYTHONPATH="$PWD":$PYTHONPATH
 
 cd ../../
 
-DATA_DIR="/msravcshare/dataset/ADE20K"
+DATA_DIR="${DATA_ROOT}/ADE20K"
 BACKBONE="deepbase_resnet101_dilated8"
 CONFIGS="configs/ade20k/${BACKBONE}.json"
 

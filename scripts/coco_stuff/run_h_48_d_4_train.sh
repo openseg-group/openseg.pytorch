@@ -1,16 +1,17 @@
 #!/usr/bin/env bash
+SCRIPTPATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
+cd $SCRIPTPATH
+cd ../../
+. config.profile
 
 # check the enviroment info
 nvidia-smi
-PYTHON="/root/miniconda3/bin/python"
 ${PYTHON} -m pip install yacs
 
-export PYTHONPATH="/msravcshare/yuyua/code/segmentation/openseg.pytorch":$PYTHONPATH
+export PYTHONPATH="$PWD":$PYTHONPATH
 
-cd ../../
-
-DATA_DIR="/msravcshare/dataset/coco_stuff_10k"
-SAVE_DIR="/msravcshare/dataset/seg_result/coco_stuff/"
+DATA_DIR="${DATA_ROOT}/coco_stuff_10k"
+SAVE_DIR="${DATA_ROOT}/seg_result/coco_stuff/"
 BACKBONE="hrnet48"
 
 CONFIGS="configs/coco_stuff/H_48_D_4.json"
