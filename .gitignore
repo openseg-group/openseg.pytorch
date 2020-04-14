@@ -110,3 +110,6 @@ pretrained_model
 nohup.out
 
 release_files/
+lib/metrics/cityscapes/evaluation/addToConfusionMatrix.c
+log/
+checkpoints/
