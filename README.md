@@ -44,6 +44,9 @@ We achieve SOTA on **6** different semantic segmentation benchmarks including: *
 
 We provide a set of baseline results and trained models available for download in the [openseg Model Zoo](MODEL_ZOO.md).
 
+## SegFix for InstanceSegmentation (TODO)
+
+script at `scripts/cityscapes/segfix_instance.py`. Offset files at [offset_instance.zip](https://drive.google.com/open?id=1UXj6-XCXrPGAzDq3F1GGRpaF32nNTF4m).
 
 ## Citation
 Please consider citing our work if you find it helps you,
