@@ -46,7 +46,7 @@ if [ "$1"x == "train"x ]; then
                        --max_iters ${MAX_ITERS} \
                        --resume ${PRETRAINED_MODEL} \
                        --checkpoints_name ${CHECKPOINTS_NAME} \
-                       > ${LOG_FILE} 2>&1
+                       2>&1 | tee ${LOG_FILE}
 
 
 elif [ "$1"x == "resume"x ]; then
@@ -68,19 +68,19 @@ elif [ "$1"x == "resume"x ]; then
                        --resume_continue y \
                        --resume ./checkpoints/cityscapes/${CHECKPOINTS_NAME}_latest.pth \
                        --checkpoints_name ${CHECKPOINTS_NAME} \
-                        >> ${LOG_FILE} 2>&1
+                        2>&1 | tee -a ${LOG_FILE}
 
 
 elif [ "$1"x == "debug"x ]; then
   ${PYTHON} -u main.py --configs ${CONFIGS} --drop_last y \
-                       --phase debug --gpu 0 --log_to_file n  > ${LOG_FILE} 2>&1
+                       --phase debug --gpu 0 --log_to_file n  2>&1 | tee ${LOG_FILE}
 
 
 elif [ "$1"x == "val"x ]; then
   ${PYTHON} -u main.py --configs ${CONFIGS} --drop_last y --train_batch_size ${BATCH_SIZE} \
                        --backbone ${BACKBONE} --model_name ${MODEL_NAME} --checkpoints_name ${CHECKPOINTS_NAME} \
                        --phase test --gpu 0 --resume ./checkpoints/cityscapes/${CHECKPOINTS_NAME}_latest.pth \
-                       --test_dir ${DATA_DIR}/val/image --log_to_file n --out_dir val >> ${LOG_FILE} 2>&1
+                       --test_dir ${DATA_DIR}/val/image --log_to_file n --out_dir val 2>&1 | tee -a ${LOG_FILE}
   cd lib/metrics
   ${PYTHON} -u cityscapes_evaluator.py --pred_dir ../../results/cityscapes/test_dir/${CHECKPOINTS_NAME}/val/label \
                                        --gt_dir ${DATA_DIR}/val/label  >> "../../"${LOG_FILE} 2>&1

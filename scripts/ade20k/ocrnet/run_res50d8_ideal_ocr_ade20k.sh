@@ -32,7 +32,7 @@ if [ "$1"x == "train"x ]; then
                        --data_dir ${DATA_DIR} --loss_type ${LOSS_TYPE} --max_iters ${MAX_ITERS} \
                        --checkpoints_name ${CHECKPOINTS_NAME} --pretrained ${PRETRAINED_MODEL} \
                        --use_ground_truth \
-                       > ${LOG_FILE} 2>&1
+                       2>&1 | tee ${LOG_FILE}
 
 elif [ "$1"x == "resume"x ]; then
   ${PYTHON} -u main.py --configs ${CONFIGS} --drop_last y \
@@ -42,11 +42,11 @@ elif [ "$1"x == "resume"x ]; then
                        --resume_continue y --resume ./checkpoints/ade20k/${CHECKPOINTS_NAME}_latest.pth \
                        --checkpoints_name ${CHECKPOINTS_NAME} --pretrained ${PRETRAINED_MODEL}  \
                        --use_ground_truth \
-                       >> ${LOG_FILE} 2>&1
+                       2>&1 | tee -a ${LOG_FILE}
 
 elif [ "$1"x == "debug"x ]; then
   ${PYTHON} -u main.py --configs ${CONFIGS} \
-                       --phase debug --gpu 0 --log_to_file n > ${LOG_FILE} 2>&1
+                       --phase debug --gpu 0 --log_to_file n 2>&1 | tee ${LOG_FILE}
 
 elif [ "$1"x == "val"x ]; then
   ${PYTHON} -u main.py --configs ${CONFIGS} --data_dir ${DATA_DIR} \
@@ -54,7 +54,7 @@ elif [ "$1"x == "val"x ]; then
                        --phase test --gpu 0 1 2 3 --resume ./checkpoints/ade20k/${CHECKPOINTS_NAME}_latest.pth \
                        --test_dir ${DATA_DIR}/val/image --log_to_file n \
                        --out_dir ${SAVE_DIR}${CHECKPOINTS_NAME}_val_ms_flip
-                       # >> ${LOG_FILE} 2>&1
+                       # 2>&1 | tee -a ${LOG_FILE}
 
   cd lib/metrics
   ${PYTHON} -u ade20k_evaluator.py --configs ../../${CONFIGS} \
@@ -66,7 +66,7 @@ elif [ "$1"x == "test"x ]; then
   ${PYTHON} -u main.py --configs ${CONFIGS} \
                        --backbone ${BACKBONE} --model_name ${MODEL_NAME} --checkpoints_name ${CHECKPOINTS_NAME} \
                        --phase test --gpu 0 --resume ./checkpoints/ade20k/${CHECKPOINTS_NAME}_latest.pth \
-                       --test_dir ${DATA_DIR}/test --log_to_file n --out_dir test >> ${LOG_FILE} 2>&1
+                       --test_dir ${DATA_DIR}/test --log_to_file n --out_dir test 2>&1 | tee -a ${LOG_FILE}
 
 else
   echo "$1"x" is invalid..."

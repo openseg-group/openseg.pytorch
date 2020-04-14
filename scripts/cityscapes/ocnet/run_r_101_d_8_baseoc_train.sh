@@ -43,7 +43,7 @@ if [ "$1"x == "train"x ]; then
                        --max_iters ${MAX_ITERS} \
                        --checkpoints_name ${CHECKPOINTS_NAME} \
                        --pretrained ${PRETRAINED_MODEL} \
-                       > ${LOG_FILE} 2>&1
+                       2>&1 | tee ${LOG_FILE}
                        
 
 elif [ "$1"x == "resume"x ]; then
@@ -62,7 +62,7 @@ elif [ "$1"x == "resume"x ]; then
                        --resume_continue y \
                        --resume ./checkpoints/cityscapes/${CHECKPOINTS_NAME}_latest.pth \
                        --checkpoints_name ${CHECKPOINTS_NAME} \
-                        >> ${LOG_FILE} 2>&1
+                        2>&1 | tee -a ${LOG_FILE}
                         
 
 elif [ "$1"x == "val"x ]; then

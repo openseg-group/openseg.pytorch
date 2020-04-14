@@ -45,7 +45,7 @@ elif [ "$1"x == "test"x ]; then
                        --backbone ${BACKBONE} --model_name ${MODEL_NAME} --checkpoints_name ${CHECKPOINTS_NAME} \
                        --phase test --gpu 0 --resume ./checkpoints/ade20k/${CHECKPOINTS_NAME}_latest.pth \
                        --test_dir ${DATA_DIR}/test --log_to_file n --out_dir test 
-                       # >> ${LOG_FILE} 2>&1
+                       # 2>&1 | tee -a ${LOG_FILE}
 
 else
   echo "$1"x" is invalid..."

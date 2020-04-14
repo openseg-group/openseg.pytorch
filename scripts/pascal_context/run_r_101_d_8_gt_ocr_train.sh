@@ -48,7 +48,7 @@ if [ "$1"x == "train"x ]; then
                        --checkpoints_name ${CHECKPOINTS_NAME} \
                        --pretrained ${PRETRAINED_MODEL} \
                        --use_ground_truth \
-                       > ${LOG_FILE} 2>&1
+                       2>&1 | tee ${LOG_FILE}
                        
 
 elif [ "$1"x == "resume"x ]; then
@@ -69,7 +69,7 @@ elif [ "$1"x == "resume"x ]; then
                        --resume ./checkpoints/pascal_context/${CHECKPOINTS_NAME}_latest.pth \
                        --checkpoints_name ${CHECKPOINTS_NAME} \
                        --use_ground_truth \
-                        >> ${LOG_FILE} 2>&1
+                        2>&1 | tee -a ${LOG_FILE}
 
 
 elif [ "$1"x == "val"x ]; then
