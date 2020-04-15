@@ -205,6 +205,6 @@ e.g.
     input_args = [fn for fn in os.listdir(in_dir) if fn.endswith('pred.txt')]
     print(len(input_args), 'files in total.')
     copy_gt()
-    # mpp.Pool(processes=None).map(process, input_args)
+    mpp.Pool(processes=None).map(process, input_args)
     if args.split == 'val':
         evaluation(out_dir)

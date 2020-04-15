@@ -45,10 +45,10 @@ We have released the prediction of some state-of-the-arts approaches and their S
 
 | Method | Test Set | AP w/o SegFix | AP w/ SegFix |
 | :----: | :----: | :--: | :--: |
-| PointRend (w/o COCO, detectron2) | val | 35.9 | 37.4 |
 | MaskRCNN (w/ COCO, detectron2) | val | 36.5 | 38.2 |
+| PointRend (w/ COCO, detectron2) | val | 37.9 | 39.5 |
+| MaskRCNN (w/ COCO, detectron2) | test | 32.0 | 33.3 |
 | PointRend (w/ COCO, detectron2) | test | 33.3 | 34.8 |
-| MaskRCNN (w/ COCO, detectron2) | val | 32.0 | 33.3 |
 
 ### Use SegFix for your own label files
 
