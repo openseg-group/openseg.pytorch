@@ -22,7 +22,6 @@ script_path = osp.abspath(osp.join(osp.dirname(__file__)))
 os.chdir(osp.join(script_path, '..', '..'))
 sys.path.insert(0, os.getcwd())
 os.environ['PYTHONPATH'] = os.getcwd() + ':' + os.environ.get('PYTHONPATH', '')
-from lib.models.modules.offset_block import OffsetModule
 
 class LabelTransformer:
 
@@ -62,12 +61,6 @@ def gen_coord_map(H, W):
     coord_h, coord_w = torch.meshgrid(coord_vecs)
     return coord_h, coord_w
 
-
-def get_onehot(label_map, num_classes=19):
-    onehot = torch.eye(num_classes)
-    return onehot[label_map.long()].permute(0, 3, 1, 2)
-
-
 def shift(x, offset):
     """
     x: h x w
@@ -75,15 +68,15 @@ def shift(x, offset):
     """
     h, w = x.shape
     x = torch.from_numpy(x).unsqueeze(0)
-    onehot = get_onehot(x)
     offset = torch.from_numpy(offset).unsqueeze(0)
     coord_map = gen_coord_map(h, w)
     norm_factor = torch.FloatTensor([(w-1)/2, (h-1)/2])
     grid_h = offset[:, 0]+coord_map[0]
     grid_w = offset[:, 1]+coord_map[1]
     grid = torch.stack([grid_w, grid_h], dim=-1) / norm_factor - 1
-    onehot = F.grid_sample(onehot, grid, padding_mode='border', mode='bilinear')
-    return onehot.argmax(dim=1).squeeze().numpy().astype(np.uint8)
+    x = F.grid_sample(x.unsqueeze(1).float(), grid, padding_mode='border', mode='bilinear').squeeze().numpy()
+    x = np.round(x)
+    return x.astype(np.uint8)
 
 def get_offset(basename):
     return io.loadmat(osp.join(offset_dir, basename+'.mat'))['mat']\
@@ -112,10 +105,20 @@ if __name__ == '__main__':
     parser.add_argument('--scale', type=float, default=2)
     args = parser.parse_args()
 
-    offset_dir = args.offset
+    if args.offset is None:
+        if args.split == 'val':
+            offset_dir = osp.join(DATA_ROOT, 'cityscapes', 'val', 'offset_pred', 'semantic', 'offset_hrnext')
+        else:
+            offset_dir = osp.join(DATA_ROOT, 'cityscapes', 'test_offset', 'semantic', 'offset_hrnext')
+    else:
+        offset_dir = args.offset
+
     in_label_dir = args.input
     if args.out is None:
-        out_label_dir = in_label_dir.replace('/label', '/label_w_segfix')
+        if '/label' in in_label_dir:
+            out_label_dir = in_label_dir.replace('/label', '/label_w_segfix')
+        else:
+            out_label_dir = osp.join(in_label_dir, 'label_w_segfix')
     else:
         out_label_dir = args.out
     print('Saving to', out_label_dir)

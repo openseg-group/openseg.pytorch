@@ -20,6 +20,11 @@ import sys
 import time
 import cv2
 
+script_path = osp.abspath(osp.join(osp.dirname(__file__)))
+os.chdir(osp.join(script_path, '..', '..'))
+sys.path.insert(0, os.getcwd())
+os.environ['PYTHONPATH'] = os.getcwd() + ':' + os.environ.get('PYTHONPATH', '')
+
 def gen_coord_map(H, W):
     coord_vecs = [torch.arange(length, dtype=torch.float) for length in (H, W)]
     coord_h, coord_w = torch.meshgrid(coord_vecs)
@@ -179,18 +184,27 @@ e.g.
     parser.add_argument('--split', choices=['val', 'test'], default='val')
     parser.add_argument('--scale', type=float, default=1)
     parser.add_argument(
-        '--dataset-dir', default='/msravcshare/split/cs_orig_data/')
+        '--dataset-dir', default='/msravcshare/dataset/original_cityscapes/')
     parser.add_argument('--out')
     args = parser.parse_args()
 
     in_dir = args.input
-    out_dir = args.out
-    offset_dir = args.offset
+    if args.offset is None:
+        if args.split == 'val':
+            offset_dir = osp.join(DATA_ROOT, 'cityscapes', 'val', 'offset_pred', 'instance', 'offset_hrnext')
+        else:
+            offset_dir = osp.join(DATA_ROOT, 'cityscapes', 'test_offset', 'instance', 'offset_hrnext')
+    else:
+        offset_dir = args.offset
+    if args.out is not None:
+        out_dir = args.out
+    else:
+        out_dir = osp.join(in_dir, 'label_w_segfix')
 
     os.makedirs(out_dir, exist_ok=True)
     input_args = [fn for fn in os.listdir(in_dir) if fn.endswith('pred.txt')]
     print(len(input_args), 'files in total.')
     copy_gt()
-    mpp.Pool(processes=None).map(process, input_args)
+    # mpp.Pool(processes=None).map(process, input_args)
     if args.split == 'val':
         evaluation(out_dir)
