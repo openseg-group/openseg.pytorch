@@ -5,11 +5,13 @@ opencv-python
 scipy
 easydict
 matplotlib
-Pillow
+Pillow==5.1.0
+torchcontrib
+yacs
 pyyaml
 visdom
 bs4
 html5lib
 ninja
-torch
-torchvision
+torch==0.4.1
+torchvision==0.2.1
