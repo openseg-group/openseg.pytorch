@@ -9,7 +9,7 @@ Performance on the Cityscapes dataset. The models are trained and tested with in
 Checkpoints should be put under `~/checkpoints/cityscapes`.
 
 Methods | Backbone | Train Set | Test Set | Iterations | Batch Size | OHEM | Multi-scale | Flip | mIoU | mIoU w/ SegFix | Link | Script |
-| :----: | :----: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
+| :---- | :------- | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
 Base-OC | ResNet-101 | Train | Val | 40000 | 8 | No | No | No | 79.49 | 80.55 | [Log](https://drive.google.com/open?id=1bdO_yyuUH63fBP8AE0DO_9OJmJiuvPvw) / [Model](https://drive.google.com/open?id=1AyfnfIt_Aci3CoKup0uVY0UczJS3BiS7) | scripts/cityscapes/ocnet/run_r_101_d_8_baseoc_train.sh |
 OCR | ResNet-101 | Train | Val | 40000 | 8 | No | No | No | 79.63 | 80.68 | [Log](https://drive.google.com/open?id=1mKUM15UQXj5QYwvW6gJ6wQ0KDhJkWbFA) / [Model](https://drive.google.com/open?id=1bUCC3PEvuTBgfUpJlswEjdSJ_iGvg-Px) | scripts/cityscapes/ocrnet/run_r_101_d_8_ocrnet_train.sh |
 ASP-OCR | ResNet-101 | Train | Val | 40000 | 8 | No | No | No | 79.89 | 80.69 | [Log](https://drive.google.com/open?id=1pT2OaCU6uGhNKH3TOJWvgvELYWV-0Fyd) / [Model](https://drive.google.com/open?id=1PXg7RK0LOOmTUNhjFOQXRswx0RAwCw2a) | scripts/cityscapes/ocrnet/run_r_101_d_8_asp_ocrnet_train.sh |
@@ -26,7 +26,7 @@ The models are trained with the input size of 520x520, and tested with original 
 Checkpoints should be put under `~/checkpoints/pascal_context`.
 
 Methods | Backbone | Train Set | Test Set | Iterations | Batch Size | OHEM | Multi-scale | Flip | mIoU | Link | Script |
-| :----: | :----: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
+| :---- | :----: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
 OCR | HRNet-W48 | Train | Val | 60000 | 16 | No | No | No | 55.11 | [Log](https://drive.google.com/open?id=1cJcI3hL0MA4bxWQOCViV0J2ispIgYteV) / [Model](https://drive.google.com/open?id=1hJhlOFh2Vltuy8ebNVy3IX037UAptvgE) | scripts/pascal_context/run_h_48_d_4_ocr_train.sh |
 
 ## LIP
@@ -36,7 +36,7 @@ The models are trained and tested with input size of 473x473.
 Checkpoints should be put under `~/checkpoints/lip`.
 
 Methods | Backbone | Train Set | Test Set | Iterations | Batch Size | OHEM | Multi-scale | Flip | mIoU | Link | Script |
-| :----: | :----: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
+| :---- | :----: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
 OCR | HRNet-W48 | Train | Val | 100000 | 32 | No | No | Yes | 56.72 | [Log](https://drive.google.com/open?id=1o6hOZWBJNk2LHxVJCtT7bW3u8SdHZb4f) / [Model](https://drive.google.com/open?id=1jlcJ_FwsadgxR1QrDw5Cxy2_9me86hUh) | scripts/lip/run_h_48_d_4_ocr_train.sh |
 
 
@@ -53,7 +53,7 @@ SegFix can be applied on both Semantic Segmentation and Instance Segmentation ta
 We have released the prediction of some state-of-the-arts approaches and their SegFixed results. The files can be found [here](https://drive.google.com/open?id=1ZTpzyGcjme7Cgz-PC6Urn27Qw5n29d9U). The performances are listed in the table below:
 
 | Method | Test Set | mIoU w/o SegFix | mIoU w/ SegFix |
-| :----: | :----: | :--: | :--: |
+| :---- | :----: | :--: | :--: |
 | HRNet-W48 | val | 81.1 | 81.6 |
 | HRNet-W48 + OCR | test | 84.2 | 84.5 |
 
@@ -86,11 +86,13 @@ where
 We have released the prediction of some state-of-the-arts approaches and their SegFixed results. The files can be found [here](https://drive.google.com/open?id=184RXq8-RT8cdt5ojQGa1ziGN5iOxU1Xh). The performances are listed in the table below:
 
 | Method | Test Set | AP w/o SegFix | AP w/ SegFix |
-| :----: | :----: | :--: | :--: |
-| MaskRCNN (w/ COCO, detectron2) | val | 36.5 | 38.2 |
-| PointRend (w/ COCO, detectron2) | val | 37.9 | 39.5 |
-| MaskRCNN (w/ COCO, detectron2) | test | 32.0 | 33.3 |
-| PointRend (w/ COCO, detectron2) | test | 33.3 | 34.8 |
+| :---- | :----: | :--: | :--: |
+| MaskRCNN (w/ COCO, Detectron2) | val | 36.5 | 38.2 |
+| PointRend (w/ COCO, Detectron2) | val | 37.9 | 39.5 |
+| MaskRCNN (w/ COCO, Detectron2) | test | 32.0 | 33.3 |
+| PointRend (w/ COCO, Detectron2) | test | 33.3 | 34.8 |
+| PANet (w/ COCO) | test | 36.4 | 37.8 |
+| PolyTransform (w/ COCO) | test | 40.1 | 41.2 |
 
 ### Use SegFix for your own label files
 
