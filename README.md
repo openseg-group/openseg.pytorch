@@ -12,12 +12,28 @@
 
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/object-contextual-representations-for/semantic-segmentation-on-cityscapes)](https://paperswithcode.com/sota/semantic-segmentation-on-cityscapes?p=object-contextual-representations-for)
 
-
 ## News
 
-- 2019/12/06
-We have released our code (with the training log and checkpoints) to provide a good baseline for the community. Thanks for your patience.
+- 2020/04/16
+We have released some of our checkpoints/logs of OCNet, OCR and SegFix. Thanks for your patience.
 
+- 2020/03/12
+Our SegFix could be used to improve the performance of various SOTA methods on both semantic segmentation and instance segmentation, e.g., "PolyTransform + SegFix" achieves **Rank#2** on Cityscapes leaderboard (instance segmentation track) with performance as 41.2%.
+
+- 2020/01/13
+The source code for reproduced [HRNet+OCR](https://github.com/HRNet/HRNet-Semantic-Segmentation/tree/HRNet-OCR) has been made public.
+
+- 2020/01/09
+"HRNet + OCR + SegFix" achieves **Rank#1** on Cityscapes leaderboard with mIoU as **84.5%**. 
+
+- 2020/01/07
+"HRNet+OCR[Mapillary+Coarse]" currently achieves **84.26%** on Cityscapes test with better Mapillary pretraining, where we pretrain the HRNet+OCR model on the original Mapillary training set and achieve **50.8%** on Mapillary val set. We can expect higher performance with various improvements, e.g., ASP-OCR, larger batch size/crop size (as in Panoptic-DeepLab) and our novel post-processing mechanism.
+
+- 2020/01/03
+"HRNet+OCR" will be made open-source in the code-base [HRNet-Semantic-Segmentation](https://github.com/HRNet/HRNet-Semantic-Segmentation) very soon, thanks for your patience.
+
+- 2020/01/02
+Please email us (yuyua@microsoft.com) if you need the code for our OCR module and we would like to share it with you ASAP. We also hope you could try our method in your own code base and share the results with us.
 
 - 2019/11/19
 We have updated the paper [OCR](https://arxiv.org/abs/1909.11065).
@@ -38,15 +54,6 @@ We achieve **56.02%** on the leaderboard of ADE20K test set based on single mode
 
 - 2019/05/27
 We achieve SOTA on **6** different semantic segmentation benchmarks including: **Cityscapes, ADE20K,  LIP, Pascal-Context, Pascal-VOC, COCO-Stuff**. We provide the source code for our approach on all the six benchmarks.
-
-
-## Model Zoo and Baselines
-
-We provide a set of baseline results and trained models available for download in the [openseg Model Zoo](MODEL_ZOO.md).
-
-## SegFix for InstanceSegmentation (TODO)
-
-script at `scripts/cityscapes/segfix_instance.py`. Offset files at [offset_instance.zip](https://drive.google.com/open?id=1UXj6-XCXrPGAzDq3F1GGRpaF32nNTF4m).
 
 ## Citation
 Please consider citing our work if you find it helps you,
@@ -70,6 +77,43 @@ Please consider citing our work if you find it helps you,
   author={Yuan Yuhui and Chen Xilin and Wang Jingdong},
   journal={arXiv preprint arXiv:1909.11065},
   year={2019}
+}
+```
+
+
+## Model Zoo and Baselines
+
+We provide a set of baseline results and trained models available for download in the [openseg Model Zoo](MODEL_ZOO.md).
+
+## Citation
+Please consider citing our work if you find it helps you,
+```
+@article{yuan2018ocnet,
+  title={Ocnet: Object context network for scene parsing},
+  author={Yuan Yuhui and Wang Jingdong},
+  journal={arXiv preprint arXiv:1809.00916},
+  year={2018}
+}
+
+@article{huang2019isa,
+  title={Interlaced Sparse Self-Attention for Semantic Segmentation},
+  author={Huang Lang and Yuan Yuhui and Guo Jianyuan and Zhang Chao and Chen Xilin and Wang Jingdong},
+  journal={arXiv preprint arXiv:1907.12273},
+  year={2019}
+}
+
+@article{yuan2019ocr,
+  title={Object-Contextual Representations for Semantic Segmentation},
+  author={Yuan Yuhui and Chen Xilin and Wang Jingdong},
+  journal={arXiv preprint arXiv:1909.11065},
+  year={2019}
+}
+
+@article{yuan2020segfix,
+title={SegFix: Model-Agnostic Boundary Refinement for Segmentation},
+author={Yuan Yuhui,  Xie Jingyi, Chen Xilin, Wang Jingdong},
+journal={arXiv preprint},
+year={2020}
 }
 ```
 
