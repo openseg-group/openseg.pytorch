@@ -1,7 +1,13 @@
-#!/usr/bin/env python
-# -*- coding:utf-8 -*-
-# Author: Donny You(youansheng@gmail.com)
-# Main Scripts for computer vision.
+##+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+## Created by: Donny You
+## Modified by: RainbowSecret, JingyiXie, LangHuang
+## Microsoft Research
+## yuyua@microsoft.com
+## Copyright (c) 2020
+##
+## This source code is licensed under the MIT-style license found in the
+## LICENSE file in the root directory of this source tree 
+##+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 from __future__ import absolute_import
 from __future__ import division
