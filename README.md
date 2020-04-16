@@ -55,35 +55,10 @@ We achieve **56.02%** on the leaderboard of ADE20K test set based on single mode
 - 2019/05/27
 We achieve SOTA on **6** different semantic segmentation benchmarks including: **Cityscapes, ADE20K,  LIP, Pascal-Context, Pascal-VOC, COCO-Stuff**. We provide the source code for our approach on all the six benchmarks.
 
-## Citation
-Please consider citing our work if you find it helps you,
-```
-@article{yuan2018ocnet,
-  title={Ocnet: Object context network for scene parsing},
-  author={Yuan Yuhui and Wang Jingdong},
-  journal={arXiv preprint arXiv:1809.00916},
-  year={2018}
-}
-
-@article{huang2019isa,
-  title={Interlaced Sparse Self-Attention for Semantic Segmentation},
-  author={Huang Lang and Yuan Yuhui and Guo Jianyuan and Zhang Chao and Chen Xilin and Wang Jingdong},
-  journal={arXiv preprint arXiv:1907.12273},
-  year={2019}
-}
-
-@article{yuan2019ocr,
-  title={Object-Contextual Representations for Semantic Segmentation},
-  author={Yuan Yuhui and Chen Xilin and Wang Jingdong},
-  journal={arXiv preprint arXiv:1909.11065},
-  year={2019}
-}
-```
-
 
 ## Model Zoo and Baselines
 
-We provide a set of baseline results and trained models available for download in the [openseg Model Zoo](MODEL_ZOO.md).
+We provide a set of baseline results and trained models available for download in the [Model Zoo](MODEL_ZOO.md).
 
 ## Citation
 Please consider citing our work if you find it helps you,
@@ -110,10 +85,10 @@ Please consider citing our work if you find it helps you,
 }
 
 @article{yuan2020segfix,
-title={SegFix: Model-Agnostic Boundary Refinement for Segmentation},
-author={Yuan Yuhui,  Xie Jingyi, Chen Xilin, Wang Jingdong},
-journal={arXiv preprint},
-year={2020}
+  title={SegFix: Model-Agnostic Boundary Refinement for Segmentation},
+  author={Yuan Yuhui,  Xie Jingyi, Chen Xilin, Wang Jingdong},
+  journal={arXiv preprint},
+  year={2020}
 }
 ```
 
