@@ -86,7 +86,7 @@ Please consider citing our work if you find it helps you,
 
 @article{yuan2020segfix,
   title={SegFix: Model-Agnostic Boundary Refinement for Segmentation},
-  author={Yuan Yuhui,  Xie Jingyi, Chen Xilin, Wang Jingdong},
+  author={Yuan Yuhui and Xie Jingyi and Chen Xilin and Wang Jingdong},
   journal={arXiv preprint},
   year={2020}
 }
