@@ -1,65 +1,4 @@
-# Data Preparation
-
-You need to download [Cityscapes](https://www.cityscapes-dataset.com/), [LIP](http://sysu-hcp.net/lip/) and [PASCAL-Context](https://cs.stanford.edu/~roozbeh/pascal-context/) datasets.
-
-We arrange images and labels in another way. You could preprocess the files by running:
-
-```bash
-python lib/datasets/preprocess/cityscapes/cityscapes_generator.py --coarse True \
-  --save_dir <path/to/preprocessed_cityscapes> --ori_root_dir <path/to/original_cityscapes>
-python lib/datasets/preprocess/pascal_context/pascal_context_generator.py \
-  --save_dir <path/to/preprocessed_context> --ori_root_dir <path/to/original_context>
-# TODO: LIP Preprocess
-```
-
-and finally, the dataset directory should look like:
-
-```
-$DATA_ROOT
-├── cityscapes
-│   ├── coarse
-│   │   ├── image
-│   │   ├── instance
-│   │   └── label
-│   ├── train
-│   │   ├── image
-│   │   └── label
-│   ├── val
-│   │   ├── image
-│   │   └── label
-├── pascal_context
-│   ├── train
-│   │   ├── image
-│   │   └── label
-│   ├── val
-│   │   ├── image
-│   │   └── label
-├── lip
-│   ├── atr
-│   │   ├── edge
-│   │   ├── image
-│   │   └── label
-│   ├── cihp
-│   │   ├── image
-│   │   └── label
-│   ├── train
-│   │   ├── edge
-│   │   ├── image
-│   │   └── label
-│   ├── val
-│   │   ├── edge
-│   │   ├── image
-│   │   └── label
-```
-
-# Configuration
-
-Before executing any scripts, your should first fill up the config file `config.profile` at project root directory. There are two items you should specify:
-
- + `PYTHON`, identifying your python executable.
- + `DATA_ROOT`, the root directory of your data. It should be the parent directory of `cityscapes`.
-
-# Segmentation Results
+# OCNet series
 
 The following tables listed segmentation results on various datasets. To perform the validation, simply download and put checkpoints to corresponding directories, and run the script. For example, to evaluate `HRNet-W48 + OCR` on Cityscapes, you should download `ocr/Cityscapes/hrnet_w48_ocr_1_latest.pth` and put it under `~/checkpoints/cityscapes`, then run `bash scripts/cityscapes/hrnet/run_h_48_d_4_ocr.sh val 1` to start validation.
 
@@ -99,3 +38,73 @@ Checkpoints should be put under `~/checkpoints/lip`.
 Methods | Backbone | Train Set | Test Set | Iterations | Batch Size | OHEM | Multi-scale | Flip | mIoU | Link | Script |
 | :----: | :----: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
 OCR | HRNet-W48 | Train | Val | 100000 | 32 | No | No | Yes | 56.72 | [Log](https://drive.google.com/open?id=1o6hOZWBJNk2LHxVJCtT7bW3u8SdHZb4f) / [Model](https://drive.google.com/open?id=1jlcJ_FwsadgxR1QrDw5Cxy2_9me86hUh) | scripts/lip/run_h_48_d_4_ocr_train.sh |
+
+
+# SegFix
+
+SegFix is a novel yet simple model-agnostic post-processing scheme. Our model-agnostic post-processing scheme is a new work under progress, which can be applied to improve the results of any existing approaches without any re-training or fine-tuning.
+
+SegFix can be applied on both Semantic Segmentation and Instance Segmentation tasks.
+
+## SegFix for Semantic Segmentation
+
+### Released prediction files
+
+We have released the prediction of some state-of-the-arts approaches and their SegFixed results. The files can be found [here](https://drive.google.com/open?id=1ZTpzyGcjme7Cgz-PC6Urn27Qw5n29d9U). The performances are listed in the table below:
+
+| Method | Test Set | mIoU w/o SegFix | mIoU w/ SegFix |
+| :----: | :----: | :--: | :--: |
+| HRNet-W48 | val | 81.1 | 81.6 |
+| HRNet-W48 + OCR | test | 84.2 | 84.5 |
+
+### Use SegFix in openseg
+
+To apply SegFix, you should first down the offset files [offset_instance.zip](https://drive.google.com/open?id=1iDP2scYmy51XJww-888oouNpRBksmrkv) to `$DATA_ROOT/cityscapes`, and then extract the archive.
+
+Several scripts in openseg have built-in support for SegFix post-processing. For example, you can first run `bash scripts/cityscapes/hrnet/run_h_48_d_4_ocr.sh val 1` to get the baseline prediction of HRNet-W48 + OCR model, then run `bash scripts/cityscapes/hrnet/run_h_48_d_4_ocr.sh segfix 1 val` to further apply SegFix on the prediction.
+
+### Use SegFix for your own label files
+
+You can use `scripts/cityscapes/segfix.py` to apply SegFix on your own label files. Usage:
+```bash
+python scripts/cityscapes/segfix.py \
+  --input <path/to/your/label/dir> \
+  --split <SPLIT> \
+  [ --offset <OFFSET_DIR>] \
+  [ --out <OUT_DIR>]
+```
+where 
+  + `<SPLIT>` is `test` or `val`.
+  + `<OFFSET_DIR>` is the location of SegFix offsets, default to `$DATA_ROOT/cityscapes/val/offset_pred/semantic/offset_hrnext/` or `$DATA_ROOT/cityscapes/test_offset/semantic/offset_hrnext/`.
+  + `<OUT_DIR>` is an optional output directory.
+
+
+## SegFix for Instance Segmentation
+
+### Released prediction files
+
+We have released the prediction of some state-of-the-arts approaches and their SegFixed results. The files can be found [here](https://drive.google.com/open?id=184RXq8-RT8cdt5ojQGa1ziGN5iOxU1Xh). The performances are listed in the table below:
+
+| Method | Test Set | AP w/o SegFix | AP w/ SegFix |
+| :----: | :----: | :--: | :--: |
+| MaskRCNN (w/ COCO, detectron2) | val | 36.5 | 38.2 |
+| PointRend (w/ COCO, detectron2) | val | 37.9 | 39.5 |
+| MaskRCNN (w/ COCO, detectron2) | test | 32.0 | 33.3 |
+| PointRend (w/ COCO, detectron2) | test | 33.3 | 34.8 |
+
+### Use SegFix for your own label files
+
+You can use `scripts/cityscapes/segfix_instance.py` to apply SegFix on your own label files. Usage:
+```bash
+python scripts/cityscapes/segfix.py \
+  --input <path/to/your/label/dir> \
+  --split <SPLIT> \
+  [ --offset <OFFSET_DIR>] \
+  [ --out <OUT_DIR>]
+```
+where 
+  + `<SPLIT>` is `test` or `val`.
+  + `<OFFSET_DIR>` is the location of SegFix offsets, default to `$DATA_ROOT/cityscapes/val/offset_pred/semantic/offset_hrnext/` or `$DATA_ROOT/cityscapes/test_offset/semantic/offset_hrnext/`.
+  + `<OUT_DIR>` is an optional output directory.
+
+
