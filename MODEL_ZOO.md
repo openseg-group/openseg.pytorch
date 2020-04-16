@@ -15,7 +15,7 @@ OCR | ResNet-101 | Train | Val | 40000 | 8 | No | No | No | 79.63 | 80.68 | [Log
 ASP-OCR | ResNet-101 | Train | Val | 40000 | 8 | No | No | No | 79.89 | 80.69 | [Log](https://drive.google.com/open?id=1pT2OaCU6uGhNKH3TOJWvgvELYWV-0Fyd) / [Model](https://drive.google.com/open?id=1PXg7RK0LOOmTUNhjFOQXRswx0RAwCw2a) | scripts/cityscapes/ocrnet/run_r_101_d_8_asp_ocrnet_train.sh |
 OCR | HRNet-W48 | Train | Val | 80000 | 8 | No | No | No | 81.09 | 81.73 | [Log](https://drive.google.com/open?id=1rHzUdSmLjvKsVkG-XpRzEpNX2zzU0hZc) / [Model](https://drive.google.com/open?id=1SJAgAhFODCqm_6L8KRkFFFr7dB2l6aC_) | scripts/cityscapes/hrnet/run_h_48_d_4_ocr.sh |
 
-### SegFix
+#### SegFix
 
 On Cityscapes, we can use SegFix scheme to further refine the boundary of segmentation results. To apply SegFix, you should first download [offset_semantic.zip](https://drive.google.com/open?id=1iDP2scYmy51XJww-888oouNpRBksmrkv) to `$DATA_ROOT/cityscapes`, then unzip the archive. Take HRNet-W48 based OCR as an example. To refine the results on Cityscapes val set, you should first run `bash scripts/cityscapes/hrnet/run_h_48_d_4_ocr.sh val 1` to obtain the baseline results, then run `bash scripts/cityscapes/hrnet/run_h_48_d_4_ocr.sh segfix 1 val` to apply SegFix.
 
@@ -46,7 +46,7 @@ SegFix is a novel yet simple model-agnostic post-processing scheme. Our model-ag
 
 SegFix can be applied on both Semantic Segmentation and Instance Segmentation tasks.
 
-## SegFix for Semantic Segmentation
+## Cityscapes Semantic Segmentation
 
 ### Released prediction files
 
@@ -79,7 +79,7 @@ where
   + `<OUT_DIR>` is an optional output directory.
 
 
-## SegFix for Instance Segmentation
+## Cityscapes Instance Segmentation
 
 ### Released prediction files
 
