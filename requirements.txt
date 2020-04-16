@@ -5,7 +5,7 @@ opencv-python
 scipy
 easydict
 matplotlib
-Pillow==5.1.0
+Pillow>=6.2.2
 torchcontrib
 yacs
 pyyaml
