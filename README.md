@@ -15,7 +15,7 @@
 ## News
 
 - 2020/04/16
-We have released some of our checkpoints/logs of OCNet, OCR and SegFix. Thanks for your patience.
+We have released some of our checkpoints/logs of OCNet, OCR and SegFix. **We highly recommend you to use our SegFix to improve your segmentation results as it is super easy & fast to use.**
 
 - 2020/03/12
 Our SegFix could be used to improve the performance of various SOTA methods on both semantic segmentation and instance segmentation, e.g., "PolyTransform + SegFix" achieves **Rank#2** on Cityscapes leaderboard (instance segmentation track) with performance as 41.2%.
