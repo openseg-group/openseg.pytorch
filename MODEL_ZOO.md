@@ -44,7 +44,7 @@ OCR | HRNet-W48 | Train | Val | 100000 | 32 | No | No | Yes | 56.72 | [Log](http
 
 **We strongly recommend you to use our SegFix to improve your segmentation results as it is super easy & fast to use.**
 
-SegFix is a general effective (model-agnostic) post-processing scheme (kinds of like DenseCRF). The key idea of the SegFix is to replace the labels of the boundary pixels with the label of the interior pixels. SegFix can be used to improve the semantic/instance segmentation results of any existing approaches, e.g., HRNet, DeepLabv3, OCR, without any re-training or fine-tuning. We have made the inference code and the offset files of our SegFix method. Please try our SegFix in your Cityscapes submission and you can achieve much better performance. As illustrated in the followed examples, our SegFix is complementary with various very recent methods, such as the PointRend by FAIR.
+SegFix is a general effective (model-agnostic) post-processing scheme (kinds of like DenseCRF). The key idea of the SegFix is to replace the labels of the boundary pixels with the label of the interior pixels. SegFix can be used to improve the semantic/instance segmentation results of any existing approaches, e.g., HRNet, DeepLabv3, OCR, PointRend, MaskRCNN, without any re-training or fine-tuning. We have made the inference code and the offset files of our SegFix method. Please try our SegFix in your Cityscapes submission and you can achieve much better performance. As illustrated in the followed examples, our SegFix is complementary with various very recent methods, such as the PointRend by FAIR.
 
 ## Cityscapes Semantic Segmentation
 
