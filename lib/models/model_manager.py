@@ -30,6 +30,9 @@ from lib.models.nets.hrnet import HRNet_W48_OCR, HRNet_W48_ASPOCR, HRNet_W48_OCR
 # OCNet
 from lib.models.nets.ocnet import BaseOCNet, AspOCNet
 
+# ISA Net
+from lib.models.nets.isanet import ISANet
+
 # CE2P
 from lib.models.nets.ce2pnet import CE2P_OCRNet, CE2P_IdealOCRNet, CE2P_ASPOCR
 
@@ -39,6 +42,8 @@ SEG_MODEL_DICT = {
     # OCNet series
     'base_ocnet': BaseOCNet,
     'asp_ocnet': AspOCNet,
+    # ISA Net
+    'isanet': ISANet,
     # OCR series
     'spatial_ocrnet': SpatialOCRNet,
     'spatial_asp_ocrnet': ASPOCRNet,

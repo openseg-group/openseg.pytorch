@@ -13,6 +13,8 @@
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/object-contextual-representations-for/semantic-segmentation-on-cityscapes)](https://paperswithcode.com/sota/semantic-segmentation-on-cityscapes?p=object-contextual-representations-for)
 
 ## News
+- 2020/04/18
+We have released the checkpoint/log of ISA.
 
 - 2020/04/16
 We have released some of our checkpoints/logs of OCNet, OCR and SegFix. **We highly recommend you to use our SegFix to improve your segmentation results as it is super easy & fast to use.**
