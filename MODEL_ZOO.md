@@ -60,7 +60,7 @@ We have released the prediction of some state-of-the-arts approaches and their S
 
 ### Use SegFix in openseg
 
-To apply SegFix, you should first down the offset files [offset_instance.zip](https://drive.google.com/open?id=1iDP2scYmy51XJww-888oouNpRBksmrkv) to `$DATA_ROOT/cityscapes`, and then extract the archive.
+To apply SegFix, you should first down the offset files [offset_semantic.zip](https://drive.google.com/open?id=1iDP2scYmy51XJww-888oouNpRBksmrkv) to `$DATA_ROOT/cityscapes`, and then extract the archive.
 
 Several scripts in openseg have built-in support for SegFix post-processing. For example, you can first run `bash scripts/cityscapes/hrnet/run_h_48_d_4_ocr.sh val 1` to get the baseline prediction of HRNet-W48 + OCR model, then run `bash scripts/cityscapes/hrnet/run_h_48_d_4_ocr.sh segfix 1 val` to further apply SegFix on the prediction.
 
@@ -96,6 +96,8 @@ We have released the prediction of some state-of-the-arts approaches and their S
 | PolyTransform (w/ COCO) | test | 40.1 | 41.2 |
 
 ### Use SegFix for your own label files
+
+To apply SegFix, you should first down the offset files [offset_instance.zip](https://drive.google.com/open?id=1UXj6-XCXrPGAzDq3F1GGRpaF32nNTF4m) to `$DATA_ROOT/cityscapes`, and then extract the archive.
 
 You can use `scripts/cityscapes/segfix_instance.py` to apply SegFix on your own label files. Usage:
 ```bash
