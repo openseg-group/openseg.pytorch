@@ -109,7 +109,7 @@ python scripts/cityscapes/segfix.py \
 ```
 where 
   + `<SPLIT>` is `test` or `val`.
-  + `<OFFSET_DIR>` is the location of SegFix offsets, default to `$DATA_ROOT/cityscapes/val/offset_pred/semantic/offset_hrnext/` or `$DATA_ROOT/cityscapes/test_offset/semantic/offset_hrnext/`.
+  + `<OFFSET_DIR>` is the location of SegFix offsets, default to `$DATA_ROOT/cityscapes/val/offset_pred/instance/offset_hrnext/` or `$DATA_ROOT/cityscapes/test_offset/instance/offset_hrnext/`.
   + `<OUT_DIR>` is an optional output directory.
 
 
