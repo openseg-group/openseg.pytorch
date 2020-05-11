@@ -51,7 +51,7 @@ Methods | Backbone | Train Set | Test Set | Iterations | Batch Size | OHEM | Mul
 OCR | HRNet-W48 | Train | Val | 60000 | 16 | Yes | No | No | 39.61 | [Log](https://drive.google.com/open?id=1cfxEJFPsg_QaFU3nm5E4La_fIlgmSjr3) / [Model](https://drive.google.com/open?id=13tXkK9maID7ajSOxSsOavdqKHhFJ4HvD) | scripts/coco_stuff/run_h_48_d_4_ocr_ohem/train.sh |
 OCR | HRNet-W48 | Train | Val | 60000 | 16 | Yes | Yes | Yes | 40.20 | same as above | scripts/coco_stuff/run_h_48_d_4_ocr_ohem_train.sh |
 
-## COCO-Stuff
+## ADE20K
 
 The models are trained and tested with input size of 520x520.
 
