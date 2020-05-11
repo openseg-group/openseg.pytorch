@@ -17,7 +17,7 @@ BACKBONE="hrnet48"
 CONFIGS="configs/coco_stuff/H_48_D_4.json"
 CONFIGS_TEST="configs/coco_stuff/H_48_D_4_TEST.json"
 
-MODEL_NAME="hrnet48_ocr"
+MODEL_NAME="hrnet_w48_ocr"
 LOSS_TYPE="fs_auxohemce_loss"
 CHECKPOINTS_NAME="${MODEL_NAME}_${BACKBONE}_ohem_"$2
 LOG_FILE="./log/coco_stuff/${CHECKPOINTS_NAME}.log"
@@ -80,7 +80,7 @@ elif [ "$1"x == "val"x ]; then
                        --out_dir ${SAVE_DIR}${CHECKPOINTS_NAME}_val_ms
 
   cd lib/metrics
-  ${PYTHON} -u ade20k_evaluator.py --configs ../../${CONFIGS_TEST} \
+  ${PYTHON} -u cocostuff_evaluator.py --configs ../../${CONFIGS_TEST} \
                                    --pred_dir ${SAVE_DIR}${CHECKPOINTS_NAME}_val_ms/label \
                                    --gt_dir ${DATA_DIR}/val/label  
 
@@ -88,17 +88,17 @@ elif [ "$1"x == "val"x ]; then
 elif [ "$1"x == "test"x ]; then
   if [ "$3"x == "ss"x ]; then
     echo "[single scale] test"
-    ${PYTHON} -u main.py --configs ${CONFIGS} --drop_last y \
+    ${PYTHON} -u main.py --configs ${CONFIGS} --drop_last y --data_dir ${DATA_DIR} \
                          --backbone ${BACKBONE} --model_name ${MODEL_NAME} --checkpoints_name ${CHECKPOINTS_NAME} \
                          --phase test --gpu 0 1 2 3 --resume ./checkpoints/coco_stuff/${CHECKPOINTS_NAME}_latest.pth \
-                         --test_dir ${DATA_DIR}/test --log_to_file n \
+                         --test_dir ${DATA_DIR}/val/image --log_to_file n \
                          --out_dir ${SAVE_DIR}${CHECKPOINTS_NAME}_test_ss
   else
     echo "[multiple scale + flip] test"
-    ${PYTHON} -u main.py --configs ${CONFIGS_TEST} --drop_last y \
+    ${PYTHON} -u main.py --configs ${CONFIGS_TEST} --drop_last y --data_dir ${DATA_DIR} \
                          --backbone ${BACKBONE} --model_name ${MODEL_NAME} --checkpoints_name ${CHECKPOINTS_NAME} \
                          --phase test --gpu 0 1 2 3 --resume ./checkpoints/coco_stuff/${CHECKPOINTS_NAME}_latest.pth \
-                         --test_dir ${DATA_DIR}/test --log_to_file n \
+                         --test_dir ${DATA_DIR}/val/image --log_to_file n \
                          --out_dir ${SAVE_DIR}${CHECKPOINTS_NAME}_test_ms
   fi
 
