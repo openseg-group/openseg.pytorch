@@ -3,6 +3,8 @@
 
 This document provides a brief intro of the usage of openseg.pytorch.
 
+You can also refer to the https://github.com/openseg-group/openseg.pytorch/issues/14 for the guidelines on how to train the models on your own dataset based openseg.pytorch.
+
 
 ## Requirements
 - Linux or macOS with Python ≥ 3.6
