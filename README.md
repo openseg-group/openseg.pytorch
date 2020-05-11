@@ -13,6 +13,10 @@
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/object-contextual-representations-for/semantic-segmentation-on-cityscapes)](https://paperswithcode.com/sota/semantic-segmentation-on-cityscapes?p=object-contextual-representations-for)
 
 ## News
+
+- 2020/05/11
+We have released the checkpoints/logs of "HRNet + OCR" on all the 5 benchmarks including Cityscapes, ADE20K, LIP, PASCAL-Context and COCO-Stuff. Please feel free to try our method on your own dataset.
+
 - 2020/04/18
 We have released the checkpoint/log of ISA.
 
