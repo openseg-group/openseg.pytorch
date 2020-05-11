@@ -40,6 +40,27 @@ Methods | Backbone | Train Set | Test Set | Iterations | Batch Size | OHEM | Mul
 | :---- | :----: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
 OCR | HRNet-W48 | Train | Val | 100000 | 32 | No | No | Yes | 56.72 | [Log](https://drive.google.com/open?id=1o6hOZWBJNk2LHxVJCtT7bW3u8SdHZb4f) / [Model](https://drive.google.com/open?id=1jlcJ_FwsadgxR1QrDw5Cxy2_9me86hUh) | scripts/lip/run_h_48_d_4_ocr_train.sh |
 
+## COCO-Stuff
+
+The models are trained and tested with input size of 520x520.
+
+Checkpoints should be put under `~/checkpoints/coco_stuff`.
+
+Methods | Backbone | Train Set | Test Set | Iterations | Batch Size | OHEM | Multi-scale | Flip | mIoU | Link | Script |
+| :---- | :----: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
+OCR | HRNet-W48 | Train | Val | 60000 | 16 | Yes | No | No | 39.61 | [Log](https://drive.google.com/open?id=1cfxEJFPsg_QaFU3nm5E4La_fIlgmSjr3) / [Model](https://drive.google.com/open?id=13tXkK9maID7ajSOxSsOavdqKHhFJ4HvD) | scripts/coco_stuff/run_h_48_d_4_ocr_ohem/train.sh |
+OCR | HRNet-W48 | Train | Val | 60000 | 16 | Yes | Yes | Yes | 40.20 | same as above | scripts/coco_stuff/run_h_48_d_4_ocr_ohem_train.sh |
+
+## COCO-Stuff
+
+The models are trained and tested with input size of 520x520.
+
+Checkpoints should be put under `~/checkpoints/ade20k`.
+
+Methods | Backbone | Train Set | Test Set | Iterations | Batch Size | OHEM | Multi-scale | Flip | mIoU | Link | Script |
+| :---- | :----: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
+OCR | HRNet-W48 | Train | Val | 150000 | 16 | Yes | No | No | 44.62 | [Log](https://drive.google.com/open?id=1dfn9t5Pb1-IslO-_E8BHqm2qDTLfGMhy) / [Model](https://drive.google.com/open?id=1CAZBzNFh5DiUTT8KwlGV5YpQyFZn_C91) | scripts/ade20k/hrnet/run_h_48_d_4_ocr_ohem.sh |
+OCR | HRNet-W48 | Train | Val | 150000 | 16 | Yes | Yes | Yes | 46.19 | same as above | scripts/ade20k/hrnet/run_h_48_d_4_ocr_ohem.sh |
 
 # SegFix
 
