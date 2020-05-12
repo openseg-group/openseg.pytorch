@@ -4,7 +4,7 @@ The following tables listed segmentation results on various datasets. To perform
 
 ## Cityscapes
 
-Performance on the Cityscapes dataset. The models are trained and tested with input size of 512x1024 and 1024x2048 respectively.
+Performance on the Cityscapes dataset. The models are trained and tested with input size of 512x1024 and 1024x2048 respectively. The performance of HRNet baseline is around 80.6% based on our training settings, where we train the models with smaller batch size and less iterations compared with the original setting.
 
 Checkpoints should be put under `~/checkpoints/cityscapes`.
 
