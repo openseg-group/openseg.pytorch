@@ -42,7 +42,7 @@ OCR | HRNet-W48 | Train | Val | 100000 | 32 | No | No | Yes | 56.72 | [Log](http
 
 ## COCO-Stuff
 
-The models are trained and tested with input size of 520x520.
+The models are trained with input size of 520x520, and tested with original size.
 
 Checkpoints should be put under `~/checkpoints/coco_stuff`.
 
@@ -53,7 +53,7 @@ OCR | HRNet-W48 | Train | Val | 60000 | 16 | Yes | Yes | Yes | 40.20 | same as a
 
 ## ADE20K
 
-The models are trained and tested with input size of 520x520.
+The models are trained with input size of 520x520, and tested with original size.
 
 Checkpoints should be put under `~/checkpoints/ade20k`.
 
