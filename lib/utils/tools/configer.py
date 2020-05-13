@@ -14,6 +14,7 @@ import os
 import sys
 
 from lib.utils.tools.logger import Logger as Log
+from ast import literal_eval
 
 
 class Configer(object):
@@ -49,7 +50,103 @@ class Configer(object):
                 elif value is not None:
                     self.update(key.split(':'), value)
 
+            self._handle_remaining_args(args_parser.REMAIN)
+
         self.conditions = _ConditionHelper(self)
+
+
+    def _handle_remaining_args(self, remain):
+
+        def _parse_value(x: str):
+            """
+            We first try to parse `x` as python literal object.
+            If failed, we regard x as string.
+            """
+            try:
+                return literal_eval(x)
+            except ValueError:
+                return x
+
+        def _set_value(key, value):
+            """
+            We directly operate on `params_root`.
+            """
+            remained_parts = key.split('.')
+            consumed_parts = []
+
+            parent_dict = self.params_root
+            while len(remained_parts) > 1:
+                cur_key = remained_parts.pop(0)
+                consumed_parts.append(cur_key)
+
+                if cur_key not in parent_dict:
+                    parent_dict[cur_key] = dict()
+                    Log.info('{} not exists, set as `dict()`.'.format('.'.join(consumed_parts)))
+                elif not isinstance(parent_dict[cur_key], dict):
+                    Log.error(
+                        'Cannot set {child_name} on {root_name}, as {root_name} is `{root_type}`.'.format(
+                            root_name='.'.join(consumed_parts),
+                            child_name='.'.join(remained_parts),
+                            root_type=type(parent_dict[cur_key])
+                        )
+                    )
+                    sys.exit(1)
+                
+                parent_dict = parent_dict[cur_key]
+
+            cur_key = remained_parts.pop(0)
+            consumed_parts.append(cur_key)
+
+            if cur_key.endswith('+'):
+                cur_key = cur_key[:-1]
+                target = parent_dict.get(cur_key)
+
+                if not isinstance(target, list):
+                    Log.error(
+                        'Cannot append to {key}, as its type is {target_type}.'
+                        .format(
+                            key=key[:-1],
+                            target_type=type(target)
+                        )
+                    )
+                    sys.exit(1)
+
+                target.append(value)
+                Log.info(
+                    'Append {value} to {key}. Current: {target}.'
+                    .format(
+                        key=key[:-1],
+                        value=value,
+                        target=target,
+                    )
+                )
+                return
+
+            existing_value = parent_dict.get(cur_key)
+            if existing_value is not None:
+                Log.warn(
+                    'Override {key} using {value}. Previous value: {old_value}.'
+                    .format(
+                        key=key,
+                        value=value,
+                        old_value=existing_value
+                    )
+                )
+            else:
+                Log.info(
+                    'Set {key} as {value}.'.format(key=key, value=value)
+                )
+            parent_dict[cur_key] = value
+
+        assert len(remain) % 2 == 0, remain
+        args = {}
+        for i in range(len(remain) // 2):
+            key, value = remain[2 * i: 2 * i + 2]
+            _set_value(key, _parse_value(value))
+
+    def clone(self):
+        from copy import deepcopy
+        return Configer(config_dict=deepcopy(self.params_root))
 
     def _get_caller(self):
         filename = os.path.basename(sys._getframe().f_back.f_back.f_code.co_filename)
@@ -148,6 +245,11 @@ class _ConditionHelper:
 
     def __init__(self, configer):
         self.configer = configer
+
+    @property
+    def use_multi_dataset(self):
+        root_dirs = self.configer.get('data', 'data_dir')
+        return isinstance(root_dirs, (tuple, list)) and len(root_dirs) > 1
 
     @property
     def pred_sw_offset(self):

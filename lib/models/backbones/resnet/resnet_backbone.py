@@ -13,6 +13,7 @@ import torch.nn as nn
 
 from lib.models.backbones.resnet.resnet_models import ResNetModels
 from lib.models.backbones.resnet.resnext_models import ResNextModels
+from lib.models.backbones.resnet.resnest_models import ResNeStModels
 
 # if torch.__version__[:3] == '0.4':
 #     from lib.models.backbones.resnet.dcn_resnet_models import DCNResNetModels
@@ -122,6 +123,7 @@ class ResNetBackbone(object):
         self.configer = configer
         self.resnet_models = ResNetModels(self.configer)
         self.resnext_models = ResNextModels(self.configer)
+        self.resnest_models = ResNeStModels(self.configer)
 
         # if torch.__version__[:3] == '0.4':
         #     self.dcn_resnet_models = DCNResNetModels(self.configer)
@@ -268,6 +270,19 @@ class ResNetBackbone(object):
 
         elif arch == 'wide_resnet38_dilated8':
             arch_net = self.resnet_models.wide_resnet38()
+
+        # ResNeSt series: https://github.com/zhanghang1989/ResNeSt/blob/master/resnest/torch/resnest.py
+        elif arch == 'deepbase_resnest50_dilated8':
+            arch_net = self.resnest_models.deepbase_resnest50()
+
+        elif arch == 'deepbase_resnest101_dilated8':
+            arch_net = self.resnest_models.deepbase_resnest101()
+
+        elif arch == 'deepbase_resnest200_dilated8':
+            arch_net = self.resnest_models.deepbase_resnest200()
+
+        elif arch == 'deepbase_resnest269_dilated8':
+            arch_net = self.resnest_models.deepbase_resnest269()
 
         else:
             raise Exception('Architecture undefined!')

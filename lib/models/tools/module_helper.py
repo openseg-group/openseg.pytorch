@@ -151,8 +151,9 @@ class ModuleHelper(object):
                 # pretrained_dict['conv2_full_res.weight'] = pretrained_dict['conv2.weight']
                 load_dict = {k : v for k, v in pretrained_dict.items() if k in model_dict.keys()}
 
-            elif network == "hrnet" or network == "xception":
+            elif network == "hrnet" or network == "xception" or network == 'resnest':
                 load_dict = {k : v for k, v in pretrained_dict.items() if k in model_dict.keys()}
+                Log.info('Missing keys: {}'.format(list(set(model_dict) - set(load_dict))))
 
             elif network == "dcnet" or network == "resnext":
                 load_dict = dict()

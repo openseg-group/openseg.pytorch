@@ -59,6 +59,7 @@ class Logger(object):
         Logger.stdout_level = stdout_level
 
         Logger.logger = logging.getLogger()
+        Logger.logger.handlers = []
         fmt = logging.Formatter(Logger.log_format)
 
         if Logger.logfile_level is not None:
