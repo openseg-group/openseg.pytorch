@@ -170,6 +170,8 @@ if __name__ == "__main__":
     parser.add_argument('--distributed', action='store_true', dest='distributed', help='Use multi-processing training.')
     parser.add_argument('--use_ground_truth', action='store_true', dest='use_ground_truth', help='Use ground truth for training.')
 
+    parser.add_argument('REMAIN', nargs='*')
+
     args_parser = parser.parse_args()
 
     from lib.utils.distributed import handle_distributed
