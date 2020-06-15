@@ -101,7 +101,7 @@ class ModuleHelper(object):
 
                 return functools.partial(InPlaceABNSync, activation='none')
 
-            elif torch_ver == ('1.0', '1.1'):
+            elif torch_ver in ('1.0', '1.1'):
                 from lib.extensions.inplace_abn_1.bn import InPlaceABNSync
                 if ret_cls:
                     return InPlaceABNSync
