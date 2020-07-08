@@ -74,29 +74,29 @@ Please consider citing our work if you find it helps you,
 ```
 @article{yuan2018ocnet,
   title={Ocnet: Object context network for scene parsing},
-  author={Yuan Yuhui and Wang Jingdong},
+  author={Yuan, Yuhui and Wang, Jingdong},
   journal={arXiv preprint arXiv:1809.00916},
   year={2018}
 }
 
 @article{huang2019isa,
   title={Interlaced Sparse Self-Attention for Semantic Segmentation},
-  author={Huang Lang and Yuan Yuhui and Guo Jianyuan and Zhang Chao and Chen Xilin and Wang Jingdong},
+  author={Huang, Lang and Yuan, Yuhui and Guo, Jianyuan and Zhang, Chao and Chen, Xilin and Wang, Jingdong},
   journal={arXiv preprint arXiv:1907.12273},
   year={2019}
 }
 
-@article{yuan2019ocr,
+@article{yuan2020ocr,
   title={Object-Contextual Representations for Semantic Segmentation},
-  author={Yuan Yuhui and Chen Xilin and Wang Jingdong},
-  journal={arXiv preprint arXiv:1909.11065},
-  year={2019}
+  author={Yuan, Yuhui and Chen, Xilin and Wang, Jingdong},
+  journal={ECCV},
+  year={2020}
 }
 
 @article{yuan2020segfix,
   title={SegFix: Model-Agnostic Boundary Refinement for Segmentation},
-  author={Yuan Yuhui and Xie Jingyi and Chen Xilin and Wang Jingdong},
-  journal={arXiv preprint},
+  author={Yuan, Yuhui and Xie, Jingyi and Chen, Xilin and Wang, Jingdong},
+  journal={ECCV},
   year={2020}
 }
 ```
