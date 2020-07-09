@@ -14,8 +14,8 @@
 
 ## News
 
-- 2020/07/03
-Both OCR and SegFix have been accepted by the ECCV-2020.
+- 2020/07/09
+OCR (Spotlight) [Paper-link](https://arxiv.org/pdf/1909.11065.pdf) and SegFix [Paper-link](https://arxiv.org/pdf/2007.04269.pdf) have been accepted by the ECCV-2020.   
 
 - 2020/05/11
 We have released the checkpoints/logs of "HRNet + OCR" on all the 5 benchmarks including Cityscapes, ADE20K, LIP, PASCAL-Context and COCO-Stuff in the [Model Zoo](https://github.com/openseg-group/openseg.pytorch/blob/master/MODEL_ZOO.md). Please feel free to try our method on your own dataset.
