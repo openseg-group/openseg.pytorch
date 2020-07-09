@@ -82,30 +82,30 @@ This is the official code of [OCR](https://arxiv.org/abs/1904.04514.pdf), [OCNet
 ## Citation
 Please consider citing our work if you find it helps you,
 ```
-@article{yuan2018ocnet,
+@article{YuanW18,
   title={Ocnet: Object context network for scene parsing},
-  author={Yuan, Yuhui and Wang, Jingdong},
+  author={Yuhui Yuan and Jingdong Wang},
   booktitle={arXiv preprint arXiv:1809.00916},
   year={2018}
 }
 
-@article{huang2019isa,
+@article{HuangYGZCW19,
   title={Interlaced Sparse Self-Attention for Semantic Segmentation},
-  author={Huang, Lang and Yuan, Yuhui and Guo, Jianyuan and Zhang, Chao and Chen, Xilin and Wang, Jingdong},
+  author={Lang Huang and Yuhui Yuan and Jianyuan Guo and Chao Zhang and Xilin Chen and Jingdong Wang},
   booktitle={arXiv preprint arXiv:1907.12273},
   year={2019}
 }
 
-@article{yuan2020ocr,
+@article{YuanCW20,
   title={Object-Contextual Representations for Semantic Segmentation},
-  author={Yuan, Yuhui and Chen, Xilin and Wang, Jingdong},
+  author={Yuhui Yuan and Xilin Chen and Jingdong Wang},
   booktitle={ECCV},
   year={2020}
 }
 
-@article{yuan2020segfix,
+@article{YuanXCW20,
   title={SegFix: Model-Agnostic Boundary Refinement for Segmentation},
-  author={Yuan, Yuhui and Xie, Jingyi and Chen, Xilin and Wang, Jingdong},
+  author={Yuhui Yuan and Jingyi Xie and Xilin Chen and Jingdong Wang},
   booktitle={ECCV},
   year={2020}
 }
