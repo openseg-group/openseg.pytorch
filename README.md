@@ -69,6 +69,12 @@ We achieve SOTA on **6** different semantic segmentation benchmarks including: *
 
 We provide a set of baseline results and trained models available for download in the [Model Zoo](MODEL_ZOO.md).
 
+## Framework of OCR and SegFix
+
+![Overall Framework of OCR](OCR.png?raw=true)
+
+![Overall Framework of SegFix](SegFix.png?raw=true)
+
 ## Citation
 Please consider citing our work if you find it helps you,
 ```
