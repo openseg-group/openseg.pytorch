@@ -75,7 +75,7 @@ This is the official code of [OCR](https://arxiv.org/abs/1904.04514.pdf), [OCNet
 
 <figure>
   <text-align: center;>
-  <img src="./imgs/OCR.PNG" alt="OCR" title="Framework of Object Contextual Representation" width="1200" height="300" />
+  <img src="./imgs/OCR.PNG" alt="OCR" title="Framework of Object Contextual Representation" width="900" height="250" />
   <figcaption>Fig.1 - Illustrating the pipeline of OCR. (i) form the soft object regions in the
   pink dashed box. (ii) estimate the object region representations in the purple dashed box.
   (iii) compute the object contextual representations and the augmented representations
@@ -85,7 +85,7 @@ This is the official code of [OCR](https://arxiv.org/abs/1904.04514.pdf), [OCNet
 
 <figure>
   <text-align: center;>
-  <img src="./imgs/SegFix.PNG" alt="SegFix" title="Framework of SegFix" width="1200" height="320" />
+  <img src="./imgs/SegFix.PNG" alt="SegFix" title="Framework of SegFix" width="900" height="260" />
   <figcaption>Fig.2 - Illustrating the SegFix framework: In the training stage, we first send
   the input image into a backbone to predict a feature map. Then we apply a boundary
   branch to predict a binary boundary map and a direction branch to predict a direction
