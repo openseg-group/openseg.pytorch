@@ -15,7 +15,7 @@
 ## News
 
 - 2020/07/09
-OCR (Spotlight) [Paper-link](https://arxiv.org/pdf/1909.11065.pdf) and SegFix [Paper-link](https://arxiv.org/pdf/2007.04269.pdf) have been accepted by the ECCV-2020.   
+[OCR (Spotlight)](https://arxiv.org/pdf/1909.11065.pdf) and [SegFix](https://arxiv.org/pdf/2007.04269.pdf) have been accepted by the ECCV-2020. Notably, the reseachers from Nvidia set a new state-of-the-art performance on Cityscapes leaderboard: [85.4%](https://www.cityscapes-dataset.com/method-details/?submissionID=7836) via combining our HRNet + OCR with a new [hierarchical mult-scale attention scheme](https://arxiv.org/abs/2005.10821). 
 
 - 2020/05/11
 We have released the checkpoints/logs of "HRNet + OCR" on all the 5 benchmarks including Cityscapes, ADE20K, LIP, PASCAL-Context and COCO-Stuff in the [Model Zoo](https://github.com/openseg-group/openseg.pytorch/blob/master/MODEL_ZOO.md). Please feel free to try our method on your own dataset.
@@ -69,11 +69,34 @@ We achieve SOTA on **6** different semantic segmentation benchmarks including: *
 
 We provide a set of baseline results and trained models available for download in the [Model Zoo](MODEL_ZOO.md).
 
-## Framework of OCR and SegFix
+## Introduction
 
-![Overall Framework of OCR](OCR.png?raw=true)
+This is the official code of [OCR](https://arxiv.org/abs/1904.04514.pdf), [OCNet](https://arxiv.org/abs/1809.00916.pdf), [ISA](https://arxiv.org/abs/1907.12273.pdf) and [SegFix](https://arxiv.org/pdf/2007.04269.pdf). OCR, OCNet, and ISA focus on better context aggregation mechanisms (in the semantic segmentation task) and ISA focuses on addressing the boundary errors (in both semantic segmentation and instance segmentation tasks). We highlight the overall framework of OCR and SegFix in the figures as shown below:
 
-![Overall Framework of SegFix](SegFix.png?raw=true)
+<figure>
+  <text-align: center;>
+  <img src="./imgs/OCR.PNG" alt="OCR" title="Framework of Object Contextual Representation" width="1200" height="300" />
+  <figcaption>Fig.1 - Illustrating the pipeline of OCR. (i) form the soft object regions in the
+  pink dashed box. (ii) estimate the object region representations in the purple dashed box.
+  (iii) compute the object contextual representations and the augmented representations
+  in the orange dashed box.
+</figcaption>
+</figure>
+
+<figure>
+  <text-align: center;>
+  <img src="./imgs/SegFix.PNG" alt="SegFix" title="Framework of SegFix" width="1200" height="320" />
+  <figcaption>Fig.2 - Illustrating the SegFix framework: In the training stage, we first send
+  the input image into a backbone to predict a feature map. Then we apply a boundary
+  branch to predict a binary boundary map and a direction branch to predict a direction
+  map and mask it with the binary boundary map. We apply boundary loss and direction
+  loss on the predicted boundary map and direction map separately. In the testing stage,
+  we first convert the direction map to offset map and then refine the segmentation
+  results of any existing methods according to the offset map.
+  </figcaption>
+</figure>
+
+
 
 ## Citation
 Please consider citing our work if you find it helps you,
