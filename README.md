@@ -15,7 +15,7 @@
 ## News
 
 - 2020/07/15
-[MMSegmentation](https://github.com/open-mmlab/mmsegmentation) also supports our OCR. We further introduce a OCR+ that augments the original OCR with separable convolutions and a decoder head following the same manner as DeepLabv3+, which achieves a strong (single-scale evaluation) performance 81.0% on Cityscapes val set.
+[MMSegmentation](https://github.com/open-mmlab/mmsegmentation) also supports our OCR. We further introduce a OCR+ that augments the original OCR with separable convolutions and a decoder head following the same manner as DeepLabv3+, which achieves a strong (single-scale evaluation) performance 81.0% on Cityscapes val set based on backbone ResNet-101.
 
 
 - 2020/07/09
