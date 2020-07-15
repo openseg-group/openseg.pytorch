@@ -14,6 +14,10 @@
 
 ## News
 
+- 2020/07/15
+[MMSegmentation](https://github.com/open-mmlab/mmsegmentation) also supports our OCR. We further introduce a OCR+ that augments the original OCR with separable convolutions and a decoder head following the same manner as DeepLabv3+, which achieves a strong (single-scale evaluation) performance 81.0% on Cityscapes val set.
+
+
 - 2020/07/09
 [OCR (Spotlight)](https://arxiv.org/pdf/1909.11065.pdf) and [SegFix](https://arxiv.org/pdf/2007.04269.pdf) have been accepted by the ECCV-2020. Notably, the reseachers from Nvidia set a new state-of-the-art performance on Cityscapes leaderboard: [85.4%](https://www.cityscapes-dataset.com/method-details/?submissionID=7836) via combining our HRNet + OCR with a new [hierarchical mult-scale attention scheme](https://arxiv.org/abs/2005.10821). 
 
