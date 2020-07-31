@@ -100,7 +100,7 @@ More details are introduced in the following sections.
 bash scripts/cityscapes/segfix/<script>.sh train 1
 ```
 
-Before starting training, you should download the corresponding ImageNet pretrained models to `pretrained_model/`. By default, we use Higher-W48 (`hrnet48`) as backbone, but you can choose lighter ones by modifying `BACKBONE` and `PRETRAINED_MODEL` in the script.
+Before starting training, you should download the corresponding ImageNet pretrained models to `pretrained_model/`. By default, we use HRNet-W48 (`hrnet48`) as backbone, but you can choose lighter ones by modifying `BACKBONE` and `PRETRAINED_MODEL` in the script.
 
 | Backbone | Pretrained Model | 
 | :---- | :----: |
