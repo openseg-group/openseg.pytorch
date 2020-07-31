@@ -53,7 +53,6 @@ class DataHelper:
                 'labelmap',
                 'distance_map',
                 'angle_map',
-                'boundary_map',
             ]
         elif self.conditions.pred_ml_dt_offset:
             targets = [

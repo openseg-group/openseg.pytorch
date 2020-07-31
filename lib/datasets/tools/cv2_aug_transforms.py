@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
-# Author: Donny You (youansheng@gmail.com)
+# Author: Jingyi Xie
 
 
 from __future__ import absolute_import
@@ -15,9 +15,49 @@ import cv2
 import numpy as np
 
 from lib.utils.tools.logger import Logger as Log
+from lib.datasets.tools.transforms import DeNormalize
+
+class _BaseTransform(object):
+
+    DATA_ITEMS = (
+        'labelmap', 'maskmap',
+        'distance_map', 'angle_map', 'multi_label_direction_map',
+        'boundary_map', 'offsetmap',
+        # 'offsetmap_h', 'offsetmap_w', 
+        'region_indexmap'
+    )
+
+    def __call__(self, img, **kwargs):
+
+        data_dict = collections.defaultdict(lambda: None)
+        data_dict.update(kwargs)
+
+        return img, data_dict
+
+    def _process(self, img, data_dict, skip_condition, *args, **kwargs):
+        assert isinstance(img, np.ndarray), \
+            "img should be numpy array, got {}.".format(type(img))
+        if not skip_condition:
+            img = self._process_img(img, *args, **kwargs)
+
+        ret_dict = collections.defaultdict(lambda: None)
+        for name in self.DATA_ITEMS:
+            func_name = '_process_' + name
+            x = data_dict[name]
+
+            assert isinstance(x, np.ndarray) or x is None, \
+                "{} should be numpy array or None, got {}.".format(
+                    name, type(x))
+
+            if hasattr(self, func_name) and x is not None and not skip_condition:
+                ret_dict[name] = getattr(self, func_name)(x, *args, **kwargs)
+            else:
+                ret_dict[name] = x
+
+        return img, ret_dict
 
 
-class Padding(object):
+class Padding(_BaseTransform):
     """ Padding the Image to proper size.
             Args:
                 stride: the stride of the network.
@@ -33,83 +73,142 @@ class Padding(object):
         self.mean = mean
         self.allow_outside_center = allow_outside_center
 
-    def __call__(self, img, labelmap=None, maskmap=None):
-        assert isinstance(img, np.ndarray)
-        assert labelmap is None or isinstance(labelmap, np.ndarray)
-        assert maskmap is None or isinstance(maskmap, np.ndarray)
+    def _pad(self, x, pad_value, height, width, target_size, offset_left, offset_up):
+        expand_x = np.zeros((
+            max(height, target_size[1]) + abs(offset_up),
+            max(width, target_size[0]) + abs(offset_left),
+            *x.shape[2:]
+        ), dtype=x.dtype)
+        expand_x[:, :] = pad_value
+        expand_x[
+            abs(min(offset_up, 0)):abs(min(offset_up, 0)) + height,
+            abs(min(offset_left, 0)):abs(min(offset_left, 0)) + width] = x
+        x = expand_x[
+            max(offset_up, 0):max(offset_up, 0) + target_size[1],
+            max(offset_left, 0):max(offset_left, 0) + target_size[0]
+        ]
+        return x
 
-        if random.random() > self.ratio:
-            return img, labelmap, maskmap
+    def _process_img(self, img, *args):
+        return self._pad(img, self.mean, *args)
+
+    def _process_labelmap(self, x, *args):
+        return self._pad(x, 255, *args)
+
+    def _process_region_indexmap(self, x, *args):
+        return self._pad(x, 0, *args)
+
+    def _process_maskmap(self, x, *args):
+        return self._pad(x, 1, *args)
+
+    def _process_distance_map(self, x, *args):
+        return self._pad(x, 255, *args)
+
+    def _process_angle_map(self, x, *args):
+        return self._pad(x, 0, *args)
+
+    def _process_boundary_map(self, x, *args):
+        return self._pad(x, 0, *args)
+
+    def _process_multi_label_direction_map(self, x, *args):
+        return self._pad(x, 0, *args)
+
+    # def _process_offsetmap_h(self, x, *args):
+    #     return self._pad(x, 0, *args)
+
+    # def _process_offsetmap_w(self, x, *args):
+    #     return self._pad(x, 0, *args)
+
+    def _process_offsetmap(self, x, *args):
+        return self._pad(x, 0, *args)
+
+    def __call__(self, img, **kwargs):
+        img, data_dict = super().__call__(img, **kwargs)
 
         height, width, channels = img.shape
         left_pad, up_pad, right_pad, down_pad = self.pad
 
-        target_size = [width + left_pad + right_pad, height + up_pad + down_pad]
+        target_size = [width + left_pad +
+                       right_pad, height + up_pad + down_pad]
         offset_left = -left_pad
         offset_up = -up_pad
 
-        expand_image = np.zeros((max(height, target_size[1]) + abs(offset_up),
-                                 max(width, target_size[0]) + abs(offset_left), channels), dtype=img.dtype)
-        expand_image[:, :, :] = self.mean
-        expand_image[abs(min(offset_up, 0)):abs(min(offset_up, 0)) + height,
-        abs(min(offset_left, 0)):abs(min(offset_left, 0)) + width] = img
-        img = expand_image[max(offset_up, 0):max(offset_up, 0) + target_size[1],
-              max(offset_left, 0):max(offset_left, 0) + target_size[0]]
-
-        if maskmap is not None:
-            expand_maskmap = np.zeros((max(height, target_size[1]) + abs(offset_up),
-                                       max(width, target_size[0]) + abs(offset_left)), dtype=maskmap.dtype)
-            expand_maskmap[:, :] = 1
-            expand_maskmap[abs(min(offset_up, 0)):abs(min(offset_up, 0)) + height,
-            abs(min(offset_left, 0)):abs(min(offset_left, 0)) + width] = maskmap
-            maskmap = expand_maskmap[max(offset_up, 0):max(offset_up, 0) + target_size[1],
-                      max(offset_left, 0):max(offset_left, 0) + target_size[0]]
-
-        if labelmap is not None:
-            expand_labelmap = np.zeros((max(height, target_size[1]) + abs(offset_up),
-                                        max(width, target_size[0]) + abs(offset_left)), dtype=labelmap.dtype)
-            expand_labelmap[:, :] = 255
-            expand_labelmap[abs(min(offset_up, 0)):abs(min(offset_up, 0)) + height,
-            abs(min(offset_left, 0)):abs(min(offset_left, 0)) + width] = labelmap
-            labelmap = expand_labelmap[max(offset_up, 0):max(offset_up, 0) + target_size[1],
-                       max(offset_left, 0):max(offset_left, 0) + target_size[0]]
-
-        return img, labelmap, maskmap
+        return self._process(
+            img, data_dict,
+            random.random() > self.ratio,
+            height, width, target_size, offset_left, offset_up
+        )
 
 
-class RandomHFlip(object):
+class RandomHFlip(_BaseTransform):
     def __init__(self, swap_pair=None, flip_ratio=0.5):
         self.swap_pair = swap_pair
         self.ratio = flip_ratio
 
-    def __call__(self, img, labelmap=None, maskmap=None):
-        assert isinstance(img, np.ndarray)
-        assert labelmap is None or isinstance(labelmap, np.ndarray)
-        assert maskmap is None or isinstance(maskmap, np.ndarray)
+    def _process_img(self, img):
+        return cv2.flip(img, 1)
 
-        if random.random() > self.ratio:
-            return img, labelmap, maskmap
+    def _process_labelmap(self, labelmap):
+        labelmap = cv2.flip(labelmap, 1)
+        # to handle datasets with left/right annatations
+        if self.swap_pair is not None:
+            assert isinstance(self.swap_pair, (tuple, list))
+            temp = labelmap.copy()
+            for pair in self.swap_pair:
+                assert isinstance(pair, (tuple, list)) and len(pair) == 2
+                labelmap[temp == pair[0]] = pair[1]
+                labelmap[temp == pair[1]] = pair[0]
 
-        height, width, _ = img.shape
-        img = cv2.flip(img, 1)
-        if labelmap is not None:
-            labelmap = cv2.flip(labelmap, 1)
-            # to handle datasets with left/right annatations
-            if self.swap_pair is not None:
-                assert isinstance(self.swap_pair, (tuple, list))
-                temp = labelmap.copy()
-                for pair in self.swap_pair:
-                    assert isinstance(pair, (tuple, list)) and len(pair) == 2
-                    labelmap[temp == pair[0]] = pair[1]
-                    labelmap[temp == pair[1]] = pair[0]
+        return labelmap
 
-        if maskmap is not None:
-            maskmap = cv2.flip(maskmap, 1)
+    def _process_region_indexmap(self, labelmap):
+        return cv2.flip(labelmap, 1)
 
-        return img, labelmap, maskmap
+    def _process_maskmap(self, x):
+        return cv2.flip(x, 1)
+
+    def _process_distance_map(self, x):
+        return cv2.flip(x, 1)
+
+    def _process_angle_map(self, angle_map):
+        ret_angle_map = angle_map.copy()
+        mask = (angle_map > 0) & (angle_map < 180)
+        ret_angle_map[mask] = 180 - angle_map[mask]
+        mask = (angle_map < 0) & (angle_map > -180)
+        ret_angle_map[mask] = - (180 + angle_map[mask])
+        ret_angle_map = cv2.flip(ret_angle_map, 1)
+        return ret_angle_map
+
+    def _process_boundary_map(self, x):
+        return cv2.flip(x, 1)
+
+    def _process_multi_label_direction_map(self, multi_label_direction_map):
+        perm = [4, 3, 2, 1, 0, 7, 6, 5]
+        multi_label_direction_map = cv2.flip(multi_label_direction_map, 1)
+        multi_label_direction_map = multi_label_direction_map[..., perm]
+        return multi_label_direction_map
+
+    # def _process_offsetmap_h(self, x):
+    #     return cv2.flip(x, 1)
+
+    # def _process_offsetmap_w(self, x):
+    #     return -cv2.flip(x, 1)
+
+    def _process_offsetmap_w(self, x):
+        x = cv2.flip(x, 1)
+        x[..., 1] = -x[..., 1]
+        return x
+
+    def __call__(self, img, **kwargs):
+        img, data_dict = super().__call__(img, **kwargs)
+
+        return self._process(
+            img, data_dict,
+            random.random() > self.ratio
+        )
 
 
-class RandomSaturation(object):
+class RandomSaturation(_BaseTransform):
     def __init__(self, lower=0.5, upper=1.5, saturation_ratio=0.5):
         self.lower = lower
         self.upper = upper
@@ -117,36 +216,30 @@ class RandomSaturation(object):
         assert self.upper >= self.lower, "saturation upper must be >= lower."
         assert self.lower >= 0, "saturation lower must be non-negative."
 
-    def __call__(self, img, labelmap=None, maskmap=None):
-        assert isinstance(img, np.ndarray)
-        assert labelmap is None or isinstance(labelmap, np.ndarray)
-        assert maskmap is None or isinstance(maskmap, np.ndarray)
-
-        if random.random() > self.ratio:
-            return img, labelmap, maskmap
-
+    def _process_img(self, img):
         img = img.astype(np.float32)
         img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
         img[:, :, 1] *= random.uniform(self.lower, self.upper)
         img = cv2.cvtColor(img, cv2.COLOR_HSV2BGR)
         img = np.clip(img, 0, 255).astype(np.uint8)
-        return img, labelmap, maskmap
+        return img
+
+    def __call__(self, img, **kwargs):
+        img, data_dict = super().__call__(img, **kwargs)
+
+        return self._process(
+            img, data_dict,
+            random.random() > self.ratio
+        )
 
 
-class RandomHue(object):
+class RandomHue(_BaseTransform):
     def __init__(self, delta=18, hue_ratio=0.5):
         assert 0 <= delta <= 360
         self.delta = delta
         self.ratio = hue_ratio
 
-    def __call__(self, img, labelmap=None, maskmap=None):
-        assert isinstance(img, np.ndarray)
-        assert labelmap is None or isinstance(labelmap, np.ndarray)
-        assert maskmap is None or isinstance(maskmap, np.ndarray)
-
-        if random.random() > self.ratio:
-            return img, labelmap, maskmap
-
+    def _process_img(self, img):
         img = img.astype(np.float32)
         img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
         img[:, :, 0] += random.uniform(-self.delta, self.delta)
@@ -154,30 +247,39 @@ class RandomHue(object):
         img[:, :, 0][img[:, :, 0] < 0] += 360
         img = cv2.cvtColor(img, cv2.COLOR_HSV2BGR)
         img = np.clip(img, 0, 255).astype(np.uint8)
-        return img, labelmap, maskmap
+        return img
+
+    def __call__(self, img, **kwargs):
+        img, data_dict = super().__call__(img, **kwargs)
+
+        return self._process(
+            img, data_dict,
+            random.random() > self.ratio
+        )
 
 
-class RandomPerm(object):
+class RandomPerm(_BaseTransform):
     def __init__(self, perm_ratio=0.5):
         self.ratio = perm_ratio
         self.perms = ((0, 1, 2), (0, 2, 1),
                       (1, 0, 2), (1, 2, 0),
                       (2, 0, 1), (2, 1, 0))
 
-    def __call__(self, img, labelmap=None, maskmap=None):
-        assert isinstance(img, np.ndarray)
-        assert labelmap is None or isinstance(labelmap, np.ndarray)
-        assert maskmap is None or isinstance(maskmap, np.ndarray)
-
-        if random.random() > self.ratio:
-            return img, labelmap, maskmap
-
+    def _process_img(self, img):
         swap = self.perms[random.randint(0, len(self.perms) - 1)]
         img = img[:, :, swap].astype(np.uint8)
-        return img, labelmap, maskmap
+        return img
+
+    def __call__(self, img, **kwargs):
+        img, data_dict = super().__call__(img, **kwargs)
+
+        return self._process(
+            img, data_dict,
+            random.random() > self.ratio
+        )
 
 
-class RandomContrast(object):
+class RandomContrast(_BaseTransform):
     def __init__(self, lower=0.5, upper=1.5, contrast_ratio=0.5):
         self.lower = lower
         self.upper = upper
@@ -185,44 +287,44 @@ class RandomContrast(object):
         assert self.upper >= self.lower, "contrast upper must be >= lower."
         assert self.lower >= 0, "contrast lower must be non-negative."
 
-    def __call__(self, img, labelmap=None, maskmap=None):
-        assert isinstance(img, np.ndarray)
-        assert labelmap is None or isinstance(labelmap, np.ndarray)
-        assert maskmap is None or isinstance(maskmap, np.ndarray)
-
-        if random.random() > self.ratio:
-            return img, labelmap, maskmap
-
+    def _process_img(self, img):
         img = img.astype(np.float32)
         img *= random.uniform(self.lower, self.upper)
         img = np.clip(img, 0, 255).astype(np.uint8)
+        return img
 
-        return img, labelmap, maskmap
+    def __call__(self, img, **kwargs):
+        img, data_dict = super().__call__(img, **kwargs)
+
+        return self._process(
+            img, data_dict,
+            random.random() > self.ratio
+        )
 
 
-class RandomBrightness(object):
+class RandomBrightness(_BaseTransform):
     def __init__(self, shift_value=30, brightness_ratio=0.5):
         self.shift_value = shift_value
         self.ratio = brightness_ratio
 
-    def __call__(self, img, labelmap=None, maskmap=None):
-        assert isinstance(img, np.ndarray)
-        assert labelmap is None or isinstance(labelmap, np.ndarray)
-        assert maskmap is None or isinstance(maskmap, np.ndarray)
-
-        if random.random() > self.ratio:
-            return img, labelmap, maskmap
-
+    def _process_img(self, img):
         img = img.astype(np.float32)
         shift = random.randint(-self.shift_value, self.shift_value)
         img[:, :, :] += shift
         img = np.around(img)
         img = np.clip(img, 0, 255).astype(np.uint8)
+        return img
 
-        return img, labelmap, maskmap
+    def __call__(self, img, **kwargs):
+        img, data_dict = super().__call__(img, **kwargs)
+
+        return self._process(
+            img, data_dict,
+            random.random() > self.ratio
+        )
 
 
-class RandomResize(object):
+class RandomResize(_BaseTransform):
     """Resize the given numpy.ndarray to random size and aspect ratio.
 
     Args:
@@ -246,13 +348,15 @@ class RandomResize(object):
             elif isinstance(target_size, (list, tuple)) and len(target_size) == 2:
                 self.input_size = target_size
             else:
-                raise TypeError('Got inappropriate size arg: {}'.format(target_size))
+                raise TypeError(
+                    'Got inappropriate size arg: {}'.format(target_size))
         else:
             self.input_size = None
 
     def get_scale(self, img_size):
         if self.method == 'random':
-            scale_ratio = random.uniform(self.scale_range[0], self.scale_range[1])
+            scale_ratio = random.uniform(
+                self.scale_range[0], self.scale_range[1])
             return scale_ratio
 
         elif self.method == 'bound':
@@ -265,7 +369,40 @@ class RandomResize(object):
             Log.error('Resize method {} is invalid.'.format(self.method))
             exit(1)
 
-    def __call__(self, img, labelmap=None, maskmap=None):
+    def _process_img(self, img, converted_size, *args):
+        return cv2.resize(img, converted_size, interpolation=cv2.INTER_CUBIC).astype(np.uint8)
+
+    def _process_labelmap(self, x, converted_size, *args):
+        return cv2.resize(x, converted_size, interpolation=cv2.INTER_NEAREST)
+
+    def _process_region_indexmap(self, x, converted_size, *args):
+        return cv2.resize(x, converted_size, interpolation=cv2.INTER_NEAREST)
+
+    def _process_maskmap(self, x, converted_size, *args):
+        return cv2.resize(x, converted_size, interpolation=cv2.INTER_NEAREST)
+
+    def _process_distance_map(self, x, converted_size, *args):
+        return cv2.resize(x, converted_size, interpolation=cv2.INTER_NEAREST)
+
+    def _process_angle_map(self, x, converted_size, *args):
+        return cv2.resize(x, converted_size, interpolation=cv2.INTER_NEAREST)
+
+    def _process_boundary_map(self, x, converted_size, *args):
+        return cv2.resize(x, converted_size, interpolation=cv2.INTER_NEAREST)
+
+    def _process_multi_label_direction_map(self, x, converted_size, *args):
+        return cv2.resize(x, converted_size, interpolation=cv2.INTER_NEAREST)
+
+    # def _process_offsetmap_h(self, x, converted_size, h_scale_ratio, w_scale_ratio):
+    #     return cv2.resize(x, converted_size, interpolation=cv2.INTER_NEAREST) * h_scale_ratio
+
+    # def _process_offsetmap_w(self, x, converted_size, h_scale_ratio, w_scale_ratio):
+    #     return cv2.resize(x, converted_size, interpolation=cv2.INTER_NEAREST) * w_scale_ratio
+
+    def _process_offsetmap(self, x, converted_size, h_scale_ratio, w_scale_ratio):
+        return cv2.resize(x, converted_size, interpolation=cv2.INTER_NEAREST)
+
+    def __call__(self, img, **kwargs):
         """
         Args:
             img     (Image):   Image to be resized.
@@ -279,41 +416,33 @@ class RandomResize(object):
             list:   Randomly resize keypoints.
             list:   Randomly resize center points.
         """
-        assert isinstance(img, np.ndarray)
-        assert labelmap is None or isinstance(labelmap, np.ndarray)
-        assert maskmap is None or isinstance(maskmap, np.ndarray)
+        img, data_dict = super().__call__(img, **kwargs)
 
         height, width, _ = img.shape
-        if random.random() < self.ratio:
-            if self.scale_list is None:
-                scale_ratio = self.get_scale([width, height])
-            else:
-                scale_ratio = self.scale_list[random.randint(0, len(self.scale_list)-1)]
-
-            aspect_ratio = random.uniform(*self.aspect_range)
-            w_scale_ratio = math.sqrt(aspect_ratio) * scale_ratio
-            h_scale_ratio = math.sqrt(1.0 / aspect_ratio) * scale_ratio
-            if self.max_side_bound is not None and max(height*h_scale_ratio, width*w_scale_ratio) > self.max_side_bound:
-                d_ratio = self.max_side_bound / max(height * h_scale_ratio, width * w_scale_ratio)
-                w_scale_ratio *= d_ratio
-                h_scale_ratio *= d_ratio
-
+        if self.scale_list is None:
+            scale_ratio = self.get_scale([width, height])
         else:
-            w_scale_ratio, h_scale_ratio = 1.0, 1.0
+            scale_ratio = self.scale_list[random.randint(
+                0, len(self.scale_list)-1)]
 
-        converted_size = (int(width * w_scale_ratio), int(height * h_scale_ratio))
+        aspect_ratio = random.uniform(*self.aspect_range)
+        w_scale_ratio = math.sqrt(aspect_ratio) * scale_ratio
+        h_scale_ratio = math.sqrt(1.0 / aspect_ratio) * scale_ratio
+        if self.max_side_bound is not None and max(height*h_scale_ratio, width*w_scale_ratio) > self.max_side_bound:
+            d_ratio = self.max_side_bound / max(height * h_scale_ratio, width * w_scale_ratio)
+            w_scale_ratio *= d_ratio
+            h_scale_ratio *= d_ratio
 
-        img = cv2.resize(img, converted_size, interpolation=cv2.INTER_CUBIC).astype(np.uint8)
-        if labelmap is not None:
-            labelmap = cv2.resize(labelmap, converted_size, interpolation=cv2.INTER_NEAREST)
+        converted_size = (int(width * w_scale_ratio),
+                          int(height * h_scale_ratio))
+        return self._process(
+            img, data_dict,
+            random.random() > self.ratio,
+            converted_size, h_scale_ratio, w_scale_ratio
+        )
 
-        if maskmap is not None:
-            maskmap = cv2.resize(maskmap, converted_size, interpolation=cv2.INTER_NEAREST)
 
-        return img, labelmap, maskmap
-
-
-class RandomRotate(object):
+class RandomRotate(_BaseTransform):
     """Rotate the input numpy.ndarray and points to the given degree.
 
     Args:
@@ -325,8 +454,22 @@ class RandomRotate(object):
         self.max_degree = max_degree
         self.ratio = rotate_ratio
         self.mean = mean
+        Log.warn(
+            'Currently `RandomRotate` is only implemented for `img`, `labelmap` and `maskmap`.')
 
-    def __call__(self, img, labelmap=None, maskmap=None):
+    def _warp(self, x, border_value, rotate_mat, new_width, new_height):
+        return cv2.warpAffine(x, rotate_mat, (new_width, new_height), borderValue=border_value)
+
+    def _process_img(self, x, *args):
+        return self._warp(x, self.mean, *args).astype(np.uint8)
+
+    def _process_labelmap(self, x, *args):
+        return self._warp(x, (255, 255, 255), *args).astype(np.uint8)
+
+    def _process_maskmap(self, x, *args):
+        return self._warp(x, (1, 1, 1), *args).astype(np.uint8)
+
+    def __call__(self, img, **kwargs):
         """
         Args:
             img    (Image):     Image to be rotated.
@@ -338,19 +481,11 @@ class RandomRotate(object):
             Image:     Rotated image.
             list:      Rotated key points.
         """
-        assert isinstance(img, np.ndarray)
-        assert labelmap is None or isinstance(labelmap, np.ndarray)
-        assert maskmap is None or isinstance(maskmap, np.ndarray)
+        img, data_dict = super().__call__(img, **kwargs)
 
-        if random.random() < self.ratio:
-            rotate_degree = random.uniform(-self.max_degree, self.max_degree)
-        else:
-            return img, labelmap, maskmap
-
+        rotate_degree = random.uniform(-self.max_degree, self.max_degree)
         height, width, _ = img.shape
-
         img_center = (width / 2.0, height / 2.0)
-
         rotate_mat = cv2.getRotationMatrix2D(img_center, rotate_degree, 1.0)
         cos_val = np.abs(rotate_mat[0, 0])
         sin_val = np.abs(rotate_mat[0, 1])
@@ -358,21 +493,15 @@ class RandomRotate(object):
         new_height = int(height * cos_val + width * sin_val)
         rotate_mat[0, 2] += (new_width / 2.) - img_center[0]
         rotate_mat[1, 2] += (new_height / 2.) - img_center[1]
-        img = cv2.warpAffine(img, rotate_mat, (new_width, new_height), borderValue=self.mean).astype(np.uint8)
-        if labelmap is not None:
-            labelmap = cv2.warpAffine(labelmap, rotate_mat, (new_width, new_height),
-                                      borderValue=(255, 255, 255), flags=cv2.INTER_NEAREST)
-            labelmap = labelmap.astype(np.uint8)
 
-        if maskmap is not None:
-            maskmap = cv2.warpAffine(maskmap, rotate_mat, (new_width, new_height),
-                                     borderValue=(1, 1, 1), flags=cv2.INTER_NEAREST)
-            maskmap = maskmap.astype(np.uint8)
-
-        return img, labelmap, maskmap
+        return self._process(
+            img, data_dict,
+            random.random() > self.ratio,
+            rotate_mat, new_width, new_height
+        )
 
 
-class RandomCrop(object):
+class RandomCrop(_BaseTransform):
     """Crop the given numpy.ndarray and  at a random location.
 
     Args:
@@ -412,7 +541,43 @@ class RandomCrop(object):
             Log.error('Crop method {} is invalid.'.format(self.method))
             exit(1)
 
-    def __call__(self, img, labelmap=None, maskmap=None):
+    def _crop(self, x, offset_up, offset_left, target_size):
+        return x[offset_up:offset_up + target_size[1], offset_left:offset_left + target_size[0]]
+
+    def _process_img(self, img, *args):
+        return self._crop(img, *args)
+
+    def _process_labelmap(self, x, *args):
+        return self._crop(x, *args)
+
+    def _process_region_indexmap(self, x, *args):
+        return self._crop(x, *args)
+
+    def _process_maskmap(self, x, *args):
+        return self._crop(x, *args)
+
+    def _process_distance_map(self, x, *args):
+        return self._crop(x, *args)
+
+    def _process_angle_map(self, x, *args):
+        return self._crop(x, *args)
+
+    def _process_boundary_map(self, x, *args):
+        return self._crop(x, *args)
+
+    def _process_multi_label_direction_map(self, x, *args):
+        return self._crop(x, *args)
+
+    # def _process_offsetmap_h(self, x, *args):
+    #     return self._crop(x, *args)
+
+    # def _process_offsetmap_w(self, x, *args):
+    #     return self._crop(x, *args)
+
+    def _process_offsetmap(self, x, *args):
+        return self._crop(x, *args)
+
+    def __call__(self, img, **kwargs):
         """
         Args:
             img (Image):   Image to be cropped.
@@ -424,29 +589,20 @@ class RandomCrop(object):
             list:   Cropped keypoints.
             list:   Cropped center points.
         """
-        assert isinstance(img, np.ndarray)
-        assert labelmap is None or isinstance(labelmap, np.ndarray)
-        assert maskmap is None or isinstance(maskmap, np.ndarray)
-
-        if random.random() > self.ratio:
-            return img, labelmap, maskmap
+        img, data_dict = super().__call__(img, **kwargs)
 
         height, width, _ = img.shape
         target_size = [min(self.size[0], width), min(self.size[1], height)]
 
         offset_left, offset_up = self.get_lefttop(target_size, [width, height])
-
-        img = img[offset_up:offset_up + target_size[1], offset_left:offset_left + target_size[0]]
-        if maskmap is not None:
-            maskmap = maskmap[offset_up:offset_up + target_size[1], offset_left:offset_left + target_size[0]]
-
-        if labelmap is not None:
-            labelmap = labelmap[offset_up:offset_up + target_size[1], offset_left:offset_left + target_size[0]]
-
-        return img, labelmap, maskmap
+        return self._process(
+            img, data_dict,
+            random.random() > self.ratio,
+            offset_up, offset_left, target_size
+        )
 
 
-class Resize(object):
+class Resize(RandomResize):
     """Resize the given numpy.ndarray to random size and aspect ratio.
     Args:
         scale_min: the min scale to resize.
@@ -459,10 +615,8 @@ class Resize(object):
         self.max_side_length = max_side_length
         self.max_side_bound = max_side_bound
 
-    def __call__(self, img, labelmap=None, maskmap=None):
-        assert isinstance(img, np.ndarray)
-        assert labelmap is None or isinstance(labelmap, np.ndarray)
-        assert maskmap is None or isinstance(maskmap, np.ndarray)
+    def __call__(self, img, **kwargs):
+        img, data_dict = super(RandomResize, self).__call__(img, **kwargs)
 
         height, width, _ = img.shape
         if self.target_size is not None:
@@ -473,28 +627,28 @@ class Resize(object):
         elif self.min_side_length is not None:
             scale_ratio = self.min_side_length / min(width, height)
             w_scale_ratio, h_scale_ratio = scale_ratio, scale_ratio
-            target_size = [int(round(width * w_scale_ratio)), int(round(height * h_scale_ratio))]
+            target_size = [int(round(width * w_scale_ratio)),
+                           int(round(height * h_scale_ratio))]
 
         else:
             scale_ratio = self.max_side_length / max(width, height)
             w_scale_ratio, h_scale_ratio = scale_ratio, scale_ratio
-            target_size = [int(round(width * w_scale_ratio)), int(round(height * h_scale_ratio))]
+            target_size = [int(round(width * w_scale_ratio)),
+                           int(round(height * h_scale_ratio))]
 
         if self.max_side_bound is not None and max(target_size) > self.max_side_bound:
             d_ratio = self.max_side_bound / max(target_size)
             w_scale_ratio = d_ratio * w_scale_ratio
             h_scale_ratio = d_ratio * h_scale_ratio
-            target_size = [int(round(width * w_scale_ratio)), int(round(height * h_scale_ratio))]
+            target_size = [int(round(width * w_scale_ratio)),
+                           int(round(height * h_scale_ratio))]
 
         target_size = tuple(target_size)
-        img = cv2.resize(img, target_size, interpolation=cv2.INTER_CUBIC)
-        if labelmap is not None:
-            labelmap = cv2.resize(labelmap, target_size, interpolation=cv2.INTER_NEAREST)
-
-        if maskmap is not None:
-            maskmap = cv2.resize(maskmap, target_size, interpolation=cv2.INTER_NEAREST)
-
-        return img, labelmap, maskmap
+        return self._process(
+            img, data_dict,
+            False,
+            target_size, h_scale_ratio, w_scale_ratio
+        )
 
 
 class CV2AugCompose(object):
@@ -513,346 +667,56 @@ class CV2AugCompose(object):
         self.configer = configer
         self.split = split
 
-        self.transforms = dict()
         if self.split == 'train':
             shuffle_train_trans = []
             if self.configer.exists('train_trans', 'shuffle_trans_seq'):
                 if isinstance(self.configer.get('train_trans', 'shuffle_trans_seq')[0], list):
-                    train_trans_seq_list = self.configer.get('train_trans', 'shuffle_trans_seq')
+                    train_trans_seq_list = self.configer.get(
+                        'train_trans', 'shuffle_trans_seq')
                     for train_trans_seq in train_trans_seq_list:
                         shuffle_train_trans += train_trans_seq
 
                 else:
-                    shuffle_train_trans = self.configer.get('train_trans', 'shuffle_trans_seq')
-
-            if 'random_saturation' in self.configer.get('train_trans', 'trans_seq') + shuffle_train_trans:
-                self.transforms['random_saturation'] = RandomSaturation(
-                    lower=self.configer.get('train_trans', 'random_saturation')['lower'],
-                    upper=self.configer.get('train_trans', 'random_saturation')['upper'],
-                    saturation_ratio=self.configer.get('train_trans', 'random_saturation')['ratio']
-                )
-
-            if 'random_hue' in self.configer.get('train_trans', 'trans_seq') + shuffle_train_trans:
-                self.transforms['random_hue'] = RandomHue(
-                    delta=self.configer.get('train_trans', 'random_hue')['delta'],
-                    hue_ratio=self.configer.get('train_trans', 'random_hue')['ratio']
-                )
-
-            if 'random_perm' in self.configer.get('train_trans', 'trans_seq') + shuffle_train_trans:
-                self.transforms['random_perm'] = RandomPerm(
-                    perm_ratio=self.configer.get('train_trans', 'random_perm')['ratio']
-                )
-
-            if 'random_contrast' in self.configer.get('train_trans', 'trans_seq') + shuffle_train_trans:
-                self.transforms['random_contrast'] = RandomContrast(
-                    lower=self.configer.get('train_trans', 'random_contrast')['lower'],
-                    upper=self.configer.get('train_trans', 'random_contrast')['upper'],
-                    contrast_ratio=self.configer.get('train_trans', 'random_contrast')['ratio']
-                )
-
-            if 'padding' in self.configer.get('train_trans', 'trans_seq'):
-                self.transforms['padding'] = Padding(
-                    pad=self.configer.get('train_trans', 'padding')['pad'],
-                    pad_ratio=self.configer.get('train_trans', 'padding')['ratio'],
-                    mean=self.configer.get('normalize', 'mean_value'),
-                    allow_outside_center=self.configer.get('train_trans', 'padding')['allow_outside_center']
-                )
-
-            if 'random_brightness' in self.configer.get('train_trans', 'trans_seq') + shuffle_train_trans:
-                self.transforms['random_brightness'] = RandomBrightness(
-                    shift_value=self.configer.get('train_trans', 'random_brightness')['shift_value'],
-                    brightness_ratio=self.configer.get('train_trans', 'random_brightness')['ratio']
-                )
-
-            if 'random_hflip' in self.configer.get('train_trans', 'trans_seq') + shuffle_train_trans:
-                self.transforms['random_hflip'] = RandomHFlip(
-                    swap_pair=self.configer.get('train_trans', 'random_hflip')['swap_pair'],
-                    flip_ratio=self.configer.get('train_trans', 'random_hflip')['ratio']
-                )
-
-            if 'random_resize' in self.configer.get('train_trans', 'trans_seq') + shuffle_train_trans:
-                if self.configer.get('train_trans', 'random_resize')['method'] == 'random':
-                    if 'scale_list' not in self.configer.get('train_trans', 'random_resize'):
-                        if 'max_side_bound' in self.configer.get('train_trans', 'random_resize'):
-                            self.transforms['random_resize'] = RandomResize(
-                                method=self.configer.get('train_trans', 'random_resize')['method'],
-                                scale_range=self.configer.get('train_trans', 'random_resize')['scale_range'],
-                                aspect_range=self.configer.get('train_trans', 'random_resize')['aspect_range'],
-                                max_side_bound=self.configer.get('train_trans', 'random_resize')['max_side_bound'],
-                                resize_ratio=self.configer.get('train_trans', 'random_resize')['ratio']
-                            )
-                        else:
-                            self.transforms['random_resize'] = RandomResize(
-                                method=self.configer.get('train_trans', 'random_resize')['method'],
-                                scale_range=self.configer.get('train_trans', 'random_resize')['scale_range'],
-                                aspect_range=self.configer.get('train_trans', 'random_resize')['aspect_range'],
-                                resize_ratio=self.configer.get('train_trans', 'random_resize')['ratio']
-                            )
-                    else:
-                        if 'max_side_bound' in self.configer.get('train_trans', 'random_resize'):
-                            self.transforms['random_resize'] = RandomResize(
-                                method=self.configer.get('train_trans', 'random_resize')['method'],
-                                scale_list=self.configer.get('train_trans', 'random_resize')['scale_list'],
-                                aspect_range=self.configer.get('train_trans', 'random_resize')['aspect_range'],
-                                max_side_bound=self.configer.get('train_trans', 'random_resize')['max_side_bound'],
-                                resize_ratio=self.configer.get('train_trans', 'random_resize')['ratio']
-                            )
-                        else:
-                            self.transforms['random_resize'] = RandomResize(
-                                method=self.configer.get('train_trans', 'random_resize')['method'],
-                                scale_list=self.configer.get('train_trans', 'random_resize')['scale_list'],
-                                aspect_range=self.configer.get('train_trans', 'random_resize')['aspect_range'],
-                                resize_ratio=self.configer.get('train_trans', 'random_resize')['ratio']
-                            )
-
-                elif self.configer.get('train_trans', 'random_resize')['method'] == 'focus':
-                    self.transforms['random_resize'] = RandomResize(
-                        method=self.configer.get('train_trans', 'random_resize')['method'],
-                        scale_range=self.configer.get('train_trans', 'random_resize')['scale_range'],
-                        aspect_range=self.configer.get('train_trans', 'random_resize')['aspect_range'],
-                        target_size=self.configer.get('train_trans', 'random_resize')['target_size'],
-                        resize_ratio=self.configer.get('train_trans', 'random_resize')['ratio']
-                    )
-
-                elif self.configer.get('train_trans', 'random_resize')['method'] == 'bound':
-                    self.transforms['random_resize'] = RandomResize(
-                        method=self.configer.get('train_trans', 'random_resize')['method'],
-                        aspect_range=self.configer.get('train_trans', 'random_resize')['aspect_range'],
-                        resize_bound=self.configer.get('train_trans', 'random_resize')['resize_bound'],
-                        resize_ratio=self.configer.get('train_trans', 'random_resize')['ratio']
-                    )
-
-                else:
-                    Log.error('Not Support Resize Method!')
-                    exit(1)
-
-            if 'random_crop' in self.configer.get('train_trans', 'trans_seq') + shuffle_train_trans:
-                if self.configer.get('train_trans', 'random_crop')['method'] == 'random':
-                    self.transforms['random_crop'] = RandomCrop(
-                        crop_size=self.configer.get('train_trans', 'random_crop')['crop_size'],
-                        method=self.configer.get('train_trans', 'random_crop')['method'],
-                        crop_ratio=self.configer.get('train_trans', 'random_crop')['ratio'],
-                        allow_outside_center=self.configer.get('train_trans', 'random_crop')['allow_outside_center']
-                    )
-
-                elif self.configer.get('train_trans', 'random_crop')['method'] == 'center':
-                    self.transforms['random_crop'] = RandomCrop(
-                        crop_size=self.configer.get('train_trans', 'random_crop')['crop_size'],
-                        method=self.configer.get('train_trans', 'random_crop')['method'],
-                        crop_ratio=self.configer.get('train_trans', 'random_crop')['ratio'],
-                        allow_outside_center=self.configer.get('train_trans', 'random_crop')['allow_outside_center']
-                    )
-
-                elif self.configer.get('train_trans', 'random_crop')['method'] == 'grid':
-                    self.transforms['random_crop'] = RandomCrop(
-                        crop_size=self.configer.get('train_trans', 'random_crop')['crop_size'],
-                        method=self.configer.get('train_trans', 'random_crop')['method'],
-                        grid=self.configer.get('train_trans', 'random_crop')['grid'],
-                        crop_ratio=self.configer.get('train_trans', 'random_crop')['ratio'],
-                        allow_outside_center=self.configer.get('train_trans', 'random_crop')['allow_outside_center']
-                    )
-
-                else:
-                    Log.error('Not Support Crop Method!')
-                    exit(1)
-
-            if 'random_rotate' in self.configer.get('train_trans', 'trans_seq') + shuffle_train_trans:
-                self.transforms['random_rotate'] = RandomRotate(
-                    max_degree=self.configer.get('train_trans', 'random_rotate')['rotate_degree'],
-                    rotate_ratio=self.configer.get('train_trans', 'random_rotate')['ratio'],
-                    mean=self.configer.get('normalize', 'mean_value')
-                )
-
-            if 'resize' in self.configer.get('train_trans', 'trans_seq') + shuffle_train_trans:
-                if 'target_size' in self.configer.get('train_trans', 'resize'):
-                    self.transforms['resize'] = Resize(
-                        target_size=self.configer.get('train_trans', 'resize')['target_size']
-                    )
-                if 'min_side_length' in self.configer.get('train_trans', 'resize'):
-                    if 'max_side_bound' in self.configer.get('train_trans', 'resize'):
-                        self.transforms['resize'] = Resize(
-                            min_side_length=self.configer.get('train_trans', 'resize')['min_side_length'],
-                            max_side_bound=self.configer.get('train_trans', 'resize')['max_side_bound'],
-                        )
-                    else:
-                        self.transforms['resize'] = Resize(
-                            min_side_length=self.configer.get('train_trans', 'resize')['min_side_length']
-                        )
-                if 'max_side_length' in self.configer.get('train_trans', 'resize'):
-                    self.transforms['resize'] = Resize(
-                        max_side_length=self.configer.get('train_trans', 'resize')['max_side_length']
-                    )
-
+                    shuffle_train_trans = self.configer.get(
+                        'train_trans', 'shuffle_trans_seq')
+            trans_seq = self.configer.get(
+                'train_trans', 'trans_seq') + shuffle_train_trans
+            trans_key = 'train_trans'
         else:
-            if 'random_saturation' in self.configer.get('val_trans', 'trans_seq'):
-                self.transforms['random_saturation'] = RandomSaturation(
-                    lower=self.configer.get('val_trans', 'random_saturation')['lower'],
-                    upper=self.configer.get('val_trans', 'random_saturation')['upper'],
-                    saturation_ratio=self.configer.get('val_trans', 'random_saturation')['ratio']
-                )
+            trans_seq = self.configer.get('val_trans', 'trans_seq')
+            trans_key = 'val_trans'
 
-            if 'random_hue' in self.configer.get('val_trans', 'trans_seq'):
-                self.transforms['random_hue'] = RandomHue(
-                    delta=self.configer.get('val_trans', 'random_hue')['delta'],
-                    hue_ratio=self.configer.get('val_trans', 'random_hue')['ratio']
-                )
+        self.transforms = dict()
+        self.trans_config = self.configer.get(trans_key)
+        for trans_name in trans_seq:
+            specs = TRANSFORM_SPEC[trans_name]
+            config = self.configer.get(trans_key, trans_name)
+            for spec in specs:
+                if 'when' not in spec:
+                    break
+                choose_this = True
+                for cond_key, cond_value in spec['when'].items():
+                    choose_this = choose_this and (
+                        config[cond_key] == cond_value)
+                if choose_this:
+                    break
+            else:
+                raise RuntimeError("Not support!")
 
-            if 'random_perm' in self.configer.get('val_trans', 'trans_seq'):
-                self.transforms['random_perm'] = RandomPerm(
-                    perm_ratio=self.configer.get('val_trans', 'random_perm')['ratio']
-                )
+            kwargs = {}
+            for arg_name, arg_path in spec["args"].items():
+                if isinstance(arg_path, str):
+                    arg_value = config.get(arg_path, None)
+                elif isinstance(arg_path, list):
+                    arg_value = self.configer.get(*arg_path)
+                kwargs[arg_name] = arg_value
 
-            if 'random_contrast' in self.configer.get('val_trans', 'trans_seq'):
-                self.transforms['random_contrast'] = RandomContrast(
-                    lower=self.configer.get('val_trans', 'random_contrast')['lower'],
-                    upper=self.configer.get('val_trans', 'random_contrast')['upper'],
-                    contrast_ratio=self.configer.get('val_trans', 'random_contrast')['ratio']
-                )
+            klass = TRANSFORM_MAPPING[trans_name]
+            self.transforms[trans_name] = klass(**kwargs)
 
-            if 'padding' in self.configer.get('val_trans', 'trans_seq'):
-                self.transforms['padding'] = Padding(
-                    pad=self.configer.get('val_trans', 'padding')['pad'],
-                    pad_ratio=self.configer.get('val_trans', 'padding')['ratio'],
-                    mean=self.configer.get('normalize', 'mean_value'),
-                    allow_outside_center=self.configer.get('val_trans', 'padding')['allow_outside_center']
-                )
+    def __call__(self, img, **data_dict):
 
-            if 'random_brightness' in self.configer.get('val_trans', 'trans_seq'):
-                self.transforms['random_brightness'] = RandomBrightness(
-                    shift_value=self.configer.get('val_trans', 'random_brightness')['shift_value'],
-                    brightness_ratio=self.configer.get('val_trans', 'random_brightness')['ratio']
-                )
-
-            if 'random_hflip' in self.configer.get('val_trans', 'trans_seq'):
-                self.transforms['random_hflip'] = RandomHFlip(
-                    swap_pair=self.configer.get('val_trans', 'random_hflip')['swap_pair'],
-                    flip_ratio=self.configer.get('val_trans', 'random_hflip')['ratio']
-                )
-
-            if 'random_resize' in self.configer.get('val_trans', 'trans_seq'):
-                if self.configer.get('train_trans', 'random_resize')['method'] == 'random':
-                    if 'scale_list' not in self.configer.get('val_trans', 'random_resize'):
-                        if 'max_side_bound' in self.configer.get('val_trans', 'random_resize'):
-                            self.transforms['random_resize'] = RandomResize(
-                                method=self.configer.get('val_trans', 'random_resize')['method'],
-                                scale_range=self.configer.get('val_trans', 'random_resize')['scale_range'],
-                                aspect_range=self.configer.get('val_trans', 'random_resize')['aspect_range'],
-                                max_side_bound=self.configer.get('val_trans', 'random_resize')['max_side_bound'],
-                                resize_ratio=self.configer.get('val_trans', 'random_resize')['ratio']
-                            )
-                        else:
-                            self.transforms['random_resize'] = RandomResize(
-                                method=self.configer.get('val_trans', 'random_resize')['method'],
-                                scale_range=self.configer.get('val_trans', 'random_resize')['scale_range'],
-                                aspect_range=self.configer.get('val_trans', 'random_resize')['aspect_range'],
-                                resize_ratio=self.configer.get('val_trans', 'random_resize')['ratio']
-                            )
-                    else:
-                        if 'max_side_bound' in self.configer.get('val_trans', 'random_resize'):
-                            self.transforms['random_resize'] = RandomResize(
-                                method=self.configer.get('val_trans', 'random_resize')['method'],
-                                scale_list=self.configer.get('val_trans', 'random_resize')['scale_list'],
-                                aspect_range=self.configer.get('val_trans', 'random_resize')['aspect_range'],
-                                max_side_bound=self.configer.get('val_trans', 'random_resize')['max_side_bound'],
-                                resize_ratio=self.configer.get('val_trans', 'random_resize')['ratio']
-                            )
-                        else:
-                            self.transforms['random_resize'] = RandomResize(
-                                method=self.configer.get('val_trans', 'random_resize')['method'],
-                                scale_list=self.configer.get('val_trans', 'random_resize')['scale_list'],
-                                aspect_range=self.configer.get('val_trans', 'random_resize')['aspect_range'],
-                                resize_ratio=self.configer.get('val_trans', 'random_resize')['ratio']
-                            )
-
-                elif self.configer.get('val_trans', 'random_resize')['method'] == 'focus':
-                    self.transforms['random_resize'] = RandomResize(
-                        method=self.configer.get('val_trans', 'random_resize')['method'],
-                        scale_range=self.configer.get('val_trans', 'random_resize')['scale_range'],
-                        aspect_range=self.configer.get('val_trans', 'random_resize')['aspect_range'],
-                        target_size=self.configer.get('val_trans', 'random_resize')['target_size'],
-                        resize_ratio=self.configer.get('val_trans', 'random_resize')['ratio']
-                    )
-
-                elif self.configer.get('val_trans', 'random_resize')['method'] == 'bound':
-                    self.transforms['random_resize'] = RandomResize(
-                        method=self.configer.get('val_trans', 'random_resize')['method'],
-                        aspect_range=self.configer.get('val_trans', 'random_resize')['aspect_range'],
-                        resize_bound=self.configer.get('val_trans', 'random_resize')['resize_bound'],
-                        resize_ratio=self.configer.get('val_trans', 'random_resize')['ratio']
-                    )
-
-                else:
-                    Log.error('Not Support Resize Method!')
-                    exit(1)
-
-            if 'random_crop' in self.configer.get('val_trans', 'trans_seq'):
-                if self.configer.get('val_trans', 'random_crop')['method'] == 'random':
-                    self.transforms['random_crop'] = RandomCrop(
-                        crop_size=self.configer.get('val_trans', 'random_crop')['crop_size'],
-                        method=self.configer.get('val_trans', 'random_crop')['method'],
-                        crop_ratio=self.configer.get('val_trans', 'random_crop')['ratio'],
-                        allow_outside_center=self.configer.get('val_trans', 'random_crop')['allow_outside_center']
-                    )
-
-                elif self.configer.get('val_trans', 'random_crop')['method'] == 'center':
-                    self.transforms['random_crop'] = RandomCrop(
-                        crop_size=self.configer.get('val_trans', 'random_crop')['crop_size'],
-                        method=self.configer.get('val_trans', 'random_crop')['method'],
-                        crop_ratio=self.configer.get('val_trans', 'random_crop')['ratio'],
-                        allow_outside_center=self.configer.get('val_trans', 'random_crop')['allow_outside_center']
-                    )
-
-                elif self.configer.get('val_trans', 'random_crop')['method'] == 'grid':
-                    self.transforms['random_crop'] = RandomCrop(
-                        crop_size=self.configer.get('val_trans', 'random_crop')['crop_size'],
-                        method=self.configer.get('val_trans', 'random_crop')['method'],
-                        grid=self.configer.get('val_trans', 'random_crop')['grid'],
-                        crop_ratio=self.configer.get('val_trans', 'random_crop')['ratio'],
-                        allow_outside_center=self.configer.get('val_trans', 'random_crop')['allow_outside_center']
-                    )
-
-                else:
-                    Log.error('Not Support Crop Method!')
-                    exit(1)
-
-            if 'random_rotate' in self.configer.get('val_trans', 'trans_seq'):
-                self.transforms['random_rotate'] = RandomRotate(
-                    max_degree=self.configer.get('val_trans', 'random_rotate')['rotate_degree'],
-                    rotate_ratio=self.configer.get('val_trans', 'random_rotate')['ratio'],
-                    mean=self.configer.get('normalize', 'mean_value')
-                )
-
-            if 'resize' in self.configer.get('val_trans', 'trans_seq'):
-                if 'target_size' in self.configer.get('val_trans', 'resize'):
-                    self.transforms['resize'] = Resize(
-                        target_size=self.configer.get('val_trans', 'resize')['target_size']
-                    )
-                if 'min_side_length' in self.configer.get('val_trans', 'resize'):
-                    if 'max_side_bound' in self.configer.get('val_trans', 'resize'):
-                        self.transforms['resize'] = Resize(
-                            min_side_length=self.configer.get('val_trans', 'resize')['min_side_length'],
-                            max_side_bound=self.configer.get('val_trans', 'resize')['max_side_bound'],
-                        )
-                    else:
-                        self.transforms['resize'] = Resize(
-                            min_side_length=self.configer.get('val_trans', 'resize')['min_side_length']
-                        )
-                if 'max_side_length' in self.configer.get('val_trans', 'resize'):
-                    self.transforms['resize'] = Resize(
-                        max_side_length=self.configer.get('val_trans', 'resize')['max_side_length']
-                    )
-
-    def __check_none(self, key_list, value_list):
-        for key, value in zip(key_list, value_list):
-            if value == 'y' and key is None:
-                return False
-
-            if value == 'n' and key is not None:
-                return False
-
-        return True
-
-    def __call__(self, img, labelmap=None, maskmap=None):
+        orig_key_list = list(data_dict)
 
         if self.configer.get('data', 'input_mode') == 'RGB':
             img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
@@ -866,28 +730,174 @@ class CV2AugCompose(object):
                 else:
                     shuffle_trans_seq = self.configer.get('train_trans', 'shuffle_trans_seq')
                     random.shuffle(shuffle_trans_seq)
-
-            for trans_key in (shuffle_trans_seq + self.configer.get('train_trans', 'trans_seq')):
-                img, labelmap, maskmap = self.transforms[trans_key](img, labelmap, maskmap)
-
+            trans_seq = shuffle_trans_seq + self.configer.get('train_trans', 'trans_seq')
         else:
-            for trans_key in self.configer.get('val_trans', 'trans_seq'):
-                img, labelmap, maskmap = self.transforms[trans_key](img, labelmap, maskmap)
+            trans_seq = self.configer.get('val_trans', 'trans_seq')
+
+        for trans_key in trans_seq:
+            img, data_dict = self.transforms[trans_key](img, **data_dict)
 
         if self.configer.get('data', 'input_mode') == 'RGB':
             img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
-        if self.__check_none([labelmap, maskmap], ['n', 'n']):
-            return img
+        return (img, *[data_dict[key] for key in orig_key_list])
 
-        if self.__check_none([labelmap, maskmap], ['y', 'n']):
-            return img, labelmap
+    def __repr__(self):
+        import pprint
+        return 'CV2AugCompose({})'.format(pprint.pformat(self.trans_config))
 
-        if self.__check_none([labelmap, maskmap], ['n', 'y']):
-            return img, maskmap
 
-        if self.__check_none([labelmap, maskmap], ['y', 'y']):
-            return img, labelmap, maskmap
+TRANSFORM_MAPPING = {
+    "random_saturation": RandomSaturation,
+    "random_hue": RandomHue,
+    "random_perm": RandomPerm,
+    "random_contrast": RandomContrast,
+    "padding": Padding,
+    "random_brightness": RandomBrightness,
+    "random_hflip": RandomHFlip,
+    "random_resize": RandomResize,
+    "random_crop": RandomCrop,
+    "random_rotate": RandomRotate,
+    "resize": Resize,
+}
 
-        Log.error('Params is not valid.')
-        exit(1)
+TRANSFORM_SPEC = {
+    "random_style": [{
+        "args": {
+            "style_ratio": "ratio"
+        }
+    }],
+    "random_saturation": [{
+        "args": {
+            "lower": "lower",
+            "upper": "upper",
+            "saturation_ratio": "ratio"
+        }
+    }],
+    "random_hue": [{
+        "args": {
+            "delta": "delta",
+            "hue_ratio": "ratio"
+        }
+    }],
+    "ramdom_perm": [{
+        "args": {
+            "perm_ratio": "ratio"
+        }
+    }],
+    "random_contrast": [{
+        "args": {
+            "lower": "lower",
+            "upper": "upper",
+            "contrast_ratio": "ratio"
+        }
+    }],
+    "padding": [{
+        "args": {
+            "pad": "pad",
+            "pad_ratio": "ratio",
+            "mean": ["normalize", "mean_value"],
+            "allow_outside_center": "allow_outside_center"
+        }
+    }],
+    "random_brightness": [{
+        "args": {
+            "shift_value": "shift_value",
+            "brightness_ratio": "ratio"
+        }
+    }],
+    "random_hflip": [{
+        "args": {
+            "swap_pair": "swap_pair",
+            "flip_ratio": "ratio"
+        }
+    }],
+    "random_resize": [
+        {
+            "args": {
+                "method": "method",
+                "scale_range": "scale_range",
+                "aspect_range": "aspect_range",
+                "max_side_bound": "max_side_bound",
+                "resize_ratio": "ratio"
+            },
+            "when": {
+                "method": "random"
+            }
+        },
+        {
+            "args": {
+                "method": "method",
+                "scale_range": "scale_range",
+                "aspect_range": "aspect_range",
+                "target_size": "target_size",
+                "resize_ratio": "ratio"
+            },
+            "when": {
+                "method": "focus"
+            }
+        },
+        {
+            "args": {
+                "method": "method",
+                "aspect_range": "aspect_range",
+                "resize_bound": "resize_bound",
+                "resize_ratio": "ratio"
+            },
+            "when": {
+                "method": "bound"
+            }
+        },
+    ],
+    "random_crop": [
+        {
+            "args": {
+                "crop_size": "crop_size",
+                "method": "method",
+                "crop_ratio": "ratio",
+                "allow_outside_center": "allow_outside_center"
+            },
+            "when": {
+                "method": "random"
+            }
+        },
+        {
+            "args": {
+                "crop_size": "crop_size",
+                "method": "method",
+                "crop_ratio": "ratio",
+                "allow_outside_center": "allow_outside_center"
+            },
+            "when": {
+                "method": "center"
+            }
+        },
+        {
+            "args": {
+                "crop_size": "crop_size",
+                "method": "method",
+                "crop_ratio": "ratio",
+                "grid": "grid",
+                "allow_outside_center": "allow_outside_center"
+            },
+            "when": {
+                "method": "grid"
+            }
+        },
+    ],
+    "random_rotate": [{
+        "args": {
+            "max_degree": "rotate_degree",
+            "rotate_ratio": "ratio",
+            "mean": ["normalize", "mean_value"]
+        }
+    }],
+    "resize": [{
+        "args": {
+            "target_size": "target_size",
+            "min_side_length": "min_side_length",
+            "max_side_bound": "max_side_bound",
+            "max_side_length": "max_side_length"
+        }
+    }],
+}

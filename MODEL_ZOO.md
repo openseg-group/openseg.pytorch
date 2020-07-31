@@ -68,7 +68,111 @@ OCR | HRNet-W48 | Train | Val | 150000 | 16 | Yes | Yes | Yes | 46.19 | same as 
 
 SegFix is a general effective (model-agnostic) post-processing scheme (kinds of like DenseCRF). The key idea of the SegFix is to replace the labels of the boundary pixels with the label of the interior pixels. SegFix can be used to improve the semantic/instance segmentation results of any existing approaches, e.g., HRNet, DeepLabv3, OCR, PointRend, MaskRCNN, without any re-training or fine-tuning. We have made the inference code and the offset files of our SegFix method. Please try our SegFix in your Cityscapes submission and you can achieve much better performance. As illustrated in the followed examples, our SegFix is complementary with various very recent methods, such as the PointRend by FAIR.
 
+## SegFix Pipelines
+
+Currently openseg allows users to use SegFix in the following ways.
+
+For whom want to try SegFix by training a new SegFix model, you should:
+
+ 1. Generate ground truth offsets.
+ 2. Download ImageNet pretrained model to `pretrained_model/`.
+ 3. Run the training script.
+ 4. Run the prediction script to predict offsets for Cityscapes val / test set.
+ 5. Run the refinement script to refine any labels with the offsets.
+
+For whom want to try SegFix by using a pretrained SegFix model, you should:
+
+ 1. Download corresponding checkpoints to `checkpoints/cityscapes/`.
+ 2. Run the prediction script to predict offsets for Cityscapes val / test set.
+ 3. Run the refinement script to refine any labels with the offsets.
+
+For whom want to try SegFix by using offline-generated offsets, you should:
+
+ 1. Download corresponding offsets files to `${DATA_ROOT}/cityscapes` and extract them.
+ 2. Run the refinement script to refine any labels with the offsets.
+
+More details are introduced in the following sections.
+
+### Training
+
+```bash
+# Training
+bash scripts/cityscapes/segfix/<script>.sh train 1
+```
+
+Before starting training, you should download the corresponding ImageNet pretrained models to `pretrained_model/`. By default, we use Higher-W48 (`hrnet48`) as backbone, but you can choose lighter ones by modifying `BACKBONE` and `PRETRAINED_MODEL` in the script.
+
+| Backbone | Pretrained Model | 
+| :---- | :----: |
+| hrnet18 | [GoogleDrive](https://drive.google.com/file/d/1sLqUR30qG91km0vDmPGJLt8efP-vfiXX/view?usp=sharing) |
+| hrnet32 | [GoogleDrive](https://drive.google.com/file/d/1Rjo3O0AAzL0LXBeGoR2qi3Tu9hT9KV9z/view?usp=sharing) |
+| hrnet48 | [GoogleDrive](https://drive.google.com/file/d/1XyQMb2ZjAibqzumXCI30Na5Bl3Zt0bfn/view?usp=sharing) |
+
+**Note** For some reasons, our best results with Higher-HRNet are currently unavailable. We will release them as soon as they are ready.
+
+### Prediction
+
+SegFix generates a kind of intermediate files called **offsets**, which can be used to refine segmentation results from any models.
+
+```bash
+# Predict offsets for val set and save to path
+# `segfix_pred/val/[semantic | instance]/cityscapes/
+bash scripts/cityscapes/segfix/<script>.sh segfix_pred_val 1
+# Predict offsets for test set and save to path
+# `segfix_pred/test/[semantic | instance]/cityscapes/
+bash scripts/cityscapes/segfix/<script>.sh segfix_pred_test 1
+```
+
+For example, running 
+```bash
+bash scripts/cityscapes/segfix/run_h_48_d_4_segfix.sh segfix_pred_val 1
+```
+will store offsets to `offset_pred/val/semantic/cityscapes/offset_hrnet48/`. Then you can run
+```bash
+python scripts/cityscapes/segfix.py \
+  --offset offset_pred/val/semantic/cityscapes/offset_hrnet48/ \
+  --input <your labels>
+```
+to refine your own labels.
+
+### Use offline-generated offsets
+
+You can download [offset_semantic.zip](https://drive.google.com/open?id=1iDP2scYmy51XJww-888oouNpRBksmrkv) or [offset_instance.zip](https://drive.google.com/open?id=1UXj6-XCXrPGAzDq3F1GGRpaF32nNTF4m) to `${DATA_ROOT}/cityscapes` and extract the archive.
+
+### Refinement
+
+You can use `scripts/cityscapes/segfix.py` (semantic) or `scripts/cityscapes/segfix_instance.py` (instance) to apply SegFix on your own label files. Usage:
+```bash
+python scripts/cityscapes/segfix[_instance].py \
+  --input <path/to/your/label/dir> \
+  --split <SPLIT> \
+  [ --offset <OFFSET_DIR>] \
+  [ --out <OUT_DIR>]
+```
+where 
+  + `<SPLIT>` is `test` or `val`.
+  + `<OFFSET_DIR>` is the location of SegFix offsets, default to `$DATA_ROOT/cityscapes/val/offset_pred/[semantic | instance]/offset_hrnext/` or `$DATA_ROOT/cityscapes/test_offset/[semantic | instance]/offset_hrnext/`.
+  + `<OUT_DIR>` is an optional output directory.
+
+
 ## Cityscapes Semantic Segmentation
+
+### Generating ground truth for SegFix
+
+Simply run
+
+```bash
+python lib/datasets/preprocess/cityscapes/dt_offset_generator.py
+```
+
+### Scripts and checkpoints for SegFix models
+
+| Method | Backbone | Train Set | Script | Checkpoint | 
+| :----: | :----: | :--: | :--: | :--: |
+| SegFix | HRNet-W48 | train | `scripts/cityscapes/segfix/run_h_48_d_4_segfix.sh`  | [GoogleDrive](https://drive.google.com/file/d/1PSTA5LetgqBUFFDPkvyuZk3ImjvvV1mL/view?usp=sharing) |
+| SegFix | HRNet-W48 | train + val | `scripts/cityscapes/segfix/run_h_48_d_4_segfix_trainval.sh`  | - |
+
+Scripts and checkpoints for Higher-HRNet will be coming soon.
 
 ### Released prediction files
 
@@ -79,29 +183,27 @@ We have released the prediction of some state-of-the-arts approaches and their S
 | HRNet-W48 | val | 81.1 | 81.6 |
 | HRNet-W48 + OCR | test | 84.2 | 84.5 |
 
-### Use SegFix in openseg
+### Refinement with SegFix
 
-To apply SegFix, you should first down the offset files [offset_semantic.zip](https://drive.google.com/open?id=1iDP2scYmy51XJww-888oouNpRBksmrkv) to `$DATA_ROOT/cityscapes`, and then extract the archive.
-
-Several scripts in openseg have built-in support for SegFix post-processing. For example, you can first run `bash scripts/cityscapes/hrnet/run_h_48_d_4_ocr.sh val 1` to get the baseline prediction of HRNet-W48 + OCR model, then run `bash scripts/cityscapes/hrnet/run_h_48_d_4_ocr.sh segfix 1 val` to further apply SegFix on the prediction.
-
-### Use SegFix for your own label files
-
-You can use `scripts/cityscapes/segfix.py` to apply SegFix on your own label files. Usage:
-```bash
-python scripts/cityscapes/segfix.py \
-  --input <path/to/your/label/dir> \
-  --split <SPLIT> \
-  [ --offset <OFFSET_DIR>] \
-  [ --out <OUT_DIR>]
-```
-where 
-  + `<SPLIT>` is `test` or `val`.
-  + `<OFFSET_DIR>` is the location of SegFix offsets, default to `$DATA_ROOT/cityscapes/val/offset_pred/semantic/offset_hrnext/` or `$DATA_ROOT/cityscapes/test_offset/semantic/offset_hrnext/`.
-  + `<OUT_DIR>` is an optional output directory.
-
+Except for the refinement scripts mentioned above, several scripts in openseg have built-in support for SegFix post-processing. For example, you can first run `bash scripts/cityscapes/hrnet/run_h_48_d_4_ocr.sh val 1` to get the baseline prediction of HRNet-W48 + OCR model, then run `bash scripts/cityscapes/hrnet/run_h_48_d_4_ocr.sh segfix 1 val` to further apply SegFix on the prediction labels.
 
 ## Cityscapes Instance Segmentation
+
+### Generating ground truth for SegFix
+
+Simply run
+
+```bash
+python lib/datasets/preprocess/cityscapes/instance_dt_offset_generator.py
+```
+
+### Scripts and checkpoints for SegFix models
+
+| Method | Backbone | Train Set | Script | Checkpoint | 
+| :----: | :----: | :--: | :--: | :--: |
+| SegFix | Higher-W48 | train | `scripts/cityscapes/segfix/run_h_48_d_4_segfix_inst.sh`  | - |
+
+Scripts and checkpoints for Higher-HRNet will be coming soon.
 
 ### Released prediction files
 
@@ -116,21 +218,6 @@ We have released the prediction of some state-of-the-arts approaches and their S
 | PANet (w/ COCO) | test | 36.4 | 37.8 |
 | PolyTransform (w/ COCO) | test | 40.1 | 41.2 |
 
-### Use SegFix for your own label files
+### Refinement with SegFix
 
-To apply SegFix, you should first down the offset files [offset_instance.zip](https://drive.google.com/open?id=1UXj6-XCXrPGAzDq3F1GGRpaF32nNTF4m) to `$DATA_ROOT/cityscapes`, and then extract the archive.
-
-You can use `scripts/cityscapes/segfix_instance.py` to apply SegFix on your own label files. Usage:
-```bash
-python scripts/cityscapes/segfix.py \
-  --input <path/to/your/label/dir> \
-  --split <SPLIT> \
-  [ --offset <OFFSET_DIR>] \
-  [ --out <OUT_DIR>]
-```
-where 
-  + `<SPLIT>` is `test` or `val`.
-  + `<OFFSET_DIR>` is the location of SegFix offsets, default to `$DATA_ROOT/cityscapes/val/offset_pred/instance/offset_hrnext/` or `$DATA_ROOT/cityscapes/test_offset/instance/offset_hrnext/`.
-  + `<OUT_DIR>` is an optional output directory.
-
-
+Simply follow the instruction in the **Refinement** section.

@@ -15,6 +15,7 @@ from __future__ import print_function
 
 from lib.loss.loss_helper import FSAuxOhemCELoss, FSOhemCELoss
 from lib.loss.loss_helper import FSCELoss, FSAuxCELoss
+from lib.loss.loss_helper import SegFixLoss
 
 from lib.utils.tools.logger import Logger as Log
 from lib.utils.distributed import is_distributed
@@ -25,6 +26,7 @@ SEG_LOSS_DICT = {
     'fs_ohemce_loss': FSOhemCELoss,
     'fs_auxce_loss': FSAuxCELoss,
     'fs_auxohemce_loss': FSAuxOhemCELoss,
+    'segfix_loss': SegFixLoss,
 }
 
 

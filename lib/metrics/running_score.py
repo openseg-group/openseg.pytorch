@@ -103,6 +103,13 @@ class RunningScore(object):
         self.ignore_index = ignore_index
         self.confusion_matrix = np.zeros((self.n_classes, self.n_classes))
 
+    def get_F1_score(self):
+        assert self.n_classes == 2
+        TN, FN, FP, TP = self.confusion_matrix.flatten()
+        precision = TP / (TP + FP)
+        recall = TP / (TP + FN)
+        return 2 / (1 / precision + 1 / recall), precision, recall       
+
     def _fast_hist(self, label_true, label_pred, n_class):
         mask = (label_true >= 0) & (label_true < n_class)
 

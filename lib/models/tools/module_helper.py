@@ -176,7 +176,10 @@ class ModuleHelper(object):
                              if '.'.join(k.split('.')[1:]) in model_dict}
 
             # used to debug
-            Log.info('Matched Keys: {}'.format(load_dict.keys()))
+            if int(os.environ.get("debug_load_model", 0)):
+                Log.info('Matched Keys List:')
+                for key in load_dict.keys():
+                    Log.info('{}'.format(key))
             model_dict.update(load_dict)
             model.load_state_dict(model_dict)
 

@@ -184,8 +184,9 @@ e.g.
     parser.add_argument('--split', choices=['val', 'test'], default='val')
     parser.add_argument('--scale', type=float, default=1)
     parser.add_argument(
-        '--dataset-dir', default='/msravcshare/dataset/original_cityscapes/')
+        '--dataset_dir', default='/msravcshare/dataset/original_cityscapes/')
     parser.add_argument('--out')
+    parser.add_argument('--eval_only', action='store_true')
     args = parser.parse_args()
 
     in_dir = args.input
@@ -205,6 +206,7 @@ e.g.
     input_args = [fn for fn in os.listdir(in_dir) if fn.endswith('pred.txt')]
     print(len(input_args), 'files in total.')
     copy_gt()
-    mpp.Pool(processes=None).map(process, input_args)
+    if not args.eval_only:
+        mpp.Pool(processes=None).map(process, input_args)
     if args.split == 'val':
         evaluation(out_dir)

@@ -36,9 +36,14 @@ from lib.models.nets.isanet import ISANet
 # CE2P
 from lib.models.nets.ce2pnet import CE2P_OCRNet, CE2P_IdealOCRNet, CE2P_ASPOCR
 
+# SegFix
+from lib.models.nets.segfix import SegFix_HRNet
+
 from lib.utils.tools.logger import Logger as Log
 
 SEG_MODEL_DICT = {
+    # SegFix
+    'segfix_hrnet': SegFix_HRNet,
     # OCNet series
     'base_ocnet': BaseOCNet,
     'asp_ocnet': AspOCNet,

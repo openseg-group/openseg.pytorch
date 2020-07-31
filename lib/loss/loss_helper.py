@@ -12,6 +12,7 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+import os
 import pdb
 import torch
 import torch.nn as nn
@@ -184,3 +185,65 @@ class FSAuxCELoss(nn.Module):
         loss = self.configer.get('network', 'loss_weights')['seg_loss'] * seg_loss
         loss = loss + self.configer.get('network', 'loss_weights')['aux_loss'] * aux_loss
         return loss
+
+
+class SegFixLoss(nn.Module):
+    """
+    We predict a binary mask to categorize the boundary pixels as class 1 and otherwise as class 0
+    Based on the pixels predicted as 1 within the binary mask, we further predict the direction for these
+    pixels.
+    """
+
+    def __init__(self, configer=None):
+        super().__init__()
+        self.configer = configer
+        self.ce_loss = FSCELoss(self.configer)
+
+    def calc_weights(self, label_map, num_classes):
+
+        weights = []
+        for i in range(num_classes):
+            weights.append((label_map == i).sum().data)
+        weights = torch.FloatTensor(weights)
+        weights_sum = weights.sum()
+        return (1 - weights / weights_sum).cuda()       
+
+    def forward(self, inputs, targets, **kwargs):
+
+        from lib.utils.helpers.offset_helper import DTOffsetHelper
+
+        pred_mask, pred_direction = inputs
+
+        seg_label_map, distance_map, angle_map = targets[0], targets[1], targets[2]
+        gt_mask = DTOffsetHelper.distance_to_mask_label(distance_map, seg_label_map, return_tensor=True)
+
+        gt_size = gt_mask.shape[1:]
+        mask_weights = self.calc_weights(gt_mask, 2)
+
+        pred_direction = F.interpolate(pred_direction, size=gt_size, mode="bilinear", align_corners=True)
+        pred_mask = F.interpolate(pred_mask, size=gt_size, mode="bilinear", align_corners=True)
+        mask_loss = F.cross_entropy(pred_mask, gt_mask, weight=mask_weights, ignore_index=-1)
+
+        mask_threshold = float(os.environ.get('mask_threshold', 0.5))
+        binary_pred_mask = torch.softmax(pred_mask, dim=1)[:, 1, :, :] > mask_threshold
+
+        gt_direction = DTOffsetHelper.angle_to_direction_label(
+            angle_map,
+            seg_label_map=seg_label_map,
+            extra_ignore_mask=(binary_pred_mask == 0),
+            return_tensor=True
+        )
+
+        direction_loss_mask = gt_direction != -1
+        direction_weights = self.calc_weights(gt_direction[direction_loss_mask], pred_direction.size(1))
+        direction_loss = F.cross_entropy(pred_direction, gt_direction, weight=direction_weights, ignore_index=-1)
+
+        if self.training \
+           and self.configer.get('iters') % self.configer.get('solver', 'display_iter') == 0 \
+           and torch.cuda.current_device() == 0:
+            Log.info('mask loss: {} direction loss: {}.'.format(mask_loss, direction_loss))
+
+        mask_weight = float(os.environ.get('mask_weight', 1))
+        direction_weight = float(os.environ.get('direction_weight', 1))
+
+        return mask_weight * mask_loss + direction_weight * direction_loss
