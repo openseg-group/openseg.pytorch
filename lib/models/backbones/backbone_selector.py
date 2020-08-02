@@ -30,7 +30,7 @@ class BackboneSelector(object):
         if ('resnet' in backbone or 'resnext' in backbone or 'resnest' in backbone) and 'senet' not in backbone:
             model = ResNetBackbone(self.configer)(**params)
 
-        elif 'hrnet' in backbone:
+        elif 'hrne' in backbone:
             model = HRNetBackbone(self.configer)(**params)
 
         else:

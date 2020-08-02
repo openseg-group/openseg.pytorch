@@ -100,15 +100,14 @@ More details are introduced in the following sections.
 bash scripts/cityscapes/segfix/<script>.sh train 1
 ```
 
-Before starting training, you should download the corresponding ImageNet pretrained models to `pretrained_model/`. By default, we use HRNet-W48 (`hrnet48`) as backbone, but you can choose lighter ones by modifying `BACKBONE` and `PRETRAINED_MODEL` in the script.
+Before starting training, you should download the corresponding ImageNet pretrained models to `pretrained_model/`. By default, we use HRNet-W48 (`hrnet48`) or Higher-HRNet (`hrnext20`) as backbone, but you can choose lighter ones by modifying `BACKBONE` and `PRETRAINED_MODEL` in the script.
 
 | Backbone | Pretrained Model | 
 | :---- | :----: |
 | hrnet18 | [GoogleDrive](https://drive.google.com/file/d/1sLqUR30qG91km0vDmPGJLt8efP-vfiXX/view?usp=sharing) |
 | hrnet32 | [GoogleDrive](https://drive.google.com/file/d/1Rjo3O0AAzL0LXBeGoR2qi3Tu9hT9KV9z/view?usp=sharing) |
 | hrnet48 | [GoogleDrive](https://drive.google.com/file/d/1XyQMb2ZjAibqzumXCI30Na5Bl3Zt0bfn/view?usp=sharing) |
-
-**Note** For some reasons, our best results with Higher-HRNet are currently unavailable. We will release them as soon as they are ready.
+| hrnext20 | [GoogleDrive](https://drive.google.com/file/d/1vzUJHHZyH3GdtCnXVs4uK_9cDPxZdGLY/view?usp=sharing) |
 
 ### Prediction
 
@@ -171,8 +170,9 @@ python lib/datasets/preprocess/cityscapes/dt_offset_generator.py
 | :----: | :----: | :--: | :--: | :--: |
 | SegFix | HRNet-W48 | train | `scripts/cityscapes/segfix/run_h_48_d_4_segfix.sh`  | [GoogleDrive](https://drive.google.com/file/d/1PSTA5LetgqBUFFDPkvyuZk3ImjvvV1mL/view?usp=sharing) |
 | SegFix | HRNet-W48 | train + val | `scripts/cityscapes/segfix/run_h_48_d_4_segfix_trainval.sh`  | - |
+| SegFix | Higher-HRNet | train | `scripts/cityscapes/segfix/run_hx_20_d_2_segfix.sh`  | [GoogleDrive](https://drive.google.com/file/d/1CtNXrdu1PWesd9ZOMVk-svKaQNfh79mp/view?usp=sharing) |
+| SegFix | Higher-HRNet | train + val | `scripts/cityscapes/segfix/run_hx_20_d_2_segfix_trainval.sh`  | [GoogleDrive](https://drive.google.com/file/d/1fJsIHmOFsRQLoP-TXUg2FjYQxittNU6u/view?usp=sharing) |
 
-Scripts and checkpoints for Higher-HRNet will be coming soon.
 
 ### Released prediction files
 
@@ -202,8 +202,7 @@ python lib/datasets/preprocess/cityscapes/instance_dt_offset_generator.py
 | Method | Backbone | Train Set | Script | Checkpoint | 
 | :----: | :----: | :--: | :--: | :--: |
 | SegFix | Higher-W48 | train | `scripts/cityscapes/segfix/run_h_48_d_4_segfix_inst.sh`  | - |
-
-Scripts and checkpoints for Higher-HRNet will be coming soon.
+| SegFix | Higher-HRNet | train | `scripts/cityscapes/segfix/run_hx_20_d_2_segfix_inst.sh`  | [GoogleDrive](https://drive.google.com/file/d/1ehCJzzYNs-9mJs8lPr82Gddh59o6O8-E/view?usp=sharing) |
 
 ### Released prediction files
 

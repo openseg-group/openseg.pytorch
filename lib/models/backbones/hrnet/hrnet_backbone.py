@@ -20,6 +20,12 @@ import numpy as np
 from lib.models.tools.module_helper import ModuleHelper
 from lib.utils.tools.logger import Logger as Log
 
+if torch.__version__.startswith('1'):	
+    relu_inplace = True	
+else:	
+    relu_inplace = False
+
+
 def conv3x3(in_planes, out_planes, stride=1):
     """3x3 convolution with padding"""
     return nn.Conv2d(in_planes, out_planes, kernel_size=3, stride=stride,
@@ -566,6 +572,171 @@ class HighResolutionNet(nn.Module):
         return y_list
 
 
+class HighResolutionNext(nn.Module):
+
+    def __init__(self, cfg, bn_type, **kwargs):
+        super(HighResolutionNext, self).__init__()
+        # stem net
+        self.conv1 = nn.Conv2d(3, 64, kernel_size=3, stride=2, padding=1,
+                               bias=False)
+        self.bn1 = ModuleHelper.BatchNorm2d(bn_type=bn_type)(64)
+        self.relu = nn.ReLU(relu_inplace)
+
+        self.stage1_cfg = cfg['STAGE1']
+        num_channels = self.stage1_cfg['NUM_CHANNELS']
+        block = blocks_dict[self.stage1_cfg['BLOCK']]
+        num_channels = [
+            num_channels[i] * block.expansion for i in range(len(num_channels))]
+        self.transition0 = self._make_transition_layer([64], num_channels, bn_type=bn_type)
+        self.stage1, pre_stage_channels = self._make_stage(
+            self.stage1_cfg, num_channels, bn_type=bn_type)
+
+        self.stage2_cfg = cfg['STAGE2']
+        num_channels = self.stage2_cfg['NUM_CHANNELS']
+        block = blocks_dict[self.stage2_cfg['BLOCK']]
+        num_channels = [
+            num_channels[i] * block.expansion for i in range(len(num_channels))]
+        self.transition1 = self._make_transition_layer(
+            pre_stage_channels, num_channels, bn_type=bn_type)
+        self.stage2, pre_stage_channels = self._make_stage(
+            self.stage2_cfg, num_channels, bn_type=bn_type)
+
+        self.stage3_cfg = cfg['STAGE3']
+        num_channels = self.stage3_cfg['NUM_CHANNELS']
+        block = blocks_dict[self.stage3_cfg['BLOCK']]
+        num_channels = [
+            num_channels[i] * block.expansion for i in range(len(num_channels))]
+        self.transition2 = self._make_transition_layer(
+            pre_stage_channels, num_channels, bn_type=bn_type)
+        self.stage3, pre_stage_channels = self._make_stage(
+            self.stage3_cfg, num_channels, bn_type=bn_type)
+
+        self.stage4_cfg = cfg['STAGE4']
+        num_channels = self.stage4_cfg['NUM_CHANNELS']
+        block = blocks_dict[self.stage4_cfg['BLOCK']]
+        num_channels = [
+            num_channels[i] * block.expansion for i in range(len(num_channels))]
+        self.transition3 = self._make_transition_layer(
+            pre_stage_channels, num_channels, bn_type=bn_type)
+        self.stage4, pre_stage_channels = self._make_stage(
+            self.stage4_cfg, num_channels, multi_scale_output=True, bn_type=bn_type)
+
+    def _make_transition_layer(
+            self, num_channels_pre_layer, num_channels_cur_layer, bn_type):
+        num_branches_cur = len(num_channels_cur_layer)
+        num_branches_pre = len(num_channels_pre_layer)
+
+        transition_layers = []
+        for i in range(num_branches_cur):
+            if i < num_branches_pre:
+                if num_channels_cur_layer[i] != num_channels_pre_layer[i]:
+                    transition_layers.append(
+                        nn.Sequential(
+                            nn.Conv2d(
+                                num_channels_pre_layer[i],
+                                num_channels_cur_layer[i],
+                                3, 1, 1, bias=False
+                            ),
+                            ModuleHelper.BatchNorm2d(bn_type=bn_type)(num_channels_cur_layer[i]),
+                            nn.ReLU(relu_inplace)
+                        )
+                    )
+                else:
+                    transition_layers.append(None)
+            else:
+                conv3x3s = []
+                for j in range(i+1-num_branches_pre):
+                    inchannels = num_channels_pre_layer[-1]
+                    outchannels = num_channels_cur_layer[i] \
+                        if j == i-num_branches_pre else inchannels
+                    conv3x3s.append(
+                        nn.Sequential(
+                            nn.Conv2d(
+                                inchannels, outchannels, 3, 2, 1, bias=False
+                            ),
+                            ModuleHelper.BatchNorm2d(bn_type=bn_type)(outchannels),
+                            nn.ReLU(relu_inplace)
+                        )
+                    )
+                transition_layers.append(nn.Sequential(*conv3x3s))
+
+        return nn.ModuleList(transition_layers)
+
+    def _make_stage(self, layer_config, num_inchannels,
+                    multi_scale_output=True, bn_type=None):
+        num_modules = layer_config['NUM_MODULES']
+        num_branches = layer_config['NUM_BRANCHES']
+        num_blocks = layer_config['NUM_BLOCKS']
+        num_channels = layer_config['NUM_CHANNELS']
+        block = blocks_dict[layer_config['BLOCK']]
+        fuse_method = layer_config['FUSE_METHOD']
+
+        modules = []
+        for i in range(num_modules):
+            # multi_scale_output is only used last module
+            if not multi_scale_output and i == num_modules - 1:
+                reset_multi_scale_output = False
+            else:
+                reset_multi_scale_output = True
+
+            modules.append(
+                HighResolutionModule(
+                    num_branches,
+                    block,
+                    num_blocks,
+                    num_inchannels,
+                    num_channels,
+                    fuse_method,
+                    reset_multi_scale_output,
+                    bn_type
+                )
+            )
+            num_inchannels = modules[-1].get_num_inchannels()
+
+        return nn.Sequential(*modules), num_inchannels
+
+    def forward(self, x):
+        x = self.conv1(x)
+        x = self.bn1(x)
+        x = self.relu(x)
+
+        x_list = []
+        for i in range(self.stage1_cfg['NUM_BRANCHES']):
+            if self.transition0[i] is not None:
+                x_list.append(self.transition0[i](x))
+            else:
+                x_list.append(x)
+        y_list = self.stage1(x_list)
+
+        x_list = []
+        for i in range(self.stage2_cfg['NUM_BRANCHES']):
+            if self.transition1[i] is not None:
+                if i == 0:
+                    x_list.append(self.transition1[i](y_list[0]))
+                else:
+                    x_list.append(self.transition1[i](y_list[-1]))
+            else:
+                x_list.append(y_list[i])
+        y_list = self.stage2(x_list)
+
+        x_list = []
+        for i in range(self.stage3_cfg['NUM_BRANCHES']):
+            if self.transition2[i] is not None:
+                x_list.append(self.transition2[i](y_list[-1]))
+            else:
+                x_list.append(y_list[i])
+        y_list = self.stage3(x_list)
+
+        x_list = []
+        for i in range(self.stage4_cfg['NUM_BRANCHES']):
+            if self.transition3[i] is not None:
+                x_list.append(self.transition3[i](y_list[-1]))
+            else:
+                x_list.append(y_list[i])
+        x = self.stage4(x_list)
+        return x
+
+
 class HRNetBackbone(object):
     def __init__(self, configer):
         self.configer = configer
@@ -609,6 +780,15 @@ class HRNetBackbone(object):
                                                pretrained=self.configer.get('network', 'pretrained'), 
                                                all_match=False,
                                                network='hrnet')        
+
+        elif arch == 'hrnext20':
+            arch_net = HighResolutionNext(MODEL_CONFIGS['hrnext20'], 
+                                         bn_type=self.configer.get('network', 'bn_type'))
+            arch_net = ModuleHelper.load_model(arch_net, 
+                                               pretrained=self.configer.get('network', 'pretrained'), 
+                                               all_match=False,
+                                               network='hrnet')
+                                               
         else:
             raise Exception('Architecture undefined!')
 
