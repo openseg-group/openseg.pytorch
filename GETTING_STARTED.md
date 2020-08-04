@@ -24,9 +24,7 @@ Before executing any scripts, your should first fill up the config file `config.
 
 ## Data Preparation
 
-You need to download [Cityscapes](https://www.cityscapes-dataset.com/), [LIP](http://sysu-hcp.net/lip/) and [PASCAL-Context](https://cs.stanford.edu/~roozbeh/pascal-context/) datasets.
-
-For COCO-Stuff dataset, you need to download `cocostuff-10k-v1.1.zip` and `cocostuff-10k-v1.1.json` from [nightrome/cocostuff10k](https://github.com/nightrome/cocostuff10k), and put the JSON, extracted images and annotations under `<path/to/original_cocostuff>`. You might also need to install `pycocotools` by `python -m pip install pycocotools`.
+You need to download [Cityscapes](https://www.cityscapes-dataset.com/), [LIP](http://sysu-hcp.net/lip/), [PASCAL-Context](https://cs.stanford.edu/~roozbeh/pascal-context/) or [COCO-Stuff 10k v1.1](https://github.com/nightrome/cocostuff10k) datasets.
 
 We arrange images and labels in another way. You could preprocess the files by running:
 
