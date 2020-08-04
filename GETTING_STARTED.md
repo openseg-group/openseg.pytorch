@@ -26,6 +26,8 @@ Before executing any scripts, your should first fill up the config file `config.
 
 You need to download [Cityscapes](https://www.cityscapes-dataset.com/), [LIP](http://sysu-hcp.net/lip/) and [PASCAL-Context](https://cs.stanford.edu/~roozbeh/pascal-context/) datasets.
 
+For COCO-Stuff dataset, you should download `cocostuff-10k-v1.1.zip` and `cocostuff-10k-v1.1.json` from [nightrome/cocostuff10k](https://github.com/nightrome/cocostuff10k), and put the JSON, extracted images and annotations under `<path/to/original_cocostuff>`.
+
 We arrange images and labels in another way. You could preprocess the files by running:
 
 ```bash
@@ -33,7 +35,8 @@ python lib/datasets/preprocess/cityscapes/cityscapes_generator.py --coarse True 
   --save_dir <path/to/preprocessed_cityscapes> --ori_root_dir <path/to/original_cityscapes>
 python lib/datasets/preprocess/pascal_context/pascal_context_generator.py \
   --save_dir <path/to/preprocessed_context> --ori_root_dir <path/to/original_context>
-# TODO: LIP Preprocess
+python lib/datasets/preprocess/coco_stuff/coco_stuff_generator.py \
+  --save_dir <path/to/preprocessed_cocostuff> --ori_root_dir <path/to/original_cocostuff>
 ```
 
 and finally, the dataset directory should look like:
@@ -72,6 +75,13 @@ $DATA_ROOT
 │   │   └── label
 │   ├── val
 │   │   ├── edge
+│   │   ├── image
+│   │   └── label
+├── coco_stuff_10k
+│   ├── train
+│   │   ├── image
+│   │   └── label
+│   ├── val
 │   │   ├── image
 │   │   └── label
 ```
