@@ -47,7 +47,7 @@ from lib.utils.helpers.offset_helper import DTOffsetConfig, DTOffsetHelper
 class Tester(object):
     def __init__(self, configer):
         self.crop_size = configer.get('train',
-                                      'data_transformer')['input_size']
+                                      'data_transformer')['input_size'][::-1]
         val_trans_seq = [
             x for x in configer.get('val_trans', 'trans_seq')
             if 'random' not in x
