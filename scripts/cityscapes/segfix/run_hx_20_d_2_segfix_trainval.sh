@@ -34,7 +34,7 @@ echo offset_dir: $offset_dir
 DATA_DIR="${DATA_ROOT}/cityscapes"
 SAVE_DIR="${DATA_ROOT}/seg_result/cityscapes/"
 
-BACKBONE="hrnext20"
+BACKBONE="hrnet2x20"
 CONFIGS="configs/cityscapes/H_SEGFIX.json"
 
 MODEL_NAME="segfix_hrnet"

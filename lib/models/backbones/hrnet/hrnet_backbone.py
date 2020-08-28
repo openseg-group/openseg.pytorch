@@ -781,8 +781,8 @@ class HRNetBackbone(object):
                                                all_match=False,
                                                network='hrnet')        
 
-        elif arch == 'hrnext20':
-            arch_net = HighResolutionNext(MODEL_CONFIGS['hrnext20'], 
+        elif arch == 'hrnet2x20':
+            arch_net = HighResolutionNext(MODEL_CONFIGS['hrnet2x20'], 
                                          bn_type=self.configer.get('network', 'bn_type'))
             arch_net = ModuleHelper.load_model(arch_net, 
                                                pretrained=self.configer.get('network', 'pretrained'), 
