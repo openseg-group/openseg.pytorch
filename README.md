@@ -14,6 +14,10 @@
 
 ## News
 
+- 2020/08/16 [MMSegmentation](https://github.com/open-mmlab/mmsegmentation) has supported our HRNet + OCR.
+
+- 2020/07/20 The researchers from AInnovation have achieved the 1-st place on [ADE20K Leaderboard](http://sceneparsing.csail.mit.edu/) via training our HRNet + OCR with a semi-supervised learning scheme. More details are in their [Technical Report](https://arxiv.org/pdf/2007.10591.pdf)
+
 - 2020/07/09
 [OCR (Spotlight)](https://arxiv.org/pdf/1909.11065.pdf) and [SegFix](https://arxiv.org/pdf/2007.04269.pdf) have been accepted by the ECCV-2020. Notably, the reseachers from Nvidia set a new state-of-the-art performance on Cityscapes leaderboard: [85.4%](https://www.cityscapes-dataset.com/method-details/?submissionID=7836) via combining our HRNet + OCR with a new [hierarchical mult-scale attention scheme](https://arxiv.org/abs/2005.10821). 
 
@@ -85,28 +89,28 @@ Please consider citing our work if you find it helps you,
 @article{YuanW18,
   title={Ocnet: Object context network for scene parsing},
   author={Yuhui Yuan and Jingdong Wang},
-  booktitle={arXiv preprint arXiv:1809.00916},
+  journal={arXiv preprint arXiv:1809.00916},
   year={2018}
 }
 
 @article{HuangYGZCW19,
   title={Interlaced Sparse Self-Attention for Semantic Segmentation},
   author={Lang Huang and Yuhui Yuan and Jianyuan Guo and Chao Zhang and Xilin Chen and Jingdong Wang},
-  booktitle={arXiv preprint arXiv:1907.12273},
+  journal={arXiv preprint arXiv:1907.12273},
   year={2019}
 }
 
 @article{YuanCW20,
   title={Object-Contextual Representations for Semantic Segmentation},
   author={Yuhui Yuan and Xilin Chen and Jingdong Wang},
-  booktitle={ECCV},
+  journal={arXiv preprint arXiv:1909.11065},
   year={2020}
 }
 
 @article{YuanXCW20,
   title={SegFix: Model-Agnostic Boundary Refinement for Segmentation},
   author={Yuhui Yuan and Jingyi Xie and Xilin Chen and Jingdong Wang},
-  booktitle={ECCV},
+  journal={arXiv preprint arXiv:2007.04269},
   year={2020}
 }
 ```
