@@ -16,7 +16,19 @@ OCR | ResNet-101 | Train | Val | 40000 | 8 | No | No | No | 79.63 | 80.68 | [Log
 ASP-OCR | ResNet-101 | Train | Val | 40000 | 8 | No | No | No | 79.89 | 80.69 | [Log](https://drive.google.com/open?id=1pT2OaCU6uGhNKH3TOJWvgvELYWV-0Fyd) / [Model](https://drive.google.com/open?id=1PXg7RK0LOOmTUNhjFOQXRswx0RAwCw2a) | scripts/cityscapes/ocrnet/run_r_101_d_8_asp_ocrnet_train.sh |
 OCR | HRNet-W48 | Train | Val | 80000 | 8 | No | No | No | 81.09 | 81.73 | [Log](https://drive.google.com/open?id=1rHzUdSmLjvKsVkG-XpRzEpNX2zzU0hZc) / [Model](https://drive.google.com/open?id=1SJAgAhFODCqm_6L8KRkFFFr7dB2l6aC_) | scripts/cityscapes/hrnet/run_h_48_d_4_ocr.sh |
 
-#### SegFix
+### How to reproduce the HRNet + OCR with Mapillary pretraining
+To help you to reproduce our best results on the Cityscapes leaderboard, we explain the details of the training pipeline as following:
+(1) We use the model `HRNet_W48_OCR_B` as the main architecture, which decreases the intput feature map channels from `720` to `256` (instead of `512`) w/o almost no performance drop.
+(2) We train the `HRNet_W48_OCR_B` on the original Mapillary training set with `batch size=16`, `crop size=1024x1024`, `base lr=0.01`, and `max iterations=500,000`
+and achieve `50.8` on the Mapillary validation set. We have released the pretrained checkpoints `hrnet_w48_ocr_b_mapillary_bs16_500000_1024x1024_lr0.01_1_latest.pth`.
+(3) We fine-tune the above Mapillary pretrained models on the Cityscapes `train + val` set with script `run_h_48_d_4_ocr_b_mapillary_trainval_ohem.sh`. Here we use smaller base learning rate `0.001`.
+(4) We fine-tune the models after (3) on the Cityscapes `coarse` set with script `run_h_48_d_4_ocr_b_mapillary_trainval_coarse_ohem.sh`. Here we also empirically find that freezing the BN statistics achieves slightly better results (+0.1%).
+(5) Last, we fine-tune the models on the Cityscapes `train + val` set with script `run_h_48_d_4_ocr_b_mapillary_trainval_coarse_trainval_ohem.sh`.
+Finally, you could achieve the performance around `84.2%` on the Cityscapes leaderboard.
+We will upload the checkpoints latter.
+
+
+### SegFix
 
 On Cityscapes, we can use SegFix scheme to further refine the boundary of segmentation results. To apply SegFix, you should first download [offset_semantic.zip](https://drive.google.com/open?id=1iDP2scYmy51XJww-888oouNpRBksmrkv) to `$DATA_ROOT/cityscapes`, then unzip the archive. Take HRNet-W48 based OCR as an example. To refine the results on Cityscapes val set, you should first run `bash scripts/cityscapes/hrnet/run_h_48_d_4_ocr.sh val 1` to obtain the baseline results, then run `bash scripts/cityscapes/hrnet/run_h_48_d_4_ocr.sh segfix 1 val` to apply SegFix.
 
