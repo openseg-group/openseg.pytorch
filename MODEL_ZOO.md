@@ -10,22 +10,22 @@ Checkpoints should be put under `~/checkpoints/cityscapes`.
 
 Methods | Backbone | Train Set | Test Set | Iterations | Batch Size | OHEM | Multi-scale | Flip | mIoU | mIoU w/ SegFix | Link | Script |
 | :---- | :------- | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
-Base-OC | ResNet-101 | Train | Val | 40000 | 8 | No | No | No | 79.49 | 80.55 | [Log](https://drive.google.com/open?id=1bdO_yyuUH63fBP8AE0DO_9OJmJiuvPvw) / [Model](https://drive.google.com/open?id=1AyfnfIt_Aci3CoKup0uVY0UczJS3BiS7) | scripts/cityscapes/ocnet/run_r_101_d_8_baseoc_train.sh |
+Base-OC | ResNet-101 | Train | Val | 40000 | 8 | No | No | No | 79.49 | 80.55 | [Log](https://github.com/hsfzxjy/models.storage/releases/download/openseg.pytorch.cityscapes/base_ocnet_deepbase_resnet101_dilated8_1.log) / [Model](https://github.com/hsfzxjy/models.storage/releases/download/openseg.pytorch.cityscapes/base_ocnet_deepbase_resnet101_dilated8_1_latest.pth) | scripts/cityscapes/ocnet/run_r_101_d_8_baseoc_train.sh |
 ISA | ResNet-101 | Train | Val | 40000 | 8 | No | No | No | 79.55 | 80.62 | [Log](https://drive.google.com/open?id=1gkWYJYSodnRcGrBQPYeDg47lsV9fiAhQ) / [Model](https://drive.google.com/open?id=1Sf9YFjo9dpirojzLev8CfHAc99U6cBwH) | scripts/cityscapes/isa/run_r_101_d_8_isa_train.sh |
-OCR | ResNet-101 | Train | Val | 40000 | 8 | No | No | No | 79.63 | 80.68 | [Log](https://drive.google.com/open?id=1mKUM15UQXj5QYwvW6gJ6wQ0KDhJkWbFA) / [Model](https://drive.google.com/open?id=1bUCC3PEvuTBgfUpJlswEjdSJ_iGvg-Px) | scripts/cityscapes/ocrnet/run_r_101_d_8_ocrnet_train.sh |
-ASP-OCR | ResNet-101 | Train | Val | 40000 | 8 | No | No | No | 79.89 | 80.69 | [Log](https://drive.google.com/open?id=1pT2OaCU6uGhNKH3TOJWvgvELYWV-0Fyd) / [Model](https://drive.google.com/open?id=1PXg7RK0LOOmTUNhjFOQXRswx0RAwCw2a) | scripts/cityscapes/ocrnet/run_r_101_d_8_asp_ocrnet_train.sh |
-OCR | HRNet-W48 | Train | Val | 80000 | 8 | No | No | No | 81.09 | 81.73 | [Log](https://drive.google.com/open?id=1rHzUdSmLjvKsVkG-XpRzEpNX2zzU0hZc) / [Model](https://drive.google.com/open?id=1SJAgAhFODCqm_6L8KRkFFFr7dB2l6aC_) | scripts/cityscapes/hrnet/run_h_48_d_4_ocr.sh |
+OCR | ResNet-101 | Train | Val | 40000 | 8 | No | No | No | 79.63 | 80.68 | [Log](https://github.com/hsfzxjy/models.storage/releases/download/openseg.pytorch.cityscapes/spatial_ocrnet_deepbase_resnet101_dilated8_1.log) / [Model](https://github.com/hsfzxjy/models.storage/releases/download/openseg.pytorch.cityscapes/spatial_ocrnet_deepbase_resnet101_dilated8_1_latest.pth) | scripts/cityscapes/ocrnet/run_r_101_d_8_ocrnet_train.sh |
+ASP-OCR | ResNet-101 | Train | Val | 40000 | 8 | No | No | No | 79.89 | 80.69 | [Log](https://github.com/hsfzxjy/models.storage/releases/download/openseg.pytorch.cityscapes/spatial_asp_ocrnet_deepbase_resnet101_dilated8_1.log) / [Model](https://github.com/hsfzxjy/models.storage/releases/download/openseg.pytorch.cityscapes/spatial_asp_ocrnet_deepbase_resnet101_dilated8_1_latest.pth) | scripts/cityscapes/ocrnet/run_r_101_d_8_asp_ocrnet_train.sh |
+OCR | HRNet-W48 | Train | Val | 80000 | 8 | No | No | No | 81.09 | 81.73 | [Log](https://github.com/hsfzxjy/models.storage/releases/download/openseg.pytorch.cityscapes/hrnet_w48_ocr_1.log) / [Model](https://github.com/hsfzxjy/models.storage/releases/download/openseg.pytorch.cityscapes/hrnet_w48_ocr_1_latest.pth) | scripts/cityscapes/hrnet/run_h_48_d_4_ocr.sh |
 
 ### How to reproduce the HRNet + OCR with Mapillary pretraining
 To help you to reproduce our best results on the Cityscapes leaderboard, we explain the details of the training pipeline as following:
 * (1) We use the model `HRNet_W48_OCR_B` as the main architecture, which decreases the intput feature map channels from `720` to `256` (instead of `512`) w/o almost no performance drop.
 * (2) We train the `HRNet_W48_OCR_B` on the original Mapillary training set with `batch size=16`, `crop size=1024x1024`, `base lr=0.01`, and `max iterations=500,000`
-and achieve `50.8` on the Mapillary validation set. We have released the pretrained checkpoint [hrnet_w48_ocr_b_mapillary_bs16_500000_1024x1024_lr0.01_1_latest.pth](https://drive.google.com/file/d/1_anY7cSyV8kskBvAnUcO0rPIpTCgNGFy/view?usp=sharing).
+and achieve `50.8` on the Mapillary validation set. We have released the pretrained checkpoint [hrnet_w48_ocr_b_mapillary_bs16_500000_1024x1024_lr0.01_1_latest.pth](https://github.com/hsfzxjy/models.storage/releases/download/openseg.pytorch.cityscapes/hrnet_w48_ocr_b_mapillary_bs16_500000_1024x1024_lr0.01_1_latest.pth).
 * (3) We fine-tune the above Mapillary pretrained models on the Cityscapes `train + val` set with script `run_h_48_d_4_ocr_b_mapillary_trainval_ohem.sh`. Here we use smaller base learning rate `0.001`.
 * (4) We fine-tune the models after (3) on the Cityscapes `coarse` set with script `run_h_48_d_4_ocr_b_mapillary_trainval_coarse_ohem.sh`. Here we also empirically find that freezing the BN statistics achieves slightly better results (+0.1%).
 * (5) Last, we fine-tune the models on the Cityscapes `train + val` set with script `run_h_48_d_4_ocr_b_mapillary_trainval_coarse_trainval_ohem.sh`.
 Finally, you could achieve the performance around `84.2%` on the Cityscapes leaderboard.
-We have released the pretrained checkpoint [hrnet_w48_ocr_b_hrnet48_8_20000_trainval_coarse_trainval_mapillary_pretrain_freeze_bn_1_latest.pth](https://drive.google.com/file/d/1mAQI8kJoKx31gNpO4eEWQzxN2FOgTvmx/view?usp=sharing).
+We have released the pretrained checkpoint [hrnet_w48_ocr_b_hrnet48_8_20000_trainval_coarse_trainval_mapillary_pretrain_freeze_bn_1_latest.pth](https://github.com/hsfzxjy/models.storage/releases/download/openseg.pytorch.cityscapes/hrnet_w48_ocr_b_hrnet48_8_20000_trainval_coarse_trainval_mapillary_pretrain_freeze_bn_1_latest.pth).
 
 
 ### SegFix
@@ -40,7 +40,7 @@ Checkpoints should be put under `~/checkpoints/pascal_context`.
 
 Methods | Backbone | Train Set | Test Set | Iterations | Batch Size | OHEM | Multi-scale | Flip | mIoU | Link | Script |
 | :---- | :----: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
-OCR | HRNet-W48 | Train | Val | 60000 | 16 | No | No | No | 55.11 | [Log](https://drive.google.com/open?id=1cJcI3hL0MA4bxWQOCViV0J2ispIgYteV) / [Model](https://drive.google.com/open?id=1hJhlOFh2Vltuy8ebNVy3IX037UAptvgE) | scripts/pascal_context/run_h_48_d_4_ocr_train.sh |
+OCR | HRNet-W48 | Train | Val | 60000 | 16 | No | No | No | 55.11 | [Log](https://github.com/hsfzxjy/models.storage/releases/download/openseg.pytorch.pascal_context/hrnet_w48_ocr_hrnet48_2.log) / [Model](https://github.com/hsfzxjy/models.storage/releases/download/openseg.pytorch.pascal_context/hrnet_w48_ocr_hrnet48_2_latest.pth) | scripts/pascal_context/run_h_48_d_4_ocr_train.sh |
 
 ## LIP
 
@@ -50,7 +50,7 @@ Checkpoints should be put under `~/checkpoints/lip`.
 
 Methods | Backbone | Train Set | Test Set | Iterations | Batch Size | OHEM | Multi-scale | Flip | mIoU | Link | Script |
 | :---- | :----: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
-OCR | HRNet-W48 | Train | Val | 100000 | 32 | No | No | Yes | 56.72 | [Log](https://drive.google.com/open?id=1o6hOZWBJNk2LHxVJCtT7bW3u8SdHZb4f) / [Model](https://drive.google.com/open?id=1jlcJ_FwsadgxR1QrDw5Cxy2_9me86hUh) | scripts/lip/run_h_48_d_4_ocr_train.sh |
+OCR | HRNet-W48 | Train | Val | 100000 | 32 | No | No | Yes | 56.72 | [Log](https://github.com/hsfzxjy/models.storage/releases/download/opeseg.pytorch.lip/hrnet_w48_ocr_1.log) / [Model](https://github.com/hsfzxjy/models.storage/releases/download/opeseg.pytorch.lip/hrnet_w48_ocr_1_latest.pth) | scripts/lip/run_h_48_d_4_ocr_train.sh |
 
 ## COCO-Stuff
 
@@ -60,7 +60,7 @@ Checkpoints should be put under `~/checkpoints/coco_stuff`.
 
 Methods | Backbone | Train Set | Test Set | Iterations | Batch Size | OHEM | Multi-scale | Flip | mIoU | Link | Script |
 | :---- | :----: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
-OCR | HRNet-W48 | Train | Val | 60000 | 16 | Yes | No | No | 39.61 | [Log](https://drive.google.com/open?id=1cfxEJFPsg_QaFU3nm5E4La_fIlgmSjr3) / [Model](https://drive.google.com/open?id=13tXkK9maID7ajSOxSsOavdqKHhFJ4HvD) | scripts/coco_stuff/run_h_48_d_4_ocr_ohem/train.sh |
+OCR | HRNet-W48 | Train | Val | 60000 | 16 | Yes | No | No | 39.61 | [Log](https://github.com/hsfzxjy/models.storage/releases/download/openseg.pytorch.coco_stuff/hrnet_w48_ocr_hrnet48_ohem_2.log) / [Model](https://github.com/hsfzxjy/models.storage/releases/download/openseg.pytorch.coco_stuff/hrnet_w48_ocr_hrnet48_ohem_2_latest.pth) | scripts/coco_stuff/run_h_48_d_4_ocr_ohem/train.sh |
 OCR | HRNet-W48 | Train | Val | 60000 | 16 | Yes | Yes | Yes | 40.20 | same as above | scripts/coco_stuff/run_h_48_d_4_ocr_ohem_train.sh |
 
 ## ADE20K
@@ -71,7 +71,7 @@ Checkpoints should be put under `~/checkpoints/ade20k`.
 
 Methods | Backbone | Train Set | Test Set | Iterations | Batch Size | OHEM | Multi-scale | Flip | mIoU | Link | Script |
 | :---- | :----: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
-OCR | HRNet-W48 | Train | Val | 150000 | 16 | Yes | No | No | 44.62 | [Log](https://drive.google.com/open?id=1dfn9t5Pb1-IslO-_E8BHqm2qDTLfGMhy) / [Model](https://drive.google.com/open?id=1CAZBzNFh5DiUTT8KwlGV5YpQyFZn_C91) | scripts/ade20k/hrnet/run_h_48_d_4_ocr_ohem.sh |
+OCR | HRNet-W48 | Train | Val | 150000 | 16 | Yes | No | No | 44.62 | [Log](https://github.com/hsfzxjy/models.storage/releases/download/openseg.pytorch.ade20k/hrnet_w48_ocr_hrnet48_ohem_1.log) / [Model](https://github.com/hsfzxjy/models.storage/releases/download/openseg.pytorch.ade20k/hrnet_w48_ocr_hrnet48_ohem_1_latest.pth) | scripts/ade20k/hrnet/run_h_48_d_4_ocr_ohem.sh |
 OCR | HRNet-W48 | Train | Val | 150000 | 16 | Yes | Yes | Yes | 46.19 | same as above | scripts/ade20k/hrnet/run_h_48_d_4_ocr_ohem.sh |
 
 # SegFix
@@ -116,10 +116,10 @@ Before starting training, you should download the corresponding ImageNet pretrai
 
 | Backbone | Pretrained Model | 
 | :---- | :----: |
-| hrnet18 | [GoogleDrive](https://drive.google.com/file/d/1sLqUR30qG91km0vDmPGJLt8efP-vfiXX/view?usp=sharing) |
-| hrnet32 | [GoogleDrive](https://drive.google.com/file/d/1Rjo3O0AAzL0LXBeGoR2qi3Tu9hT9KV9z/view?usp=sharing) |
-| hrnet48 | [GoogleDrive](https://drive.google.com/file/d/1XyQMb2ZjAibqzumXCI30Na5Bl3Zt0bfn/view?usp=sharing) |
-| hrnet2x20 | [GoogleDrive](https://drive.google.com/file/d/1vzUJHHZyH3GdtCnXVs4uK_9cDPxZdGLY/view?usp=sharing) |
+| hrnet18 | [Github](https://github.com/hsfzxjy/models.storage/releases/download/openseg-pytorch-pretrained/hrnetv2_w18_imagenet_pretrained.pth) |
+| hrnet32 | [Github](https://github.com/hsfzxjy/models.storage/releases/download/openseg-pytorch-pretrained/hrnetv2_w32_imagenet_pretrained.pth) |
+| hrnet48 | [Github](https://github.com/hsfzxjy/models.storage/releases/download/openseg-pytorch-pretrained/hrnetv2_w48_imagenet_pretrained.pth) |
+| hrnet2x20 | [Github](https://github.com/hsfzxjy/models.storage/releases/download/openseg-pytorch-pretrained/hr_rnet_bt_w20_imagenet_pretrained.pth) |
 
 ### Prediction
 
@@ -148,7 +148,7 @@ to refine your own labels.
 
 ### Use offline-generated offsets
 
-You can download [offset_semantic.zip](https://drive.google.com/open?id=1iDP2scYmy51XJww-888oouNpRBksmrkv) or [offset_instance.zip](https://drive.google.com/open?id=1UXj6-XCXrPGAzDq3F1GGRpaF32nNTF4m) to `${DATA_ROOT}/cityscapes` and extract the archive.
+You can download [offset_semantic.zip](https://github.com/hsfzxjy/models.storage/releases/download/segfix.offsets/offset_semantic.zip) or [offset_instance.zip](https://github.com/hsfzxjy/models.storage/releases/download/segfix.offsets/offset_instance.zip) to `${DATA_ROOT}/cityscapes` and extract the archive.
 
 ### Refinement
 
@@ -180,15 +180,15 @@ python lib/datasets/preprocess/cityscapes/dt_offset_generator.py
 
 | Method | Backbone | Train Set | Script | Checkpoint | 
 | :----: | :----: | :--: | :--: | :--: |
-| SegFix | HRNet-W48 | train | `scripts/cityscapes/segfix/run_h_48_d_4_segfix.sh`  | [GoogleDrive](https://drive.google.com/file/d/1PSTA5LetgqBUFFDPkvyuZk3ImjvvV1mL/view?usp=sharing) |
+| SegFix | HRNet-W48 | train | `scripts/cityscapes/segfix/run_h_48_d_4_segfix.sh`  | [Github](https://github.com/hsfzxjy/models.storage/releases/download/segfix.pretrained/segfix_hrnet_hrnet48_segfix_loss_iter80000_1_latest.pth) |
 | SegFix | HRNet-W48 | train + val | `scripts/cityscapes/segfix/run_h_48_d_4_segfix_trainval.sh`  | - |
-| SegFix | HRNet2x-W20 | train | `scripts/cityscapes/segfix/run_hx_20_d_2_segfix.sh`  | [GoogleDrive](https://drive.google.com/file/d/1CtNXrdu1PWesd9ZOMVk-svKaQNfh79mp/view?usp=sharing) |
-| SegFix | HRNet2x-W20 | train + val | `scripts/cityscapes/segfix/run_hx_20_d_2_segfix_trainval.sh`  | [GoogleDrive](https://drive.google.com/file/d/1fJsIHmOFsRQLoP-TXUg2FjYQxittNU6u/view?usp=sharing) |
+| SegFix | HRNet2x-W20 | train | `scripts/cityscapes/segfix/run_hx_20_d_2_segfix.sh`  | [Github](https://github.com/hsfzxjy/models.storage/releases/download/segfix.pretrained/segfix_hrnet_hrnext20_segfix_loss_1_latest.pth) |
+| SegFix | HRNet2x-W20 | train + val | `scripts/cityscapes/segfix/run_hx_20_d_2_segfix_trainval.sh`  | [Github](https://github.com/hsfzxjy/models.storage/releases/download/segfix.pretrained/segfix_hrnet_hrnext20_segfix_loss_trainval_1_latest.pth) |
 
 
 ### Released prediction files
 
-We have released the prediction of some state-of-the-arts approaches and their SegFixed results. The files can be found [here](https://drive.google.com/open?id=1ZTpzyGcjme7Cgz-PC6Urn27Qw5n29d9U). The performances are listed in the table below:
+We have released the prediction of some state-of-the-arts approaches and their SegFixed results. The files can be found [here](https://github.com/hsfzxjy/models.storage/releases/tag/segfix.prediction). The performances are listed in the table below:
 
 | Method | Test Set | mIoU w/o SegFix | mIoU w/ SegFix |
 | :---- | :----: | :--: | :--: |
@@ -214,11 +214,11 @@ python lib/datasets/preprocess/cityscapes/instance_dt_offset_generator.py
 | Method | Backbone | Train Set | Script | Checkpoint | 
 | :----: | :----: | :--: | :--: | :--: |
 | SegFix | HRNet-W48 | train | `scripts/cityscapes/segfix/run_h_48_d_4_segfix_inst.sh`  | - |
-| SegFix | HRNet2x-W20 | train | `scripts/cityscapes/segfix/run_hx_20_d_2_segfix_inst.sh`  | [GoogleDrive](https://drive.google.com/file/d/1ehCJzzYNs-9mJs8lPr82Gddh59o6O8-E/view?usp=sharing) |
+| SegFix | HRNet2x-W20 | train | `scripts/cityscapes/segfix/run_hx_20_d_2_segfix_inst.sh`  | [Github](https://github.com/hsfzxjy/models.storage/releases/download/segfix.pretrained/segfix_hrnet_hrnext20_segfix_loss_inst_1_latest.pth) |
 
 ### Released prediction files
 
-We have released the prediction of some state-of-the-arts approaches and their SegFixed results. The files can be found [here](https://drive.google.com/open?id=184RXq8-RT8cdt5ojQGa1ziGN5iOxU1Xh). The performances are listed in the table below:
+We have released the prediction of some state-of-the-arts approaches and their SegFixed results. The files can be found [here](https://github.com/hsfzxjy/models.storage/releases/tag/segfix.prediction). The performances are listed in the table below:
 
 | Method | Test Set | AP w/o SegFix | AP w/ SegFix |
 | :---- | :----: | :--: | :--: |

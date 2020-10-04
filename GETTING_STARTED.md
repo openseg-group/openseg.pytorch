@@ -96,7 +96,7 @@ After inference, you can retrieve the tested labelmaps and visualization at `$DA
 
 ## Training Models in openseg
 
-First you should download ImageNet pre-trained weights from [here](https://drive.google.com/open?id=1ulZzlTulhIUvEa27joKLbas1TtbQOI7R), and put them under `$PROJECT_ROOT/pretrained_model/`. Then run `bash <script> train <name>` to start training, where `<script>` is path to the corresponding training script, and `<name>` is arbitary string to help you identify the experiments.
+First you should download ImageNet pre-trained weights from [here](https://github.com/hsfzxjy/models.storage/releases/tag/openseg-pytorch-pretrained), and put them under `$PROJECT_ROOT/pretrained_model/`. Then run `bash <script> train <name>` to start training, where `<script>` is path to the corresponding training script, and `<name>` is arbitary string to help you identify the experiments.
 
 For example, to train HRNet-W48 + OCR on Cityscapes, you may run `bash scripts/cityscapes/hrnet/run_h_48_d_4_ocr.sh train 1`.
 
