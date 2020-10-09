@@ -77,6 +77,7 @@ class FSCELoss(nn.Module):
         self.ce_loss = nn.CrossEntropyLoss(weight=weight, ignore_index=ignore_index, reduction=reduction)
 
     def forward(self, inputs, *targets, weights=None, **kwargs):
+        pdb.set_trace()
         loss = 0.0
         if isinstance(inputs, tuple) or isinstance(inputs, list):
             if weights is None:

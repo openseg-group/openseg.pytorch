@@ -10,23 +10,21 @@ ${PYTHON} -m pip install yacs
 
 export PYTHONPATH="$PWD":$PYTHONPATH
 
-DATA_DIR="${DATA_ROOT}/coco_stuff_10k"
-SAVE_DIR="${DATA_ROOT}/seg_result/coco_stuff/"
+DATA_DIR="${DATA_ROOT}/face_parse/CelebAMask-HQ"
+SAVE_DIR="${DATA_ROOT}/seg_result/celeba/"
 BACKBONE="hrnet48"
 
-CONFIGS="configs/coco_stuff/H_48_D_4.json"
-CONFIGS_TEST="configs/coco_stuff/H_48_D_4_TEST.json"
+CONFIGS="configs/celeba/H_48_D_4.json"
+CONFIGS_TEST="configs/celeba/H_48_D_4_TEST.json"
 
-MODEL_NAME="hrnet_w48"
-LOSS_TYPE="fs_ce_loss"
+MODEL_NAME="hrnet_w48_ocr"
+LOSS_TYPE="fs_auxce_loss"
 CHECKPOINTS_NAME="${MODEL_NAME}_${BACKBONE}_"$2
-LOG_FILE="./log/coco_stuff/${CHECKPOINTS_NAME}.log"
+LOG_FILE="./log/celeba/${CHECKPOINTS_NAME}.log"
 echo "Logging to $LOG_FILE"
 mkdir -p `dirname $LOG_FILE`
 PRETRAINED_MODEL="./pretrained_model/hrnetv2_w48_imagenet_pretrained.pth"
 MAX_ITERS=60000
-
-
 
 if [ "$1"x == "train"x ]; then
   ${PYTHON} -u main.py --configs ${CONFIGS} \

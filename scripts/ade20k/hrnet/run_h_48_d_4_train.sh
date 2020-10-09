@@ -14,7 +14,7 @@ DATA_DIR="${DATA_ROOT}/ADE20K"
 BACKBONE="hrnet48"
 CONFIGS="configs/ade20k/H_48_D_4.json"
 
-MODEL_NAME="hrnet48"
+MODEL_NAME="hrnet_w48"
 LOSS_TYPE="fs_ce_loss"
 CHECKPOINTS_NAME="${MODEL_NAME}_${BACKBONE}_"$2
 PRETRAINED_MODEL="./pretrained_model/hrnetv2_w48_imagenet_pretrained.pth"
