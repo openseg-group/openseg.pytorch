@@ -1,6 +1,7 @@
 import os
 
 import cv2
+import pdb
 import numpy as np
 import torch
 import torch.nn as nn
@@ -83,10 +84,17 @@ class StandardEvaluator(_BaseEvaluator):
             outputs_numpy = {}
             for name, idx in self.output_indices.items():
                 item = outputs[idx].permute(0, 2, 3, 1)
-                item = cv2.resize(
-                    item[i, :border_size[1], :border_size[0]].cpu().numpy(),
-                    tuple(ori_img_size), interpolation=cv2.INTER_CUBIC
-                )
+                if self.configer.get('dataset') == 'celeba':
+                    # the celeba image is of size 1024x1024
+                    item = cv2.resize(
+                        item[i, :border_size[1], :border_size[0]].cpu().numpy(),
+                        tuple(x // 2 for x in ori_img_size), interpolation=cv2.INTER_CUBIC
+                    )
+                else:
+                    item = cv2.resize(
+                        item[i, :border_size[1], :border_size[0]].cpu().numpy(),
+                        tuple(ori_img_size), interpolation=cv2.INTER_CUBIC
+                    )
                 outputs_numpy[name] = item
 
             for name in outputs_numpy:

@@ -1,5 +1,5 @@
 {
-    "dataset": "celeba_mask",
+    "dataset": "celeba",
     "method": "fcn_segmentor",
     "data": {
       "image_tool": "cv2",

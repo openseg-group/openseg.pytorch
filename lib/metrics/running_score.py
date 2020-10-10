@@ -115,7 +115,7 @@ class RunningScore(object):
 
         if self.ignore_index is not None:
             mask = mask & (label_true != self.ignore_index)
-            
+        
         hist = np.bincount(
             n_class * label_true[mask].astype(int) +
             label_pred[mask], minlength=n_class**2)

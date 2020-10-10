@@ -1,17 +1,19 @@
 #!/usr/bin/env bash
-SCRIPTPATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
-cd $SCRIPTPATH
-cd ../../
-. config.profile
 
-# check the enviroment info
-nvidia-smi
+# $1 code path
+# $2 dataset path
+# $3 train or test
+# $4 log_suffix
+
+PYTHON="/opt/conda/bin/python"
+${PYTHON} -c "import torch; print(torch.__version__)"
+
 ${PYTHON} -m pip install yacs
 
-export PYTHONPATH="$PWD":$PYTHONPATH
+export PYTHONPATH=$1:$PYTHONPATH
 
-DATA_DIR="${DATA_ROOT}/face_parse/CelebAMask-HQ"
-SAVE_DIR="${DATA_ROOT}/seg_result/celeba/"
+DATA_DIR="$2/face_parse/CelebAMask-HQ"
+SAVE_DIR="$2/seg_result/celeba/"
 BACKBONE="hrnet48"
 
 CONFIGS="configs/celeba/H_48_D_4.json"
@@ -19,17 +21,17 @@ CONFIGS_TEST="configs/celeba/H_48_D_4_TEST.json"
 
 MODEL_NAME="hrnet_w48_ocr"
 LOSS_TYPE="fs_auxce_loss"
-CHECKPOINTS_NAME="${MODEL_NAME}_${BACKBONE}_"$2
+CHECKPOINTS_NAME="${MODEL_NAME}_${BACKBONE}_"$4
 LOG_FILE="./log/celeba/${CHECKPOINTS_NAME}.log"
 echo "Logging to $LOG_FILE"
 mkdir -p `dirname $LOG_FILE`
 PRETRAINED_MODEL="./pretrained_model/hrnetv2_w48_imagenet_pretrained.pth"
 MAX_ITERS=150000
 
-if [ "$1"x == "train"x ]; then
+if [ "$3"x == "train"x ]; then
   ${PYTHON} -u main.py --configs ${CONFIGS} \
+                       --base_lr 0.001 \
                        --drop_last y \
-                       --nbb_mult 10 \
                        --phase train \
                        --gathered n \
                        --loss_balance y \
@@ -43,12 +45,11 @@ if [ "$1"x == "train"x ]; then
                        --checkpoints_name ${CHECKPOINTS_NAME} \
                        --pretrained ${PRETRAINED_MODEL} \
                        2>&1 | tee ${LOG_FILE}
-                       
 
-elif [ "$1"x == "resume"x ]; then
+
+elif [ "$3"x == "resume"x ]; then
   ${PYTHON} -u main.py --configs ${CONFIGS} \
                        --drop_last y \
-                       --nbb_mult 10 \
                        --phase train \
                        --gathered n \
                        --loss_balance y \
@@ -65,7 +66,7 @@ elif [ "$1"x == "resume"x ]; then
                         2>&1 | tee -a ${LOG_FILE}
 
 
-elif [ "$1"x == "val"x ]; then
+elif [ "$3"x == "val"x ]; then
   ${PYTHON} -u main.py --configs ${CONFIGS_TEST} \
                        --data_dir ${DATA_DIR} \
                        --backbone ${BACKBONE} \
@@ -84,8 +85,8 @@ elif [ "$1"x == "val"x ]; then
                                    --gt_dir ${DATA_DIR}/val/label  
 
 
-elif [ "$1"x == "test"x ]; then
-  if [ "$3"x == "ss"x ]; then
+elif [ "$3"x == "test"x ]; then
+  if [ "$5"x == "ss"x ]; then
     echo "[single scale] test"
     ${PYTHON} -u main.py --configs ${CONFIGS} --drop_last y \
                          --backbone ${BACKBONE} --model_name ${MODEL_NAME} --checkpoints_name ${CHECKPOINTS_NAME} \
@@ -103,5 +104,5 @@ elif [ "$1"x == "test"x ]; then
 
 
 else
-  echo "$1"x" is invalid..."
+  echo "$3"x" is invalid..."
 fi

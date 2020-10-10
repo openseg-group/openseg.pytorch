@@ -1,39 +1,37 @@
 {
-    "dataset": "celeba_mask",
+    "dataset": "celeba",
     "method": "fcn_segmentor",
     "data": {
       "image_tool": "cv2",
       "input_mode": "BGR",
       "num_classes": 19,
-      "reduce_zero_label": true,
-      "data_dir": "~/DataSet/celeba_mask",
+      "reduce_zero_label": false,
+      "data_dir": "~/DataSet/celeba",
       "workers": 8
     },
    "train": {
       "batch_size": 16,
       "data_transformer": {
         "size_mode": "fix_size",
-        "input_size": [520, 520],
+        "input_size": [512, 512],
         "align_method": "only_pad",
         "pad_mode": "random"
       }
     },
     "val": {
       "batch_size": 4,
-      "mode": "ms_test",
       "data_transformer": {
-        "size_mode": "diverse_size",
-        "align_method": "only_pad",
-        "pad_mode": "pad_right_down"
+        "size_mode": "fix_size",
+        "input_size": [512, 512],
+        "align_method": "only_pad"
       }
     },
     "test": {
       "batch_size": 4,
-      "mode": "ss_test",
       "data_transformer": {
-        "size_mode": "diverse_size",
-        "align_method": "only_pad",
-        "pad_mode": "pad_right_down"
+        "size_mode": "fix_size",
+        "input_size": [512, 512],
+        "align_method": "only_pad"
       }
     },
     "train_trans": {
@@ -43,7 +41,7 @@
         "shift_value": 10
       },
       "resize": {
-        "min_side_length": 520
+        "target_size": [512, 512]
       },
       "random_hflip": {
         "ratio": 0.5,
@@ -61,21 +59,15 @@
       },
       "random_crop":{
         "ratio": 1.0,
-        "crop_size": [520, 520],
+        "crop_size": [512, 512],
         "method": "random",
         "allow_outside_center": false
       }
     },
     "val_trans": {
       "trans_seq": ["resize"],
-      "resize": {
-        "min_side_length": 520
-      },
-      "random_crop": {
-        "ratio": 1.0,
-        "crop_size": [520, 520],
-        "method": "center",
-        "allow_outside_center": false
+      "resize":{
+        "target_size": [512, 512]
       }
     },
     "normalize": {
@@ -122,7 +114,7 @@
     },
     "solver": {
       "display_iter": 10,
-      "test_interval": 5000,
+      "test_interval": 2000,
       "max_iters": 150000
     },
     "optim": {
@@ -142,7 +134,6 @@
       "loss_type": "fs_auxce_loss",
       "params": {
         "ce_reduction": "elementwise_mean",
-        "ce_ignore_index": -1,
         "ohem_minkeep":100000,
         "ohem_thresh": 0.7
       }
