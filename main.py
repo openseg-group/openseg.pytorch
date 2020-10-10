@@ -50,7 +50,7 @@ if __name__ == "__main__":
                         dest='gpu', help='The gpu list used.')
 
     # ***********  Params for data.  **********
-    parser.add_argument('--data_dir', default=None, type=str,
+    parser.add_argument('--data_dir', default=None, type=str, nargs='+',
                         dest='data:data_dir', help='The Directory of the data.')
     parser.add_argument('--include_val', type=str2bool, nargs='?', default=False,
                         dest='data:include_val', help='Include validation set for training.')
@@ -185,7 +185,10 @@ if __name__ == "__main__":
     cudnn.benchmark = args_parser.cudnn
 
     configer = Configer(args_parser=args_parser)
-    abs_data_dir = os.path.expanduser(configer.get('data', 'data_dir'))
+    data_dir = configer.get('data', 'data_dir')
+    if isinstance(data_dir, str):
+        data_dir = [data_dir]
+    abs_data_dir = [os.path.expanduser(x) for x in data_dir]
     configer.update(['data', 'data_dir'], abs_data_dir)
 
     project_dir = os.path.dirname(os.path.realpath(__file__))
