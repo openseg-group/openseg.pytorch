@@ -29,10 +29,10 @@ class SegFix_HRNet(nn.Module):
         self.backbone = BackboneSelector(configer).get_backbone()
         backbone_name = self.configer.get('network', 'backbone')
         width = int(backbone_name[-2:])
-        if 'hrnet' in backbone_name:
-            in_channels = width * 15
-        else:
+        if 'hrnet2x' in backbone_name:
             in_channels = width * 31
+        else:
+            in_channels = width * 15
 
         num_masks = 2
         num_directions = DTOffsetConfig.num_classes
