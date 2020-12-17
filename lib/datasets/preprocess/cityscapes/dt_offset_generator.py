@@ -62,7 +62,7 @@ def process(inp):
     depth_map = np.zeros(labelmap.shape, dtype=np.float32)
     dir_map = np.zeros((*labelmap.shape, 2), dtype=np.float32)
 
-    for id in range(1, 20):
+    for id in range(1, len(label_list) + 1):
         labelmap_i = labelmap.copy()
         labelmap_i[labelmap_i != id] = 0
         labelmap_i[labelmap_i == id] = 1
