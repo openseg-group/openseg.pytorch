@@ -87,7 +87,7 @@
       "backbone": "wide_resnet38_dilated8",
       "multi_grid": [1, 1, 1],
       "model_name": "asp_ocnet",
-      "bn_type": "inplace_abn",
+      "bn_type": "torchsyncbn",
       "stride": 8,
       "loss_weights": {
         "aux_loss": 0.4,

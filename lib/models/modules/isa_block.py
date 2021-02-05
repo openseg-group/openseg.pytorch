@@ -150,16 +150,22 @@ class ISA_Module(nn.Module):
 if __name__ == "__main__":
     import os
     os.environ["CUDA_VISIBLE_DEVICES"] = '0'
-    feats = torch.randn((1, 512, 256, 128)).cuda()
+    feats = torch.randn((1, 2048, 128, 128)).cuda()
     mem = torch.cuda.max_memory_allocated()
+    conv_3x3 = nn.Sequential(
+        nn.Conv2d(2048, 512, kernel_size=3, stride=1, padding=1),
+        ModuleHelper.BNReLU(512, bn_type='torchsyncbn'),
+    )
     baseoc_infer = ISA_Module(in_channels=512,
                                 key_channels=256,
                                 value_channels=512,
                                 out_channels=512,
                                 dropout=0,
-                                bn_type='inplace_abn')
+                                bn_type='torchsyncbn')
     baseoc_infer.eval()
     baseoc_infer.cuda()
+    conv_3x3.eval()
+    conv_3x3.cuda()
 
     def count_parameters(model):
         return sum(p.numel() for p in model.parameters() if p.requires_grad)
@@ -170,12 +176,13 @@ if __name__ == "__main__":
     with torch.no_grad():
         for i in range(110):
             start_time = time.time()
-            outputs = baseoc_infer(feats)
+            outputs = conv_3x3(feats)
+            outputs = baseoc_infer(outputs)
             torch.cuda.synchronize()
             if i >= 10:
                 avg_time += (time.time() - start_time)
-                avg_mem += (torch.cuda.max_memory_allocated() - mem)
+                avg_mem  += (torch.cuda.max_memory_allocated()-feats.element_size() * feats.nelement())
 
     print("Average Parameters : {}".format(count_parameters(baseoc_infer)))
     print("Average Running Time: {}".format(avg_time/100))
-    print("Average GPU Memory: {}".format(avg_mem/100))
+    print("Average GPU Memory: {:.2f} MB".format(avg_mem / 100 / 2**20))

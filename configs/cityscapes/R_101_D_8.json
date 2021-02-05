@@ -10,7 +10,7 @@
       "workers": 8
     },
    "train": {
-      "batch_size": 8,
+      "batch_size": 16,
       "data_transformer": {
         "size_mode": "fix_size",
         "input_size": [1024, 512],
@@ -19,7 +19,7 @@
       }
     },
     "val": {
-      "batch_size": 4,
+      "batch_size": 8,
       "mode": "ss_test",
       "data_transformer": {
         "size_mode": "fix_size",
@@ -28,7 +28,7 @@
       }
     },
     "test": {
-      "batch_size": 4,
+      "batch_size": 8,
       "mode": "ss_test",
       "out_dir": "/msravcshare/dataset/seg_result/cityscapes",
       "data_transformer": {
@@ -78,7 +78,7 @@
       "backbone": "deepbase_resnet101_dilated8",
       "multi_grid": [1, 1, 1],
       "model_name": "base_ocnet",
-      "bn_type": "inplace_abn",
+      "bn_type": "torchsyncbn",
       "stride": 8,
       "factors": [[8, 8]],
       "loss_weights": {

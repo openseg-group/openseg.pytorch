@@ -200,7 +200,7 @@ if __name__ == "__main__":
 
     conv_3x3 = nn.Sequential(
         nn.Conv2d(2048, 512, kernel_size=3, stride=1, padding=1),
-        ModuleHelper.BNReLU(512, bn_type='inplace_abn'),
+        ModuleHelper.BNReLU(512, bn_type='torchsyncbn'),
     )
     baseoc_infer = BaseOC_Module(in_channels=512,
                                  out_channels=512, 
@@ -208,7 +208,7 @@ if __name__ == "__main__":
                                  value_channels=256, 
                                  sizes=([1]),
                                  dropout=0, 
-                                 bn_type='inplace_abn')
+                                 bn_type='torchsyncbn')
     baseoc_infer.eval()
     conv_3x3.eval()
     baseoc_infer.cuda()
@@ -231,4 +231,4 @@ if __name__ == "__main__":
 
     print("Average Parameters : {}".format(count_parameters(baseoc_infer)+count_parameters(conv_3x3)))
     print("Average Running Time: {}".format(avg_time/100))
-    print("Average GPU Memory: {}".format(avg_mem/100))
+    print("Average GPU Memory: {:.2f} MB".format(avg_mem / 100 / 2**20))

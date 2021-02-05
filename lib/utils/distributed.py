@@ -62,5 +62,5 @@ def _setup_process_group(args):
     torch.distributed.init_process_group(
         'nccl',
         init_method='env://',
-        rank=local_rank
+        # rank=local_rank
     )

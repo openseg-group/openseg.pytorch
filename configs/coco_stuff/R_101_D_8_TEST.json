@@ -107,7 +107,7 @@
     "network":{
       "backbone": "deepbase_resnet101_dilated8",
       "model_name": "asp_ocnet",
-      "bn_type": "inplace_abn",
+      "bn_type": "torchsyncbn",
       "stride": 8,
       "factors": [[8, 8]],
       "loss_weights": {

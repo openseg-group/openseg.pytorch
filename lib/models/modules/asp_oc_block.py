@@ -79,11 +79,11 @@ if __name__ == "__main__":
 
     conv_3x3 = nn.Sequential(
         nn.Conv2d(2048, 512, kernel_size=3, stride=1, padding=1),
-        ModuleHelper.BNReLU(512, bn_type='inplace_abn'),
+        ModuleHelper.BNReLU(512, bn_type='torchsyncbn'),
     )
     aspoc_infer = ASP_OC_Module(512,
                                 256,
-                                bn_type='inplace_abn')
+                                bn_type='torchsyncbn')
 
     aspoc_infer.eval()
     conv_3x3.eval()

@@ -132,6 +132,7 @@ class Trainer(object):
         self.seg_net.train()
         self.pixel_loss.train()
         start_time = time.time()
+        scaler = torch.cuda.amp.GradScaler()
 
         if "swa" in self.configer.get('lr', 'lr_policy'):
             normal_max_iters = int(self.configer.get('solver', 'max_iters') * 0.75)
@@ -141,6 +142,7 @@ class Trainer(object):
             self.train_loader.sampler.set_epoch(self.configer.get('epoch'))
 
         for i, data_dict in enumerate(self.train_loader):
+            self.optimizer.zero_grad()
             if self.configer.get('lr', 'metric') == 'iters':
                 self.scheduler.step(self.configer.get('iters'))
             else:
@@ -157,7 +159,8 @@ class Trainer(object):
             self.data_time.update(time.time() - start_time)
 
             foward_start_time = time.time()
-            outputs = self.seg_net(*inputs)
+            with torch.cuda.amp.autocast():
+                outputs = self.seg_net(*inputs)
             self.foward_time.update(time.time() - foward_start_time)
 
             loss_start_time = time.time()
@@ -175,9 +178,10 @@ class Trainer(object):
                         reduced_inp = inp
                         dist.reduce(reduced_inp, dst=0)
                     return reduced_inp
-                loss = self.pixel_loss(outputs, targets)
-                backward_loss = loss
-                display_loss = reduce_tensor(backward_loss) / get_world_size()
+                with torch.cuda.amp.autocast():
+                    loss = self.pixel_loss(outputs, targets)
+                    backward_loss = loss
+                    display_loss = reduce_tensor(backward_loss) / get_world_size()
             else:
                 backward_loss = display_loss = self.pixel_loss(outputs, targets, gathered=self.configer.get('network', 'gathered'))
 
@@ -185,9 +189,13 @@ class Trainer(object):
             self.loss_time.update(time.time() - loss_start_time)
 
             backward_start_time = time.time()
-            self.optimizer.zero_grad()
-            backward_loss.backward()
-            self.optimizer.step()
+
+            # backward_loss.backward()
+            # self.optimizer.step()
+            scaler.scale(backward_loss).backward()
+            scaler.step(self.optimizer)
+            scaler.update()
+
             self.backward_time.update(time.time() - backward_start_time)
 
             # Update the vars of the train phase.

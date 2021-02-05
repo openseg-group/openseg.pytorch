@@ -72,7 +72,7 @@
       "backbone": "deepbase_resnet101_dilated16",
       "multi_grid": [1, 2, 4],
       "model_name": "base_ocnet",
-      "bn_type": "inplace_abn",
+      "bn_type": "torchsyncbn",
       "stride": 16,
       "loss_weights": {
         "aux_loss": 0.4,

@@ -8,7 +8,7 @@ nvidia-smi
 export PYTHONPATH="$PWD":$PYTHONPATH
 ${PYTHON} -m pip install yacs
 ${PYTHON} -m pip install torchcontrib
-${PYTHON} -m pip install pydensecrf
+${PYTHON} -m pip install git+https://github.com/lucasb-eyer/pydensecrf.git
 DATA_DIR="${DATA_ROOT}/cityscapes"
 SAVE_DIR="${DATA_ROOT}/seg_result/cityscapes/"
 

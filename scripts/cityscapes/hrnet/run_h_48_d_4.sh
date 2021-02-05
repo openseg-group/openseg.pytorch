@@ -7,7 +7,7 @@ cd ../../../
 nvidia-smi
 ${PYTHON} -m pip install yacs
 ${PYTHON} -m pip install torchcontrib
-${PYTHON} -m pip install pydensecrf
+${PYTHON} -m pip install git+https://github.com/lucasb-eyer/pydensecrf.git
 
 export PYTHONPATH="$PWD":$PYTHONPATH
 

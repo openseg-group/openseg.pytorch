@@ -21,12 +21,12 @@ CONFIGS_TEST="configs/celeba/H_48_D_4_TEST.json"
 
 MODEL_NAME="hrnet_w48_ocr"
 LOSS_TYPE="fs_auxce_loss"
-CHECKPOINTS_NAME="${MODEL_NAME}_${BACKBONE}_"$4
+CHECKPOINTS_NAME="${MODEL_NAME}_${BACKBONE}_lr1e2_"$4
 LOG_FILE="./log/celeba/${CHECKPOINTS_NAME}.log"
 echo "Logging to $LOG_FILE"
 mkdir -p `dirname $LOG_FILE`
 PRETRAINED_MODEL="./pretrained_model/hrnetv2_w48_imagenet_pretrained.pth"
-MAX_ITERS=150000
+MAX_ITERS=200000
 
 if [ "$3"x == "train"x ]; then
   ${PYTHON} -u main.py --configs ${CONFIGS} \
