@@ -19,7 +19,7 @@
       }
     },
     "val": {
-      "batch_size": 4,
+      "batch_size": 8,
       "data_transformer": {
         "size_mode": "fix_size",
         "input_size": [473, 473],

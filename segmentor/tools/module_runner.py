@@ -38,8 +38,8 @@ class ModuleRunner(object):
         if not self.configer.exists('network', 'bn_type'):
             self.configer.add(['network', 'bn_type'], 'torchbn')
 
-        if self.configer.get('phase') == 'train':
-            assert len(self.configer.get('gpu')) > 1 or self.configer.get('network', 'bn_type') == 'torchbn'
+        # if self.configer.get('phase') == 'train':
+        #     assert len(self.configer.get('gpu')) > 1 or self.configer.get('network', 'bn_type') == 'torchbn'
 
         Log.info('BN Type is {}.'.format(self.configer.get('network', 'bn_type')))
 

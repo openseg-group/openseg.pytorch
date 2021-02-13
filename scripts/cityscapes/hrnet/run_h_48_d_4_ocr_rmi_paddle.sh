@@ -4,6 +4,9 @@ cd $SCRIPTPATH
 cd ../../../
 . config.profile
 
+# PYTHON="/data/anaconda/envs/pytorch1.7.1/bin/python"
+# DATA_ROOT="/home/yuhui/teamdrive/dataset"
+
 # check the enviroment info
 nvidia-smi
 ${PYTHON} -m pip install yacs
@@ -16,18 +19,19 @@ DATA_DIR="${DATA_ROOT}/cityscapes"
 SAVE_DIR="${DATA_ROOT}/seg_result/cityscapes/"
 BACKBONE="hrnet48"
 
-CONFIGS="configs/cityscapes/H_48_D_4.json"
+CONFIGS="configs/cityscapes/H_48_D_4_RMI.json"
 CONFIGS_TEST="configs/cityscapes/H_48_D_4_TEST.json"
 
 MODEL_NAME="hrnet_w48_ocr"
-LOSS_TYPE="fs_auxce_loss"
-CHECKPOINTS_NAME="${MODEL_NAME}_paddle_lr2x_"$2
+LOSS_TYPE="fs_aux_rmi_loss"
+CHECKPOINTS_NAME="${MODEL_NAME}_rmi_paddle_lr2x_"$2
 LOG_FILE="./log/cityscapes/${CHECKPOINTS_NAME}.log"
 echo "Logging to $LOG_FILE"
 mkdir -p `dirname $LOG_FILE`
 
 PRETRAINED_MODEL="./pretrained_model/HRNet_W48_C_ssld_pretrained.pth"
 MAX_ITERS=40000
+BATCH_SIZE=16
 BASE_LR=0.02
 
 if [ "$1"x == "train"x ]; then
@@ -39,13 +43,14 @@ if [ "$1"x == "train"x ]; then
                        --log_to_file n \
                        --backbone ${BACKBONE} \
                        --model_name ${MODEL_NAME} \
-                       --gpu 0 1 2 3 4 5 6 7 \
+                       --gpu 0 \
                        --data_dir ${DATA_DIR} \
                        --loss_type ${LOSS_TYPE} \
                        --max_iters ${MAX_ITERS} \
                        --checkpoints_name ${CHECKPOINTS_NAME} \
                        --pretrained ${PRETRAINED_MODEL} \
                        --distributed \
+                       --train_batch_size ${BATCH_SIZE} \
                        --base_lr ${BASE_LR} \
                        2>&1 | tee ${LOG_FILE}
                        

@@ -20,6 +20,7 @@ import numpy as np
 import torch.nn.functional as F
 from torch.autograd import Variable
 from lib.utils.tools.logger import Logger as Log
+from lib.loss.rmi_loss import RMILoss
 
 
 class WeightedFSOhemCELoss(nn.Module):
@@ -181,6 +182,22 @@ class FSAuxCELoss(nn.Module):
     def forward(self, inputs, targets, **kwargs):
         aux_out, seg_out = inputs
         seg_loss = self.ce_loss(seg_out, targets)
+        aux_loss = self.ce_loss(aux_out, targets)
+        loss = self.configer.get('network', 'loss_weights')['seg_loss'] * seg_loss
+        loss = loss + self.configer.get('network', 'loss_weights')['aux_loss'] * aux_loss
+        return loss
+
+
+class FSAuxRMILoss(nn.Module):
+    def __init__(self, configer=None):
+        super(FSAuxRMILoss, self).__init__()
+        self.configer = configer
+        self.ce_loss = FSCELoss(self.configer)
+        self.rmi_loss = RMILoss(self.configer)
+
+    def forward(self, inputs, targets, **kwargs):
+        aux_out, seg_out = inputs
+        seg_loss = self.rmi_loss(seg_out, targets)
         aux_loss = self.ce_loss(aux_out, targets)
         loss = self.configer.get('network', 'loss_weights')['seg_loss'] * seg_loss
         loss = loss + self.configer.get('network', 'loss_weights')['aux_loss'] * aux_loss
