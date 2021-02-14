@@ -69,7 +69,7 @@ Methods | Backbone | Train Set | Test Set | Iterations | Batch Size | OHEM | Mul
 OCR | HRNet-W48 | Train | Val | 60000 | 16 | Yes | No | No | 39.61 | [Log](https://github.com/hsfzxjy/models.storage/releases/download/openseg.pytorch.coco_stuff/hrnet_w48_ocr_hrnet48_ohem_2.log) / [Model](https://github.com/hsfzxjy/models.storage/releases/download/openseg.pytorch.coco_stuff/hrnet_w48_ocr_hrnet48_ohem_2_latest.pth) | scripts/coco_stuff/run_h_48_d_4_ocr_ohem/train.sh |
 OCR | HRNet-W48 | Train | Val | 60000 | 16 | Yes | Yes | Yes | 40.20 | same as above | scripts/coco_stuff/run_h_48_d_4_ocr_ohem_train.sh |
 OCR | HRNet-W48 (Paddle) | Train | Val | 60000 | 16 | Yes | No | No | 42.50 | [Log]() / [Model]() | scripts/coco_stuff/run_h_48_d_4_ocr_ohem_train_paddle.sh |
-OCR | HRNet-W48 (Paddle) | Train | Val | 60000 | 16 | Yes | Yes | Yes | --- | same as above | scripts/coco_stuff/run_h_48_d_4_ocr_ohem_train_paddle.sh |
+OCR | HRNet-W48 (Paddle) | Train | Val | 60000 | 16 | Yes | Yes | Yes | 43.26 | same as above | scripts/coco_stuff/run_h_48_d_4_ocr_ohem_train_paddle.sh |
 
 ## ADE20K
 

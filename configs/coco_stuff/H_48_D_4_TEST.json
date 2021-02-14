@@ -31,8 +31,9 @@
     },
     "val": {
       "batch_size": 8,
-      "mode": "ss_test",
+      "mode": "ms_test",
       "min_side_length": 520,
+      "scale_search": [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2.0],
       "data_transformer": {
         "size_mode": "diverse_size",
         "fit_stride": 8,

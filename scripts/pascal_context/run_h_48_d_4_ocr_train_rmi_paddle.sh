@@ -20,12 +20,12 @@ DATA_DIR="${DATA_ROOT}/pascal_context"
 SAVE_DIR="${DATA_ROOT}/seg_result/pascal_context/"
 BACKBONE="hrnet48"
 
-CONFIGS="configs/pascal_context/H_48_D_4.json"
+CONFIGS="configs/pascal_context/H_48_D_4_RMI.json"
 CONFIGS_TEST="configs/pascal_context/H_48_D_4_TEST.json"
 
 MODEL_NAME="hrnet_w48_ocr"
-LOSS_TYPE="fs_auxce_loss"
-CHECKPOINTS_NAME="${MODEL_NAME}_paddle_"$2
+LOSS_TYPE="fs_aux_rmi_loss"
+CHECKPOINTS_NAME="${MODEL_NAME}_rmi_paddle_"$2
 LOG_FILE="./log/pascal_context/${CHECKPOINTS_NAME}.log"
 echo "Logging to $LOG_FILE"
 mkdir -p `dirname $LOG_FILE`
