@@ -4,6 +4,9 @@ cd $SCRIPTPATH
 cd ../../
 . config.profile
 
+PYTHON="/data/anaconda/envs/pytorch1.7.1/bin/python"
+DATA_ROOT="/home/yuhui/teamdrive/dataset"
+
 # check the enviroment info
 nvidia-smi
 
@@ -72,22 +75,41 @@ elif [ "$1"x == "resume"x ]; then
 
 
 elif [ "$1"x == "val"x ]; then
-  ${PYTHON} -u main.py --configs ${CONFIGS_TEST} \
-                       --data_dir ${DATA_DIR} \
-                       --backbone ${BACKBONE} \
-                       --model_name ${MODEL_NAME} \
-                       --checkpoints_name ${CHECKPOINTS_NAME} \
-                       --phase test \
-                       --gpu 0 1 2 3 \
-                       --resume ./checkpoints/pascal_context/${CHECKPOINTS_NAME}_latest.pth \
-                       --test_dir ${DATA_DIR}/val/image \
-                       --log_to_file n \
-                       --out_dir ${SAVE_DIR}${CHECKPOINTS_NAME}_val_ms
+  if [ "$3"x == "ss"x ]; then
+    ${PYTHON} -u main.py --configs ${CONFIGS} \
+                          --data_dir ${DATA_DIR} \
+                          --backbone ${BACKBONE} \
+                          --model_name ${MODEL_NAME} \
+                          --checkpoints_name ${CHECKPOINTS_NAME} \
+                          --phase test \
+                          --gpu 0 1 2 3 \
+                          --resume ./checkpoints/pascal_context/${CHECKPOINTS_NAME}_latest.pth \
+                          --test_dir ${DATA_DIR}/val/image \
+                          --log_to_file n \
+                          --out_dir ${SAVE_DIR}${CHECKPOINTS_NAME}_val_ss
 
-  cd lib/metrics
-  ${PYTHON} -u ade20k_evaluator.py --configs ../../${CONFIGS_TEST} \
-                                   --pred_dir ${SAVE_DIR}${CHECKPOINTS_NAME}_val_ms/label \
-                                   --gt_dir ${DATA_DIR}/val/label  
+    cd lib/metrics
+    ${PYTHON} -u ade20k_evaluator.py --configs ../../${CONFIGS} \
+                                      --pred_dir ${SAVE_DIR}${CHECKPOINTS_NAME}_val_ss/label \
+                                      --gt_dir ${DATA_DIR}/val/label  
+  else
+    ${PYTHON} -u main.py --configs ${CONFIGS_TEST} \
+                          --data_dir ${DATA_DIR} \
+                          --backbone ${BACKBONE} \
+                          --model_name ${MODEL_NAME} \
+                          --checkpoints_name ${CHECKPOINTS_NAME} \
+                          --phase test \
+                          --gpu 0 1 2 3 \
+                          --resume ./checkpoints/pascal_context/${CHECKPOINTS_NAME}_latest.pth \
+                          --test_dir ${DATA_DIR}/val/image \
+                          --log_to_file n \
+                          --out_dir ${SAVE_DIR}${CHECKPOINTS_NAME}_val_ms
+
+    cd lib/metrics
+    ${PYTHON} -u ade20k_evaluator.py --configs ../../${CONFIGS_TEST} \
+                                      --pred_dir ${SAVE_DIR}${CHECKPOINTS_NAME}_val_ms/label \
+                                      --gt_dir ${DATA_DIR}/val/label  
+  fi
 
 
 elif [ "$1"x == "test"x ]; then
@@ -96,14 +118,14 @@ elif [ "$1"x == "test"x ]; then
     ${PYTHON} -u main.py --configs ${CONFIGS} --drop_last y \
                          --backbone ${BACKBONE} --model_name ${MODEL_NAME} --checkpoints_name ${CHECKPOINTS_NAME} \
                          --phase test --gpu 0 1 2 3 --resume ./checkpoints/pascal_context/${CHECKPOINTS_NAME}_latest.pth \
-                         --test_dir ${DATA_DIR}/test --log_to_file n \
+                         --test_dir ${DATA_DIR}/val/image --log_to_file n \
                          --out_dir ${SAVE_DIR}${CHECKPOINTS_NAME}_test_ss
   else
     echo "[multiple scale + flip] test"
     ${PYTHON} -u main.py --configs ${CONFIGS_TEST} --drop_last y \
                          --backbone ${BACKBONE} --model_name ${MODEL_NAME} --checkpoints_name ${CHECKPOINTS_NAME} \
                          --phase test --gpu 0 1 2 3 --resume ./checkpoints/pascal_context/${CHECKPOINTS_NAME}_latest.pth \
-                         --test_dir ${DATA_DIR}/test --log_to_file n \
+                         --test_dir ${DATA_DIR}/val/image --log_to_file n \
                          --out_dir ${SAVE_DIR}${CHECKPOINTS_NAME}_test_ms
   fi
 

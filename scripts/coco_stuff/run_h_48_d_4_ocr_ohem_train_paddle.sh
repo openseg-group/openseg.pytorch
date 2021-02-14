@@ -4,10 +4,10 @@ cd $SCRIPTPATH
 cd ../../
 . config.profile
 
-PYTHON="/data/anaconda/envs/pytorch1.7.1/bin/python"
-DATA_ROOT="/home/yuhui/teamdrive/dataset"
-
+#PYTHON="/data/anaconda/envs/pytorch1.7.1/bin/python"
+#DATA_ROOT="/home/yuhui/teamdrive/dataset"
 # check the enviroment info
+
 nvidia-smi
 
 ${PYTHON} -m pip install yacs
@@ -31,7 +31,7 @@ echo "Logging to $LOG_FILE"
 mkdir -p `dirname $LOG_FILE`
 PRETRAINED_MODEL="./pretrained_model/HRNet_W48_C_ssld_pretrained.pth"
 MAX_ITERS=60000
-BATCH_SIZE=8
+BATCH_SIZE=16
 
 if [ "$1"x == "train"x ]; then
   ${PYTHON} -u main.py --configs ${CONFIGS} \
@@ -43,7 +43,7 @@ if [ "$1"x == "train"x ]; then
                        --log_to_file n \
                        --backbone ${BACKBONE} \
                        --model_name ${MODEL_NAME} \
-                       --gpu 0 1 2 3 \
+                       --gpu 0 1 2 3 4 5 6 7 \
                        --data_dir ${DATA_DIR} \
                        --loss_type ${LOSS_TYPE} \
                        --max_iters ${MAX_ITERS} \
@@ -51,7 +51,7 @@ if [ "$1"x == "train"x ]; then
                        --pretrained ${PRETRAINED_MODEL} \
                        --train_batch_size ${BATCH_SIZE} \
                        --distributed \
-                       --test_interval 20 \
+                       --test_interval ${MAX_ITERS} \
                        2>&1 | tee ${LOG_FILE}
                        
 
@@ -76,23 +76,41 @@ elif [ "$1"x == "resume"x ]; then
 
 
 elif [ "$1"x == "val"x ]; then
-  ${PYTHON} -u main.py --configs ${CONFIGS_TEST} \
-                       --data_dir ${DATA_DIR} \
-                       --backbone ${BACKBONE} \
-                       --model_name ${MODEL_NAME} \
-                       --checkpoints_name ${CHECKPOINTS_NAME} \
-                       --phase test \
-                       --gpu 0 1 2 3 \
-                       --resume ./checkpoints/coco_stuff/${CHECKPOINTS_NAME}_latest.pth \
-                       --test_dir ${DATA_DIR}/val/image \
-                       --log_to_file n \
-                       --out_dir ${SAVE_DIR}${CHECKPOINTS_NAME}_val_ms
+  if [ "$3"x == "ss"x ]; then
+    ${PYTHON} -u main.py --configs ${CONFIGS} \
+                          --data_dir ${DATA_DIR} \
+                          --backbone ${BACKBONE} \
+                          --model_name ${MODEL_NAME} \
+                          --checkpoints_name ${CHECKPOINTS_NAME} \
+                          --phase test \
+                          --gpu 0 1 2 3 \
+                          --resume ./checkpoints/coco_stuff/${CHECKPOINTS_NAME}_latest.pth \
+                          --test_dir ${DATA_DIR}/val/image \
+                          --log_to_file n \
+                          --out_dir ${SAVE_DIR}${CHECKPOINTS_NAME}_val_ss
 
-  cd lib/metrics
-  ${PYTHON} -u cocostuff_evaluator.py --configs ../../${CONFIGS_TEST} \
-                                   --pred_dir ${SAVE_DIR}${CHECKPOINTS_NAME}_val_ms/label \
-                                   --gt_dir ${DATA_DIR}/val/label  
+    cd lib/metrics
+    ${PYTHON} -u cocostuff_evaluator.py --configs ../../${CONFIGS} \
+                                      --pred_dir ${SAVE_DIR}${CHECKPOINTS_NAME}_val_ss/label \
+                                      --gt_dir ${DATA_DIR}/val/label
+  else
+    ${PYTHON} -u main.py --configs ${CONFIGS_TEST} \
+                          --data_dir ${DATA_DIR} \
+                          --backbone ${BACKBONE} \
+                          --model_name ${MODEL_NAME} \
+                          --checkpoints_name ${CHECKPOINTS_NAME} \
+                          --phase test \
+                          --gpu 0 1 2 3 4 5 6 7 \
+                          --resume ./checkpoints/coco_stuff/${CHECKPOINTS_NAME}_latest.pth \
+                          --test_dir ${DATA_DIR}/val/image \
+                          --log_to_file n \
+                          --out_dir ${SAVE_DIR}${CHECKPOINTS_NAME}_val_ms
 
+    cd lib/metrics
+    ${PYTHON} -u cocostuff_evaluator.py --configs ../../${CONFIGS_TEST} \
+                                      --pred_dir ${SAVE_DIR}${CHECKPOINTS_NAME}_val_ms/label \
+                                      --gt_dir ${DATA_DIR}/val/label 
+  fi
 
 elif [ "$1"x == "test"x ]; then
   if [ "$3"x == "ss"x ]; then
@@ -110,7 +128,6 @@ elif [ "$1"x == "test"x ]; then
                          --test_dir ${DATA_DIR}/val/image --log_to_file n \
                          --out_dir ${SAVE_DIR}${CHECKPOINTS_NAME}_test_ms
   fi
-
 
 else
   echo "$1"x" is invalid..."

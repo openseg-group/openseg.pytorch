@@ -14,6 +14,8 @@
 
 ## News
 
+- 2021/02/14 Support **pytorch-1.7, mixed-precision, and distributed training**. We also will add more segmentation models that achieve better performance based on the paddlepaddle image pretrained weights soon. Please check [Model Zoo](https://github.com/openseg-group/openseg.pytorch/blob/master/MODEL_ZOO.md) for more details. For example, we gain **2.61%** on PASCAL-Context and **2.89%** on COCO-Stuff with single-scale test.
+
 - 2020/08/16 [MMSegmentation](https://github.com/open-mmlab/mmsegmentation) has supported our HRNet + OCR.
 
 - 2020/07/20 The researchers from AInnovation have achieved **Rank#1** on [ADE20K Leaderboard](http://sceneparsing.csail.mit.edu/) via training our HRNet + OCR with a semi-supervised learning scheme. More details are in their [Technical Report](https://arxiv.org/pdf/2007.10591.pdf).

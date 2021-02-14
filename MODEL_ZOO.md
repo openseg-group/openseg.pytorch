@@ -2,6 +2,8 @@
 
 The following tables listed segmentation results on various datasets. To perform the validation, simply download and put checkpoints to corresponding directories, and run the script. For example, to evaluate `HRNet-W48 + OCR` on Cityscapes, you should download `ocr/Cityscapes/hrnet_w48_ocr_1_latest.pth` and put it under `~/checkpoints/cityscapes`, then run `bash scripts/cityscapes/hrnet/run_h_48_d_4_ocr.sh val 1` to start validation.
 
+HRNet-W48 (Paddle) means using the ImageNet pretrained weights converted from [PaddleClas](https://github.com/PaddlePaddle/PaddleClas). OCR+RMI means using [RMI](https://github.com/ZJULearning/RMI) loss.
+
 ## Cityscapes
 
 Performance on the Cityscapes dataset. The models are trained and tested with input size of 512x1024 and 1024x2048 respectively. The performance of HRNet baseline is around 80.6% based on our training settings, where we train the models with smaller batch size and less iterations compared with the original setting.
@@ -15,6 +17,8 @@ ISA | ResNet-101 | Train | Val | 40000 | 8 | No | No | No | 79.55 | 80.62 | [Log
 OCR | ResNet-101 | Train | Val | 40000 | 8 | No | No | No | 79.63 | 80.68 | [Log](https://github.com/hsfzxjy/models.storage/releases/download/openseg.pytorch.cityscapes/spatial_ocrnet_deepbase_resnet101_dilated8_1.log) / [Model](https://github.com/hsfzxjy/models.storage/releases/download/openseg.pytorch.cityscapes/spatial_ocrnet_deepbase_resnet101_dilated8_1_latest.pth) | scripts/cityscapes/ocrnet/run_r_101_d_8_ocrnet_train.sh |
 ASP-OCR | ResNet-101 | Train | Val | 40000 | 8 | No | No | No | 79.89 | 80.69 | [Log](https://github.com/hsfzxjy/models.storage/releases/download/openseg.pytorch.cityscapes/spatial_asp_ocrnet_deepbase_resnet101_dilated8_1.log) / [Model](https://github.com/hsfzxjy/models.storage/releases/download/openseg.pytorch.cityscapes/spatial_asp_ocrnet_deepbase_resnet101_dilated8_1_latest.pth) | scripts/cityscapes/ocrnet/run_r_101_d_8_asp_ocrnet_train.sh |
 OCR | HRNet-W48 | Train | Val | 80000 | 8 | No | No | No | 81.09 | 81.73 | [Log](https://github.com/hsfzxjy/models.storage/releases/download/openseg.pytorch.cityscapes/hrnet_w48_ocr_1.log) / [Model](https://github.com/hsfzxjy/models.storage/releases/download/openseg.pytorch.cityscapes/hrnet_w48_ocr_1_latest.pth) | scripts/cityscapes/hrnet/run_h_48_d_4_ocr.sh |
+OCR | HRNet-W48 (Paddle) | Train | Val | 40000 | 16 | No | No | No | 81.53 | ---- | [Log]() / [Model]() | scripts/cityscapes/hrnet/run_h_48_d_4_ocr_paddle.sh |
+
 
 ### How to reproduce the HRNet + OCR with Mapillary pretraining
 To help you to reproduce our best results on the Cityscapes leaderboard, we explain the details of the training pipeline as following:
@@ -41,6 +45,7 @@ Checkpoints should be put under `~/checkpoints/pascal_context`.
 Methods | Backbone | Train Set | Test Set | Iterations | Batch Size | OHEM | Multi-scale | Flip | mIoU | Link | Script |
 | :---- | :----: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
 OCR | HRNet-W48 | Train | Val | 60000 | 16 | No | No | No | 55.11 | [Log](https://github.com/hsfzxjy/models.storage/releases/download/openseg.pytorch.pascal_context/hrnet_w48_ocr_hrnet48_2.log) / [Model](https://github.com/hsfzxjy/models.storage/releases/download/openseg.pytorch.pascal_context/hrnet_w48_ocr_hrnet48_2_latest.pth) | scripts/pascal_context/run_h_48_d_4_ocr_train.sh |
+OCR | HRNet-W48 (Paddle)  | Train | Val | 60000 | 16 | No | No | No | 57.82 | [Log]() / [Model]() | scripts/pascal_context/run_h_48_d_4_ocr_train_paddle.sh |
 
 ## LIP
 
@@ -51,6 +56,7 @@ Checkpoints should be put under `~/checkpoints/lip`.
 Methods | Backbone | Train Set | Test Set | Iterations | Batch Size | OHEM | Multi-scale | Flip | mIoU | Link | Script |
 | :---- | :----: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
 OCR | HRNet-W48 | Train | Val | 100000 | 32 | No | No | Yes | 56.72 | [Log](https://github.com/hsfzxjy/models.storage/releases/download/opeseg.pytorch.lip/hrnet_w48_ocr_1.log) / [Model](https://github.com/hsfzxjy/models.storage/releases/download/opeseg.pytorch.lip/hrnet_w48_ocr_1_latest.pth) | scripts/lip/run_h_48_d_4_ocr_train.sh |
+OCR | HRNet-W48 | Train | Val | 100000 | 32 | No | No | Yes | --- | [Log]() / [Model]() | scripts/lip/run_h_48_d_4_ocr_train_paddle.sh |
 
 ## COCO-Stuff
 
@@ -62,6 +68,8 @@ Methods | Backbone | Train Set | Test Set | Iterations | Batch Size | OHEM | Mul
 | :---- | :----: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
 OCR | HRNet-W48 | Train | Val | 60000 | 16 | Yes | No | No | 39.61 | [Log](https://github.com/hsfzxjy/models.storage/releases/download/openseg.pytorch.coco_stuff/hrnet_w48_ocr_hrnet48_ohem_2.log) / [Model](https://github.com/hsfzxjy/models.storage/releases/download/openseg.pytorch.coco_stuff/hrnet_w48_ocr_hrnet48_ohem_2_latest.pth) | scripts/coco_stuff/run_h_48_d_4_ocr_ohem/train.sh |
 OCR | HRNet-W48 | Train | Val | 60000 | 16 | Yes | Yes | Yes | 40.20 | same as above | scripts/coco_stuff/run_h_48_d_4_ocr_ohem_train.sh |
+OCR | HRNet-W48 (Paddle) | Train | Val | 60000 | 16 | Yes | No | No | 42.50 | [Log]() / [Model]() | scripts/coco_stuff/run_h_48_d_4_ocr_ohem_train_paddle.sh |
+OCR | HRNet-W48 (Paddle) | Train | Val | 60000 | 16 | Yes | Yes | Yes | --- | same as above | scripts/coco_stuff/run_h_48_d_4_ocr_ohem_train_paddle.sh |
 
 ## ADE20K
 
@@ -73,6 +81,9 @@ Methods | Backbone | Train Set | Test Set | Iterations | Batch Size | OHEM | Mul
 | :---- | :----: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
 OCR | HRNet-W48 | Train | Val | 150000 | 16 | Yes | No | No | 44.62 | [Log](https://github.com/hsfzxjy/models.storage/releases/download/openseg.pytorch.ade20k/hrnet_w48_ocr_hrnet48_ohem_1.log) / [Model](https://github.com/hsfzxjy/models.storage/releases/download/openseg.pytorch.ade20k/hrnet_w48_ocr_hrnet48_ohem_1_latest.pth) | scripts/ade20k/hrnet/run_h_48_d_4_ocr_ohem.sh |
 OCR | HRNet-W48 | Train | Val | 150000 | 16 | Yes | Yes | Yes | 46.19 | same as above | scripts/ade20k/hrnet/run_h_48_d_4_ocr_ohem.sh |
+OCR | HRNet-W48 (Paddle) | Train | Val | 150000 | 16 | Yes | No | No | --- | [Log]() / [Model]() | scripts/ade20k/hrnet/run_h_48_d_4_ocr_ohem_paddle.sh |
+OCR | HRNet-W48 (Paddle) | Train | Val | 150000 | 16 | Yes | Yes | Yes | --- | same as above | scripts/ade20k/hrnet/run_h_48_d_4_ocr_ohem_paddle.sh |
+
 
 # SegFix
 

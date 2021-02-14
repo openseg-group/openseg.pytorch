@@ -19,7 +19,7 @@
       }
     },
     "val": {
-      "batch_size": 8,
+      "batch_size": 4,
       "mode": "ms_test",
       "data_transformer": {
         "size_mode": "diverse_size",
@@ -28,7 +28,7 @@
       }
     },
     "test": {
-      "batch_size": 8,
+      "batch_size": 4,
       "mode": "ss_test",
       "data_transformer": {
         "size_mode": "diverse_size",

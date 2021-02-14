@@ -7,6 +7,8 @@ cd ../../
 # check the enviroment info
 nvidia-smi
 ${PYTHON} -m pip install yacs
+${PYTHON} -m pip install torchcontrib
+${PYTHON} -m pip install git+https://github.com/lucasb-eyer/pydensecrf.git
 
 export PYTHONPATH="$PWD":$PYTHONPATH
 
@@ -19,13 +21,13 @@ CONFIGS_TEST="configs/coco_stuff/H_48_D_4_TEST.json"
 
 MODEL_NAME="hrnet_w48_ocr"
 LOSS_TYPE="fs_auxohemce_loss"
-CHECKPOINTS_NAME="${MODEL_NAME}_${BACKBONE}_ohem_paddle_"$2
+CHECKPOINTS_NAME="${MODEL_NAME}_${BACKBONE}_ohem_"$2
 LOG_FILE="./log/coco_stuff/${CHECKPOINTS_NAME}.log"
 echo "Logging to $LOG_FILE"
 mkdir -p `dirname $LOG_FILE`
-PRETRAINED_MODEL="./pretrained_model/HRNet_W48_C_ssld_pretrained.pth"
+PRETRAINED_MODEL="./pretrained_model/hrnetv2_w48_imagenet_pretrained.pth"
 MAX_ITERS=60000
-
+BATCH_SIZE=16
 
 if [ "$1"x == "train"x ]; then
   ${PYTHON} -u main.py --configs ${CONFIGS} \
@@ -43,7 +45,9 @@ if [ "$1"x == "train"x ]; then
                        --max_iters ${MAX_ITERS} \
                        --checkpoints_name ${CHECKPOINTS_NAME} \
                        --pretrained ${PRETRAINED_MODEL} \
+                       --train_batch_size ${BATCH_SIZE} \
                        --distributed \
+                       --test_interval ${MAX_ITERS} \
                        2>&1 | tee ${LOG_FILE}
                        
 

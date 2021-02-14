@@ -30,7 +30,7 @@
       }
     },
     "val": {
-      "batch_size": 4,
+      "batch_size": 8,
       "mode": "ss_test",
       "data_transformer": {
         "size_mode": "diverse_size",
@@ -39,7 +39,7 @@
       }
     },
     "test": {
-      "batch_size": 4,
+      "batch_size": 8,
       "mode": "ss_test",
       "data_transformer": {
         "size_mode": "diverse_size",
