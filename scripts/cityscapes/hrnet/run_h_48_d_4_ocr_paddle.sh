@@ -4,8 +4,10 @@ cd $SCRIPTPATH
 cd ../../../
 . config.profile
 
+PYTHON="/data/anaconda/envs/pytorch1.7.1/bin/python"
+DATA_ROOT="/home/yuhui/teamdrive/dataset"
+
 # check the enviroment info
-nvidia-smi
 ${PYTHON} -m pip install yacs
 ${PYTHON} -m pip install torchcontrib
 ${PYTHON} -m pip install git+https://github.com/lucasb-eyer/pydensecrf.git
@@ -15,7 +17,6 @@ export PYTHONPATH="$PWD":$PYTHONPATH
 DATA_DIR="${DATA_ROOT}/cityscapes"
 SAVE_DIR="${DATA_ROOT}/seg_result/cityscapes/"
 BACKBONE="hrnet48"
-
 CONFIGS="configs/cityscapes/H_48_D_4.json"
 CONFIGS_TEST="configs/cityscapes/H_48_D_4_TEST.json"
 
@@ -70,14 +71,14 @@ elif [ "$1"x == "resume"x ]; then
 
 
 elif [ "$1"x == "val"x ]; then
-  ${PYTHON} -u main.py --configs ${CONFIGS} --drop_last y \
-                       --backbone ${BACKBONE} --model_name ${MODEL_NAME} --checkpoints_name ${CHECKPOINTS_NAME} \
-                       --phase test --gpu 0 1 2 3 --resume ./checkpoints/cityscapes/${CHECKPOINTS_NAME}_latest.pth \
-                       --loss_type ${LOSS_TYPE} --test_dir ${DATA_DIR}/val/image \
-                       --out_dir ${SAVE_DIR}${CHECKPOINTS_NAME}_val 
+  # ${PYTHON} -u main.py --configs ${CONFIGS_TEST} --drop_last y  --data_dir ${DATA_DIR} \
+  #                      --backbone ${BACKBONE} --model_name ${MODEL_NAME} --checkpoints_name ${CHECKPOINTS_NAME} \
+  #                      --phase test --gpu 0 1 2 3 4 5 6 7 --resume ./checkpoints/cityscapes/${CHECKPOINTS_NAME}_latest.pth \
+  #                      --loss_type ${LOSS_TYPE} --test_dir ${DATA_DIR}/val/image \
+  #                      --out_dir ${SAVE_DIR}${CHECKPOINTS_NAME}_val_ms
 
   cd lib/metrics
-  ${PYTHON} -u cityscapes_evaluator.py --pred_dir ${SAVE_DIR}${CHECKPOINTS_NAME}_val/label  \
+  ${PYTHON} -u cityscapes_evaluator.py --pred_dir ${SAVE_DIR}${CHECKPOINTS_NAME}_val_ms/label  \
                                        --gt_dir ${DATA_DIR}/val/label
 
 elif [ "$1"x == "segfix"x ]; then

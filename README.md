@@ -1,4 +1,4 @@
-# openseg.pytorch
+# openseg.pytorch [pytorch-1.7]
 
 
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/object-contextual-representations-for/semantic-segmentation-on-coco-stuff-test)](https://paperswithcode.com/sota/semantic-segmentation-on-coco-stuff-test?p=object-contextual-representations-for)
@@ -14,7 +14,7 @@
 
 ## News
 
-- 2021/02/14 Support **pytorch-1.7, mixed-precision, and distributed training**. We also will add more segmentation models that achieve better performance based on the paddlepaddle image pretrained weights soon. Please check [Model Zoo](https://github.com/openseg-group/openseg.pytorch/blob/pytorch-1.7/MODEL_ZOO.md) for more details. For example, we gain **2.61%** on PASCAL-Context and **2.89%** on COCO-Stuff with single-scale test.
+- 2021/02/14 Support **pytorch-1.7, mixed-precision, and distributed training**. Based on the [PaddleClas](https://github.com/PaddlePaddle/PaddleClas) ImageNet pretrained weights, "HRNet + OCR" achieves **82.78%** on Cityscapes val, **59.13%** on PASCAL-Context val and **43.26%** on COCO-Stuff val. Check [Model Zoo](https://github.com/openseg-group/openseg.pytorch/blob/pytorch-1.7/MODEL_ZOO.md) for more details.
 
 - 2020/08/16 [MMSegmentation](https://github.com/open-mmlab/mmsegmentation) has supported our HRNet + OCR.
 

@@ -2,7 +2,8 @@
 
 # check the enviroment info
 
-PYTHON="/root/miniconda3/bin/python"
+# PYTHON="/root/miniconda3/bin/python"
+PYTHON="/data/anaconda/envs/pytorch1.7.1/bin/python"
 export PYTHONPATH="/msravcshare/yuyua/code/segmentation/openseg.pytorch":$PYTHONPATH
 
 cd ../../../
