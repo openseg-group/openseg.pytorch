@@ -14,7 +14,7 @@
 
 ## News
 
-- 2021/02/14 Support **pytorch-1.7, mixed-precision, and distributed training**. Based on the [PaddleClas](https://github.com/PaddlePaddle/PaddleClas) ImageNet pretrained weights, "HRNet + OCR" achieves **82.78%** on Cityscapes val, **59.13%** on PASCAL-Context val and **43.26%** on COCO-Stuff val. Please checkout **branch pytorch-1.7** for more details.
+- 2021/02/14 Support **pytorch-1.7, mixed-precision, and distributed training**. Based on the [PaddleClas](https://github.com/PaddlePaddle/PaddleClas) ImageNet pretrained weights, "HRNet + OCR" achieves **82.78%** on Cityscapes val, **59.13%** on PASCAL-Context val (new SOTA) and **43.26%** on COCO-Stuff val (new SOTA). Please checkout **branch pytorch-1.7** for more details.
 
 - 2020/12/07 [PaddleSeg](https://github.com/PaddlePaddle/PaddleSeg) has supported our ISA and HRNet + OCR. [Jittor](https://github.com/Jittor/segmentation-jittor) also has supported our ResNet-101 + OCR.
 
