@@ -45,7 +45,7 @@ if [ "$1"x == "train"x ]; then
                        --checkpoints_name ${CHECKPOINTS_NAME} \
                        --pretrained ${PRETRAINED_MODEL} \
                        --distributed \
-                       --test_interval ${MAX_ITERS}
+                       --test_interval 10000 \
                        2>&1 | tee ${LOG_FILE}
                        
 

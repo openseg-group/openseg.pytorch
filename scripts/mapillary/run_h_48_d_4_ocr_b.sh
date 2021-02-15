@@ -19,7 +19,7 @@ CONFIGS="configs/mapillary/H_48_D_4_1024x1024.json"
 
 MODEL_NAME="hrnet_w48_ocr_b"
 LOSS_TYPE="fs_auxce_loss"
-LOG_FILE="./log/mapillary/${CHECKPOINTS_NAME}.log"
+CHECKPOINTS_NAME="${MODEL_NAME}_mapillary_"$2
 LOG_FILE="./log/mapillary/${CHECKPOINTS_NAME}.log"
 echo "Logging to $LOG_FILE"
 mkdir -p `dirname $LOG_FILE`
