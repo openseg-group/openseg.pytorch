@@ -8,6 +8,7 @@ import torch.backends.cudnn as cudnn
 from lib.utils.tools.logger import Logger as Log
 from lib.metrics import running_score as rslib
 from lib.metrics import F1_running_score as fscore_rslib
+from lib.utils.distributed import get_world_size, get_rank, is_distributed
 
 
 class _BaseEvaluator:
@@ -58,6 +59,8 @@ class _BaseEvaluator:
         """
         Replicate models if using diverse size validation.
         """
+        if is_distributed():
+            return
         device_ids = list(range(len(self.configer.get('gpu'))))
         if self.conditions.diverse_size:
             cudnn.benchmark = False
@@ -77,7 +80,7 @@ class _BaseEvaluator:
 
             max_perf = self.configer.get('max_performance')
             self.configer.update(['performance'], perf)
-            if perf > max_perf:
+            if perf > max_perf and (not is_distributed() or get_rank() == 0):
                 Log.info('Performance {} -> {}'.format(max_perf, perf))
         except Exception as e:
             Log.warn(e)
@@ -85,3 +88,8 @@ class _BaseEvaluator:
     def reset(self):
         for rs in self.running_scores.values():
             rs.reset()
+
+    def reduce_scores(self):
+        for rs in self.running_scores.values():
+            if hasattr(rs, 'reduce_scores'):
+                rs.reduce_scores()

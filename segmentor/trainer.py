@@ -255,6 +255,7 @@ class Trainer(object):
         data_loader = self.val_loader if data_loader is None else data_loader
         for j, data_dict in enumerate(data_loader):
             if j % 10 == 0:
+                if is_distributed(): dist.barrier()  # Synchronize all processes
                 Log.info('{} images processed\n'.format(j))
 
             if self.configer.get('dataset') == 'lip':
@@ -266,7 +267,10 @@ class Trainer(object):
                 if self.configer.get('dataset') == 'lip':
                     inputs = torch.cat([inputs[0], inputs_rev[0]], dim=0)
                     outputs = self.seg_net(inputs)        
-                    outputs_ = self.module_runner.gather(outputs)
+                    if not is_distributed():
+                        outputs_ = self.module_runner.gather(outputs)
+                    else:
+                        outputs_ = outputs
                     if isinstance(outputs_, (list, tuple)):
                         outputs_ = outputs_[-1]
                     outputs = outputs_[0:int(outputs_.size(0)/2),:,:,:].clone()
@@ -283,10 +287,13 @@ class Trainer(object):
                     self.evaluator.update_score(outputs, data_dict['meta'])
 
                 elif self.data_helper.conditions.diverse_size:
-                    outputs = nn.parallel.parallel_apply(replicas[:len(inputs)], inputs)
+                    if is_distributed():
+                        outputs = [self.seg_net(inputs[i]) for i in range(len(inputs))]
+                    else:
+                        outputs = nn.parallel.parallel_apply(replicas[:len(inputs)], inputs)
 
                     for i in range(len(outputs)):
-                        loss = self.pixel_loss(outputs[i], targets[i])
+                        loss = self.pixel_loss(outputs[i], targets[i].unsqueeze(0))
                         self.val_losses.update(loss.item(), 1)
                         outputs_i = outputs[i]
                         if isinstance(outputs_i, torch.Tensor):
@@ -321,6 +328,7 @@ class Trainer(object):
         cudnn.benchmark = True
 
         # Print the log info & reset the states.
+        self.evaluator.reduce_scores()
         if not is_distributed() or get_rank() == 0:
             Log.info(
                 'Test Time {batch_time.sum:.3f}s, ({batch_time.avg:.3f})\t'
@@ -336,7 +344,7 @@ class Trainer(object):
 
     def train(self):
         # cudnn.benchmark = True
-        # self.__val()
+        self.__val()
         if self.configer.get('network', 'resume') is not None:
             if self.configer.get('network', 'resume_val'):
                 self.__val(data_loader=self.data_loader.get_valloader(dataset='val'))

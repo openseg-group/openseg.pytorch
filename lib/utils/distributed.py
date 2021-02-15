@@ -17,6 +17,11 @@ def get_rank():
         return 0
     return torch.distributed.get_rank()
 
+def all_reduce_numpy(array):
+    tensor = torch.from_numpy(array).cuda()
+    torch.distributed.all_reduce(tensor)
+    return tensor.cpu().numpy()
+
 def handle_distributed(args, main_file):
     if not args.distributed:
         os.environ['CUDA_VISIBLE_DEVICES'] = ','.join(map(str, args.gpu))        
