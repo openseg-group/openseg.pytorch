@@ -7,8 +7,8 @@ You can also refer to the https://github.com/openseg-group/openseg.pytorch/issue
 
 
 ## Requirements
-- Linux or macOS with Python ≥ 3.6
-- PyTorch == 0.4.1
+- Linux or macOS with Python ≥ 3.8
+- PyTorch >= 1.7.0
 - [torchvision](https://github.com/pytorch/vision/) that matches the PyTorch installation.
 	You can install them together at [pytorch.org](https://pytorch.org) to make sure of this.
 
