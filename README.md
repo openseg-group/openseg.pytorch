@@ -14,7 +14,7 @@
 
 ## News
 
-- 2021/02/14 Support **pytorch-1.7, mixed-precision, and distributed training**. Based on the [PaddleClas](https://github.com/PaddlePaddle/PaddleClas) ImageNet pretrained weights, "HRNet + OCR" achieves **82.78%** on Cityscapes val, **59.13%** on PASCAL-Context val (new SOTA) and **43.26%** on COCO-Stuff val (new SOTA). Check [Model Zoo](https://github.com/openseg-group/openseg.pytorch/blob/pytorch-1.7/MODEL_ZOO.md) for more details.
+- 2021/02/16 Support **pytorch-1.7, mixed-precision, and distributed training**. Based on the [PaddleClas](https://github.com/PaddlePaddle/PaddleClas) ImageNet pretrained weights, we achieve **59.62%** on PASCAL-Context val (**new SOTA**) and **45.20%** on COCO-Stuff val (**new SOTA**). Check [Model Zoo](https://github.com/openseg-group/openseg.pytorch/blob/pytorch-1.7/MODEL_ZOO.md) for more details.
 
 - 2020/08/16 [MMSegmentation](https://github.com/open-mmlab/mmsegmentation) has supported our HRNet + OCR.
 

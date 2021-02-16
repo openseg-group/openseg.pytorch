@@ -4,6 +4,7 @@ cd $SCRIPTPATH
 cd ../../../
 . config.profile
 
+DATA_ROOT=$3
 # check the enviroment info
 nvidia-smi
 ${PYTHON} -m pip install yacs

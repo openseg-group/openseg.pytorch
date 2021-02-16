@@ -17,7 +17,8 @@ ISA | ResNet-101 | Train | Val | 40000 | 8 | No | No | No | 79.55 | 80.62 | [Log
 OCR | ResNet-101 | Train | Val | 40000 | 8 | No | No | No | 79.63 | 80.68 | [Log](https://github.com/hsfzxjy/models.storage/releases/download/openseg.pytorch.cityscapes/spatial_ocrnet_deepbase_resnet101_dilated8_1.log) / [Model](https://github.com/hsfzxjy/models.storage/releases/download/openseg.pytorch.cityscapes/spatial_ocrnet_deepbase_resnet101_dilated8_1_latest.pth) | scripts/cityscapes/ocrnet/run_r_101_d_8_ocrnet_train.sh |
 ASP-OCR | ResNet-101 | Train | Val | 40000 | 8 | No | No | No | 79.89 | 80.69 | [Log](https://github.com/hsfzxjy/models.storage/releases/download/openseg.pytorch.cityscapes/spatial_asp_ocrnet_deepbase_resnet101_dilated8_1.log) / [Model](https://github.com/hsfzxjy/models.storage/releases/download/openseg.pytorch.cityscapes/spatial_asp_ocrnet_deepbase_resnet101_dilated8_1_latest.pth) | scripts/cityscapes/ocrnet/run_r_101_d_8_asp_ocrnet_train.sh |
 OCR | HRNet-W48 | Train | Val | 80000 | 8 | No | No | No | 81.09 | 81.73 | [Log](https://github.com/hsfzxjy/models.storage/releases/download/openseg.pytorch.cityscapes/hrnet_w48_ocr_1.log) / [Model](https://github.com/hsfzxjy/models.storage/releases/download/openseg.pytorch.cityscapes/hrnet_w48_ocr_1_latest.pth) | scripts/cityscapes/hrnet/run_h_48_d_4_ocr.sh |
-OCR | HRNet-W48 (Paddle) | Train | Val | 40000 | 16 | No | No | No | 81.53 | 82.78 | [Log]() / [Model]() | scripts/cityscapes/hrnet/run_h_48_d_4_ocr_paddle.sh |
+OCR | HRNet-W48 (Paddle) | Train | Val | 40000 | 16 | No | No | No | 81.53 | 82.78 | [Log]() / [Model]() | scripts/cityscapes/hrnet/run_h_48_d_4_ocr_rmi_paddle.sh |
+OCR+RMI | HRNet-W48 (Paddle) | Train | Val | 40000 | 16 | No | No | No | --- | --- | [Log]() / [Model]() | scripts/cityscapes/hrnet/run_h_48_d_4_ocr_rmi_paddle.sh |
 
 
 ### How to reproduce the HRNet + OCR with Mapillary pretraining
@@ -47,6 +48,8 @@ Methods | Backbone | Train Set | Test Set | Iterations | Batch Size | OHEM | Mul
 OCR | HRNet-W48 | Train | Val | 60000 | 16 | No | No | No | 55.11 | [Log](https://github.com/hsfzxjy/models.storage/releases/download/openseg.pytorch.pascal_context/hrnet_w48_ocr_hrnet48_2.log) / [Model](https://github.com/hsfzxjy/models.storage/releases/download/openseg.pytorch.pascal_context/hrnet_w48_ocr_hrnet48_2_latest.pth) | scripts/pascal_context/run_h_48_d_4_ocr_train.sh |
 OCR | HRNet-W48 (Paddle)  | Train | Val | 60000 | 16 | No | No | No | 57.82 | [Log]() / [Model]() | scripts/pascal_context/run_h_48_d_4_ocr_train_paddle.sh |
 OCR | HRNet-W48 (Paddle)  | Train | Val | 60000 | 16 | No | Yes | Yes | 59.13 | [Log]() / [Model]() | scripts/pascal_context/run_h_48_d_4_ocr_train_paddle.sh |
+OCR+RMI | HRNet-W48 (Paddle)  | Train | Val | 60000 | 16 | No | No | No | 58.53 | [Log]() / [Model]() | scripts/pascal_context/run_h_48_d_4_ocr_train_rmi_paddle.sh |
+OCR+RMI | HRNet-W48 (Paddle)  | Train | Val | 60000 | 16 | No | Yes | Yes | 59.62 | [Log]() / [Model]() | scripts/pascal_context/run_h_48_d_4_ocr_train_rmi_paddle.sh |
 
 ## LIP
 
@@ -58,6 +61,8 @@ Methods | Backbone | Train Set | Test Set | Iterations | Batch Size | OHEM | Mul
 | :---- | :----: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
 OCR | HRNet-W48 | Train | Val | 100000 | 32 | No | No | Yes | 56.72 | [Log](https://github.com/hsfzxjy/models.storage/releases/download/opeseg.pytorch.lip/hrnet_w48_ocr_1.log) / [Model](https://github.com/hsfzxjy/models.storage/releases/download/opeseg.pytorch.lip/hrnet_w48_ocr_1_latest.pth) | scripts/lip/run_h_48_d_4_ocr_train.sh |
 OCR | HRNet-W48 | Train | Val | 100000 | 32 | No | No | Yes | --- | [Log]() / [Model]() | scripts/lip/run_h_48_d_4_ocr_train_paddle.sh |
+OCR+RMI | HRNet-W48 | Train | Val | 100000 | 32 | No | No | Yes | --- | [Log]() / [Model]() | scripts/lip/run_h_48_d_4_ocr_train_rmi_paddle.sh |
+
 
 ## COCO-Stuff
 
@@ -71,6 +76,8 @@ OCR | HRNet-W48 | Train | Val | 60000 | 16 | Yes | No | No | 39.61 | [Log](https
 OCR | HRNet-W48 | Train | Val | 60000 | 16 | Yes | Yes | Yes | 40.20 | same as above | scripts/coco_stuff/run_h_48_d_4_ocr_ohem_train.sh |
 OCR | HRNet-W48 (Paddle) | Train | Val | 60000 | 16 | Yes | No | No | 42.50 | [Log]() / [Model]() | scripts/coco_stuff/run_h_48_d_4_ocr_ohem_train_paddle.sh |
 OCR | HRNet-W48 (Paddle) | Train | Val | 60000 | 16 | Yes | Yes | Yes | 43.26 | same as above | scripts/coco_stuff/run_h_48_d_4_ocr_ohem_train_paddle.sh |
+OCR+RMI | HRNet-W48 (Paddle) | Train | Val | 60000 | 16 | Yes | No | No | 43.95 | [Log]() / [Model]() | scripts/coco_stuff/run_h_48_d_4_ocr_ohem_train_rmi_paddle.sh |
+OCR+RMI | HRNet-W48 (Paddle) | Train | Val | 60000 | 16 | Yes | Yes | Yes | 45.20 | same as above | scripts/coco_stuff/run_h_48_d_4_ocr_ohem_train_rmi_paddle.sh |
 
 ## ADE20K
 
@@ -84,6 +91,8 @@ OCR | HRNet-W48 | Train | Val | 150000 | 16 | Yes | No | No | 44.62 | [Log](http
 OCR | HRNet-W48 | Train | Val | 150000 | 16 | Yes | Yes | Yes | 46.19 | same as above | scripts/ade20k/hrnet/run_h_48_d_4_ocr_ohem.sh |
 OCR | HRNet-W48 (Paddle) | Train | Val | 150000 | 16 | Yes | No | No | --- | [Log]() / [Model]() | scripts/ade20k/hrnet/run_h_48_d_4_ocr_ohem_paddle.sh |
 OCR | HRNet-W48 (Paddle) | Train | Val | 150000 | 16 | Yes | Yes | Yes | --- | same as above | scripts/ade20k/hrnet/run_h_48_d_4_ocr_ohem_paddle.sh |
+OCR+RMI | HRNet-W48 (Paddle) | Train | Val | 150000 | 16 | Yes | No | No | --- | [Log]() / [Model]() | scripts/ade20k/hrnet/run_h_48_d_4_ocr_rmi_paddle.sh |
+OCR+RMI | HRNet-W48 (Paddle) | Train | Val | 150000 | 16 | Yes | Yes | Yes | --- | same as above | scripts/ade20k/hrnet/run_h_48_d_4_ocr_rmi_paddle.sh |
 
 
 # SegFix

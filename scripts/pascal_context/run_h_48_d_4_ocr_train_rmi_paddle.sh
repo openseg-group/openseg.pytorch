@@ -5,10 +5,7 @@ cd ../../
 . config.profile
 
 # PYTHON="/data/anaconda/envs/pytorch1.7.1/bin/python"
-# DATA_ROOT="/home/yuhui/teamdrive/dataset"
-
-# check the enviroment info
-nvidia-smi
+# DATA_ROOT=$3
 
 ${PYTHON} -m pip install yacs
 ${PYTHON} -m pip install torchcontrib

@@ -4,11 +4,9 @@ cd $SCRIPTPATH
 cd ../../
 . config.profile
 
-#PYTHON="/data/anaconda/envs/pytorch1.7.1/bin/python"
-#DATA_ROOT="/home/yuhui/teamdrive/dataset"
-# check the enviroment info
-
-nvidia-smi
+# PYTHON="/data/anaconda/envs/pytorch1.7.1/bin/python"
+# DATA_ROOT="/home/yuhui/teamdrive/dataset"
+# DATA_ROOT=$3
 
 ${PYTHON} -m pip install yacs
 ${PYTHON} -m pip install torchcontrib
@@ -51,7 +49,7 @@ if [ "$1"x == "train"x ]; then
                        --pretrained ${PRETRAINED_MODEL} \
                        --train_batch_size ${BATCH_SIZE} \
                        --distributed \
-                       --test_interval ${MAX_ITERS} \
+                       --test_interval 10000 \
                        2>&1 | tee ${LOG_FILE}
                        
 
