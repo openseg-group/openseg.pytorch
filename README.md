@@ -14,7 +14,7 @@
 
 ## News
 
-- 2021/02/16 Support **pytorch-1.7, mixed-precision, and distributed training**. Based on the [PaddleClas](https://github.com/PaddlePaddle/PaddleClas) ImageNet pretrained weights, we achieve **82.78%** on Cityscapes val, **59.62%** on PASCAL-Context val (**new SOTA**) and **45.20%** on COCO-Stuff val (**new SOTA**). Please checkout [branch pytorch-1.7](https://github.com/openseg-group/openseg.pytorch/tree/pytorch-1.7) for more details.
+- 2021/02/16 Support **pytorch-1.7, mixed-precision, and distributed training**. Based on the [PaddleClas](https://github.com/PaddlePaddle/PaddleClas) ImageNet pretrained weights, we achieve **83.22%** on Cityscapes val, **59.62%** on PASCAL-Context val (**new SOTA**) and **45.20%** on COCO-Stuff val (**new SOTA**). Please checkout [branch pytorch-1.7](https://github.com/openseg-group/openseg.pytorch/tree/pytorch-1.7) for more details.
 
 
 - 2020/12/07 [PaddleSeg](https://github.com/PaddlePaddle/PaddleSeg) has supported our ISA and HRNet + OCR. [Jittor](https://github.com/Jittor/segmentation-jittor) also has supported our ResNet-101 + OCR.
