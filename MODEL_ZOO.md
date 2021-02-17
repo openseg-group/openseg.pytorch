@@ -18,7 +18,7 @@ OCR | ResNet-101 | Train | Val | 40000 | 8 | No | No | No | 79.63 | 80.68 | [Log
 ASP-OCR | ResNet-101 | Train | Val | 40000 | 8 | No | No | No | 79.89 | 80.69 | [Log](https://github.com/hsfzxjy/models.storage/releases/download/openseg.pytorch.cityscapes/spatial_asp_ocrnet_deepbase_resnet101_dilated8_1.log) / [Model](https://github.com/hsfzxjy/models.storage/releases/download/openseg.pytorch.cityscapes/spatial_asp_ocrnet_deepbase_resnet101_dilated8_1_latest.pth) | scripts/cityscapes/ocrnet/run_r_101_d_8_asp_ocrnet_train.sh |
 OCR | HRNet-W48 | Train | Val | 80000 | 8 | No | No | No | 81.09 | 81.73 | [Log](https://github.com/hsfzxjy/models.storage/releases/download/openseg.pytorch.cityscapes/hrnet_w48_ocr_1.log) / [Model](https://github.com/hsfzxjy/models.storage/releases/download/openseg.pytorch.cityscapes/hrnet_w48_ocr_1_latest.pth) | scripts/cityscapes/hrnet/run_h_48_d_4_ocr.sh |
 OCR | HRNet-W48 (Paddle) | Train | Val | 40000 | 16 | No | No | No | 81.53 | 82.78 | [Log]() / [Model]() | scripts/cityscapes/hrnet/run_h_48_d_4_ocr_rmi_paddle.sh |
-OCR+RMI | HRNet-W48 (Paddle) | Train | Val | 40000 | 16 | No | No | No | --- | --- | [Log]() / [Model]() | scripts/cityscapes/hrnet/run_h_48_d_4_ocr_rmi_paddle.sh |
+OCR+RMI | HRNet-W48 (Paddle) | Train | Val | 40000 | 16 | No | No | No | 82.57,82.64 | 83.20,83.22 | [Log]() / [Model]() | scripts/cityscapes/hrnet/run_h_48_d_4_ocr_rmi_paddle.sh |
 
 
 ### How to reproduce the HRNet + OCR with Mapillary pretraining
@@ -48,8 +48,8 @@ Methods | Backbone | Train Set | Test Set | Iterations | Batch Size | OHEM | Mul
 OCR | HRNet-W48 | Train | Val | 60000 | 16 | No | No | No | 55.11 | [Log](https://github.com/hsfzxjy/models.storage/releases/download/openseg.pytorch.pascal_context/hrnet_w48_ocr_hrnet48_2.log) / [Model](https://github.com/hsfzxjy/models.storage/releases/download/openseg.pytorch.pascal_context/hrnet_w48_ocr_hrnet48_2_latest.pth) | scripts/pascal_context/run_h_48_d_4_ocr_train.sh |
 OCR | HRNet-W48 (Paddle)  | Train | Val | 60000 | 16 | No | No | No | 57.82 | [Log]() / [Model]() | scripts/pascal_context/run_h_48_d_4_ocr_train_paddle.sh |
 OCR | HRNet-W48 (Paddle)  | Train | Val | 60000 | 16 | No | Yes | Yes | 59.13 | [Log]() / [Model]() | scripts/pascal_context/run_h_48_d_4_ocr_train_paddle.sh |
-OCR+RMI | HRNet-W48 (Paddle)  | Train | Val | 60000 | 16 | No | No | No | 58.53 | [Log]() / [Model]() | scripts/pascal_context/run_h_48_d_4_ocr_train_rmi_paddle.sh |
-OCR+RMI | HRNet-W48 (Paddle)  | Train | Val | 60000 | 16 | No | Yes | Yes | 59.62 | [Log]() / [Model]() | scripts/pascal_context/run_h_48_d_4_ocr_train_rmi_paddle.sh |
+OCR+RMI | HRNet-W48 (Paddle)  | Train | Val | 60000 | 16 | No | No | No | 58.53,58.72 | [Log]() / [Model]() | scripts/pascal_context/run_h_48_d_4_ocr_train_rmi_paddle.sh |
+OCR+RMI | HRNet-W48 (Paddle)  | Train | Val | 60000 | 16 | No | Yes | Yes | 59.62,59.86 | [Log]() / [Model]() | scripts/pascal_context/run_h_48_d_4_ocr_train_rmi_paddle.sh |
 
 ## LIP
 
@@ -60,8 +60,8 @@ Checkpoints should be put under `~/checkpoints/lip`.
 Methods | Backbone | Train Set | Test Set | Iterations | Batch Size | OHEM | Multi-scale | Flip | mIoU | Link | Script |
 | :---- | :----: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
 OCR | HRNet-W48 | Train | Val | 100000 | 32 | No | No | Yes | 56.72 | [Log](https://github.com/hsfzxjy/models.storage/releases/download/opeseg.pytorch.lip/hrnet_w48_ocr_1.log) / [Model](https://github.com/hsfzxjy/models.storage/releases/download/opeseg.pytorch.lip/hrnet_w48_ocr_1_latest.pth) | scripts/lip/run_h_48_d_4_ocr_train.sh |
-OCR | HRNet-W48 | Train | Val | 100000 | 32 | No | No | Yes | --- | [Log]() / [Model]() | scripts/lip/run_h_48_d_4_ocr_train_paddle.sh |
-OCR+RMI | HRNet-W48 | Train | Val | 100000 | 32 | No | No | Yes | --- | [Log]() / [Model]() | scripts/lip/run_h_48_d_4_ocr_train_rmi_paddle.sh |
+OCR | HRNet-W48 | Train | Val | 100000 | 32 | No | No | Yes | 57.87 | [Log]() / [Model]() | scripts/lip/run_h_48_d_4_ocr_train_paddle.sh |
+OCR+RMI | HRNet-W48 | Train | Val | 100000 | 32 | No | No | Yes | 58.21 | [Log]() / [Model]() | scripts/lip/run_h_48_d_4_ocr_train_rmi_paddle.sh |
 
 
 ## COCO-Stuff
