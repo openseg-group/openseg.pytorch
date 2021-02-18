@@ -4,6 +4,8 @@ The following tables listed segmentation results on various datasets. To perform
 
 HRNet-W48 (Paddle) means using the ImageNet pretrained weights converted from [PaddleClas](https://github.com/PaddlePaddle/PaddleClas). OCR+RMI means using [RMI](https://github.com/ZJULearning/RMI) loss.
 
+The current released checkpoints are previously trained with Pytorch-0.4.1 and we will release the checkpoints trained with Pytorch-1.7 soon.
+
 ## Cityscapes
 
 Performance on the Cityscapes dataset. The models are trained and tested with input size of 512x1024 and 1024x2048 respectively. The performance of HRNet baseline is around 80.6% based on our training settings, where we train the models with smaller batch size and less iterations compared with the original setting.
