@@ -4,7 +4,7 @@ cd $SCRIPTPATH
 cd ../../../
 . config.profile
 
-DATA_ROOT=$3
+# DATA_ROOT=$3
 # check the enviroment info
 nvidia-smi
 ${PYTHON} -m pip install yacs
@@ -73,18 +73,30 @@ elif [ "$1"x == "debug"x ]; then
   ${PYTHON} -u main.py --configs ${CONFIGS} \
                        --phase debug --gpu 0 --log_to_file n 2>&1 | tee ${LOG_FILE}
 
-elif [ "$1"x == "test"x ]; then
+elif [ "$1"x == "val"x ]; then
   ${PYTHON} -u main.py --configs ${CONFIGS_TEST} \
                        --data_dir ${DATA_DIR} \
                        --backbone ${BACKBONE} \
                        --model_name ${MODEL_NAME} \
                        --checkpoints_name ${CHECKPOINTS_NAME} \
                        --phase test \
-                       --gpu 0 1 2 3 \
+                       --gpu 0 1 2 3 4 5 6 7 \
                        --resume ./checkpoints/ade20k/${CHECKPOINTS_NAME}_latest.pth \
                        --test_dir ${DATA_DIR}/val/image \
                        --log_to_file n \
                        --out_dir ${SAVE_DIR}${CHECKPOINTS_NAME}_val_ms
+
+    # ${PYTHON} -u main.py --configs ${CONFIGS_TEST} \
+    #                       --data_dir ${DATA_DIR} \
+    #                       --backbone ${BACKBONE} \
+    #                       --model_name ${MODEL_NAME} \
+    #                       --checkpoints_name ${CHECKPOINTS_NAME} \
+    #                       --phase test \
+    #                       --gpu 0 1 2 3 4 5 6 7 \
+    #                       --resume ./checkpoints/coco_stuff/${CHECKPOINTS_NAME}_latest.pth \
+    #                       --test_dir ${DATA_DIR}/val/image \
+    #                       --log_to_file n \
+    #                       --out_dir ${SAVE_DIR}${CHECKPOINTS_NAME}_val_ms
 
   cd lib/metrics
   ${PYTHON} -u ade20k_evaluator.py --configs ../../${CONFIGS_TEST} \
