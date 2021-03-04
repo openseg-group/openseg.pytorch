@@ -138,6 +138,7 @@ class FSOhemCELoss(nn.Module):
         tmp_target[tmp_target == self.ignore_label] = 0
         prob = prob_out.gather(1, tmp_target.unsqueeze(1))
         mask = target.contiguous().view(-1,) != self.ignore_label
+        mask[0] = 1  # Avoid `mask` being empty
         sort_prob, sort_indices = prob.contiguous().view(-1,)[mask].contiguous().sort()
         min_threshold = sort_prob[min(self.min_kept, sort_prob.numel() - 1)]
         threshold = max(min_threshold, self.thresh)
