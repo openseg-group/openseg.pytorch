@@ -14,6 +14,8 @@
 
 ## News
 
+- 2021/03/12 The late ACCPET is finally here, our "OCNet: Object context network for scene parsing" has been accepted by IJCV-2021, which consists of two of our previous technical reports: [OCNet](https://arxiv.org/pdf/1809.00916.pdf) and [ISA](https://arxiv.org/abs/1907.12273.pdf). Congratulations to all the co-authors!
+
 - 2021/02/16 Support **pytorch-1.7, mixed-precision, and distributed training**. Based on the [PaddleClas](https://github.com/PaddlePaddle/PaddleClas) ImageNet pretrained weights, we achieve **59.62%** on PASCAL-Context val (**new SOTA**) and **45.20%** on COCO-Stuff val (**new SOTA**). Check [Model Zoo](https://github.com/openseg-group/openseg.pytorch/blob/pytorch-1.7/MODEL_ZOO.md) for more details. **The current released checkpoints are previously trained with Pytorch-0.4.1 and we will release the main checkpoints with SOTA performance trained with Pytorch-1.7 soon.**
 
 - 2020/08/16 [MMSegmentation](https://github.com/open-mmlab/mmsegmentation) has supported our HRNet + OCR.
