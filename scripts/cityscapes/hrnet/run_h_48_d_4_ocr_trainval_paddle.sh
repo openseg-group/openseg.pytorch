@@ -56,7 +56,11 @@ elif [ "$1"x == "debug"x ]; then
 
 
 elif [ "$1"x == "val"x ]; then
+<<<<<<< HEAD:scripts/cityscapes/hrnet/run_h_48_d_4_ocr_trainval_paddle.sh
   ${PYTHON} -u main.py --configs ${CONFIGS_TEST} --drop_last y \
+=======
+  ${PYTHON} -u main.py --configs ${CONFIGS} --drop_last y --train_batch_size ${BATCH_SIZE} --data_dir ${DATA_DIR} \
+>>>>>>> cefe8b7e27dd8fae6281559bc2f8ac90e505f191:scripts/cityscapes/hrnet/run_h_48_d_4_ocr_ohem.sh
                        --backbone ${BACKBONE} --model_name ${MODEL_NAME} --checkpoints_name ${CHECKPOINTS_NAME} \
                        --phase test --gpu 0 1 2 3 --resume ./checkpoints/cityscapes/${CHECKPOINTS_NAME}_latest.pth \
                        --loss_type ${LOSS_TYPE} --test_dir ${DATA_DIR}/val/image \
