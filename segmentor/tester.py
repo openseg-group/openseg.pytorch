@@ -186,11 +186,13 @@ class Tester(object):
                         label_img_ = self.__relabel(label_img)
                     else:
                         label_img_ = label_img
+                    alt_image = label_img_
                     label_img_ = Image.fromarray(label_img_, 'P')
                     Log.info('{:4d}/{:4d} label map generated'.format(image_id, self.test_size))
                     label_path = os.path.join(self.save_dir, "label/", '{}.png'.format(names[k]))
                     FileHelper.make_dirs(label_path, is_file=True)
-                    ImageHelper.save(label_img_, label_path)
+                    #ImageHelper.save(label_img_, label_path)
+                    cv2.imwrite(label_path, alt_image)
 
                     # colorize the label-map
                     if os.environ.get('save_gt_label'):
