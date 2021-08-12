@@ -15,7 +15,7 @@ CONFIGS_TEST="configs/cityscapes/${BACKBONE}_test.json"
 
 MODEL_NAME="spatial_ocrnet"
 LOSS_TYPE="fs_auxohemce_loss"
-CHECKPOINTS_NAME="${MODEL_NAME}_${BACKBONE}_trainval_mapillary_"$2
+CHECKPOINTS_NAME="${MODEL_NAME}_${BACKBONE}_trainval_mapillary_$(date +%F_%H-%M-%S)"
 LOG_FILE="./log/cityscapes/${CHECKPOINTS_NAME}.log"
 echo "Logging to $LOG_FILE"
 mkdir -p `dirname $LOG_FILE`

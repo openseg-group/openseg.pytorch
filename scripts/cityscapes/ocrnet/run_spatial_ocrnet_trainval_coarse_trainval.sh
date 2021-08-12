@@ -17,7 +17,7 @@ MODEL_NAME="spatial_ocrnet"
 LOSS_TYPE="fs_auxohemce_loss"
 
 MAX_ITERS=10000
-CHECKPOINTS_NAME="${MODEL_NAME}_${BACKBONE}_trainval_12w_coarse_10w_trainval_1w_"$2
+CHECKPOINTS_NAME="${MODEL_NAME}_${BACKBONE}_trainval_12w_coarse_10w_trainval_1w_$(date +%F_%H-%M-%S)"
 LOG_FILE="./log/cityscapes/${CHECKPOINTS_NAME}.log"
 echo "Logging to $LOG_FILE"
 mkdir -p `dirname $LOG_FILE`

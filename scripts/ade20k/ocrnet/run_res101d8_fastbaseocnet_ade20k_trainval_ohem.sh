@@ -17,7 +17,7 @@ CONFIGS_TEST="configs/ade20k/${BACKBONE}_testv2.json"
 
 MODEL_NAME="fast_base_ocnet"
 LOSS_TYPE="fs_auxohemce_loss"
-CHECKPOINTS_NAME="${MODEL_NAME}_${BACKBONE}_trainval_lr1e4_10w_ohem_"$2
+CHECKPOINTS_NAME="${MODEL_NAME}_${BACKBONE}_trainval_lr1e4_10w_ohem_$(date +%F_%H-%M-%S)"
 # PRETRAINED_MODEL="./checkpoints/ade20k/fast_base_ocnet_deepbase_resnet101_dilated8_1_latest.pth"
 PRETRAINED_MODEL="./checkpoints/ade20k/fast_base_ocnet_deepbase_resnet101_dilated8_trainval_lr1e4_1_latest.pth"
 MAX_ITERS=50000

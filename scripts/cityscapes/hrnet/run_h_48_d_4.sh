@@ -5,10 +5,6 @@ cd ../../../
 . config.profile
 # check the enviroment info
 nvidia-smi
-${PYTHON} -m pip install yacs
-${PYTHON} -m pip install torchcontrib
-${PYTHON} -m pip install git+https://github.com/lucasb-eyer/pydensecrf.git
-
 export PYTHONPATH="$PWD":$PYTHONPATH
 
 DATA_DIR="${DATA_ROOT}/cityscapes"
@@ -20,7 +16,7 @@ CONFIGS_TEST="configs/cityscapes/H_48_D_4_TEST.json"
 
 MODEL_NAME="hrnet_w48"
 LOSS_TYPE="fs_ce_loss"
-CHECKPOINTS_NAME="${MODEL_NAME}_"$2
+CHECKPOINTS_NAME="${MODEL_NAME}_$(date +%F_%H-%M-%S)"
 LOG_FILE="./log/cityscapes/${CHECKPOINTS_NAME}.log"
 echo "Logging to $LOG_FILE"
 mkdir -p `dirname $LOG_FILE`

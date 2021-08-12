@@ -7,10 +7,6 @@ cd ../../
 # check the enviroment info
 nvidia-smi
 
-${PYTHON} -m pip install yacs
-${PYTHON} -m pip install torchcontrib
-${PYTHON} -m pip install git+https://github.com/lucasb-eyer/pydensecrf.git
-
 export PYTHONPATH="$PWD":$PYTHONPATH
 
 DATA_DIR="${DATA_ROOT}/coco_stuff_10k"
@@ -22,7 +18,7 @@ CONFIGS_TEST="configs/coco_stuff/R_101_D_8_TEST.json"
 
 MODEL_NAME="ideal_spatial_ocrnet"
 LOSS_TYPE="fs_auxce_loss"
-CHECKPOINTS_NAME="${MODEL_NAME}_${BACKBONE}_"$2
+CHECKPOINTS_NAME="${MODEL_NAME}_${BACKBONE}_$(date +%F_%H-%M-%S)"
 LOG_FILE="./log/coco_stuff/${CHECKPOINTS_NAME}.log"
 echo "Logging to $LOG_FILE"
 mkdir -p `dirname $LOG_FILE`

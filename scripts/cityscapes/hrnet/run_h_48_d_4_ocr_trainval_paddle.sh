@@ -4,10 +4,6 @@ cd $SCRIPTPATH
 cd ../../../
 . config.profile
 # check the enviroment info
-${PYTHON} -m pip install yacs
-${PYTHON} -m pip install torchcontrib
-${PYTHON} -m pip install git+https://github.com/lucasb-eyer/pydensecrf.git
-
 
 export PYTHONPATH="$PWD":$PYTHONPATH
 
@@ -23,7 +19,7 @@ BASE_LR=0.02
 
 MODEL_NAME="hrnet_w48_ocr"
 LOSS_TYPE="fs_auxce_loss"
-CHECKPOINTS_NAME="${MODEL_NAME}_${BACKBONE}_${BN_TYPE}_${BATCH_SIZE}_${MAX_ITERS}_val_paddle_lr2x_"$2
+CHECKPOINTS_NAME="${MODEL_NAME}_${BACKBONE}_${BN_TYPE}_${BATCH_SIZE}_${MAX_ITERS}_val_paddle_lr2x_$(date +%F_%H-%M-%S)"
 LOG_FILE="./log/cityscapes/${CHECKPOINTS_NAME}.log"
 echo "Logging to $LOG_FILE"
 mkdir -p `dirname $LOG_FILE`

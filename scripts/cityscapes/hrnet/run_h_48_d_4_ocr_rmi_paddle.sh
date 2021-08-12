@@ -4,12 +4,10 @@ cd $SCRIPTPATH
 cd ../../../
 . config.profile
 
-PYTHON="/data/anaconda/envs/pytorch1.7.1/bin/python"
-DATA_ROOT="/home/yuhui/teamdrive/dataset"
+# PYTHON="/data/anaconda/envs/pytorch1.7.1/bin/python"
+# DATA_ROOT="/home/yuhui/teamdrive/dataset"
 
-${PYTHON} -m pip install yacs
-${PYTHON} -m pip install torchcontrib
-${PYTHON} -m pip install git+https://github.com/lucasb-eyer/pydensecrf.git
+DATA_ROOT=$2
 
 export PYTHONPATH="$PWD":$PYTHONPATH
 
@@ -22,7 +20,7 @@ CONFIGS_TEST="configs/cityscapes/H_48_D_4_TEST.json"
 
 MODEL_NAME="hrnet_w48_ocr"
 LOSS_TYPE="fs_aux_rmi_loss"
-CHECKPOINTS_NAME="${MODEL_NAME}_rmi_paddle_lr2x_"$2
+CHECKPOINTS_NAME="${MODEL_NAME}_rmi_paddle_lr2x_$(date +%F_%H-%M-%S)"
 LOG_FILE="./log/cityscapes/${CHECKPOINTS_NAME}.log"
 echo "Logging to $LOG_FILE"
 mkdir -p `dirname $LOG_FILE`
@@ -51,7 +49,27 @@ if [ "$1"x == "train"x ]; then
                        --train_batch_size ${BATCH_SIZE} \
                        --base_lr ${BASE_LR} \
                        2>&1 | tee ${LOG_FILE}
-                       
+
+elif [ "$1"x == "local"x ]; then
+  ${PYTHON} -u main.py --configs ${CONFIGS} \
+                       --drop_last y \
+                       --phase train \
+                       --gathered n \
+                       --loss_balance y \
+                       --log_to_file n \
+                       --backbone ${BACKBONE} \
+                       --model_name ${MODEL_NAME} \
+                       --gpu 0 1 2 3 \
+                       --data_dir ${DATA_DIR} \
+                       --loss_type ${LOSS_TYPE} \
+                       --max_iters ${MAX_ITERS} \
+                       --checkpoints_name ${CHECKPOINTS_NAME} \
+                       --pretrained ${PRETRAINED_MODEL} \
+                       --distributed \
+                       --train_batch_size 4 \
+                       --base_lr ${BASE_LR} \
+                       2>&1 | tee ${LOG_FILE}
+
 
 elif [ "$1"x == "resume"x ]; then
   ${PYTHON} -u main.py --configs ${CONFIGS} \

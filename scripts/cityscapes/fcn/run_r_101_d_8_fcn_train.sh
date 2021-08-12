@@ -6,9 +6,7 @@ cd ../../../
 # check the enviroment info
 nvidia-smi
 export PYTHONPATH="$PWD":$PYTHONPATH
-${PYTHON} -m pip install yacs
-${PYTHON} -m pip install torchcontrib
-${PYTHON} -m pip install git+https://github.com/lucasb-eyer/pydensecrf.git
+
 DATA_DIR="${DATA_ROOT}/cityscapes"
 SAVE_DIR="${DATA_ROOT}/seg_result/cityscapes/"
 BACKBONE="deepbase_resnet101_dilated8"
@@ -18,7 +16,7 @@ CONFIGS_TEST="configs/cityscapes/R_101_D_8_TEST.json"
 
 MODEL_NAME="fcnet"
 LOSS_TYPE="fs_auxce_loss"
-CHECKPOINTS_NAME="${MODEL_NAME}_${BACKBONE}_"$2
+CHECKPOINTS_NAME="${MODEL_NAME}_${BACKBONE}_$(date +%F_%H-%M-%S)"
 LOG_FILE="./log/cityscapes/${CHECKPOINTS_NAME}.log"
 echo "Logging to $LOG_FILE"
 mkdir -p `dirname $LOG_FILE`

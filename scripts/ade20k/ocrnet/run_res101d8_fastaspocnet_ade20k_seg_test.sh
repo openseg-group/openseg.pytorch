@@ -18,7 +18,7 @@ CONFIGS="configs/ade20k/${BACKBONE}_test.json"
 
 MODEL_NAME="fast_asp_ocnet"
 LOSS_TYPE="fs_auxce_loss"
-CHECKPOINTS_NAME="${MODEL_NAME}_${BACKBONE}_"$2
+CHECKPOINTS_NAME="${MODEL_NAME}_${BACKBONE}_$(date +%F_%H-%M-%S)"
 PRETRAINED_MODEL="./pretrained_model/resnet101-imagenet.pth"
 MAX_ITERS=150000
 

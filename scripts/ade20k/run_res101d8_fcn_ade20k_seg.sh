@@ -22,7 +22,7 @@ CONFIGS_TEST="configs/ade20k/deepbase_resnet101_dilated8_test.json"
 
 MODEL_NAME="fcnet"
 LOSS_TYPE="fs_auxce_loss"
-CHECKPOINTS_NAME="${MODEL_NAME}_${BACKBONE}_"$2
+CHECKPOINTS_NAME="${MODEL_NAME}_${BACKBONE}_$(date +%F_%H-%M-%S)"
 PRETRAINED_MODEL="./pretrained_model/resnet101-imagenet.pth"
 MAX_ITERS=150000
 

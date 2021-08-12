@@ -19,7 +19,7 @@ CONFIGS_TEST="configs/coco_stuff/H_48_D_4_TEST.json"
 
 MODEL_NAME="hrnet_w48"
 LOSS_TYPE="fs_ce_loss"
-CHECKPOINTS_NAME="${MODEL_NAME}_${BACKBONE}_"$2
+CHECKPOINTS_NAME="${MODEL_NAME}_${BACKBONE}_$(date +%F_%H-%M-%S)"
 LOG_FILE="./log/coco_stuff/${CHECKPOINTS_NAME}.log"
 echo "Logging to $LOG_FILE"
 mkdir -p `dirname $LOG_FILE`

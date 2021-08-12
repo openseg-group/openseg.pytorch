@@ -8,10 +8,6 @@ cd ../../
 # DATA_ROOT="/home/yuhui/teamdrive/dataset"
 # DATA_ROOT=$3
 
-${PYTHON} -m pip install yacs
-${PYTHON} -m pip install torchcontrib
-${PYTHON} -m pip install git+https://github.com/lucasb-eyer/pydensecrf.git
-
 export PYTHONPATH="$PWD":$PYTHONPATH
 
 DATA_DIR="${DATA_ROOT}/coco_stuff_10k"
@@ -23,7 +19,7 @@ CONFIGS_TEST="configs/coco_stuff/H_48_D_4_TEST.json"
 
 MODEL_NAME="hrnet_w48_ocr"
 LOSS_TYPE="fs_aux_rmi_loss"
-CHECKPOINTS_NAME="${MODEL_NAME}_${BACKBONE}_ohem_rmi_paddle_"$2
+CHECKPOINTS_NAME="${MODEL_NAME}_${BACKBONE}_ohem_rmi_paddle_$(date +%F_%H-%M-%S)"
 LOG_FILE="./log/coco_stuff/${CHECKPOINTS_NAME}.log"
 echo "Logging to $LOG_FILE"
 mkdir -p `dirname $LOG_FILE`

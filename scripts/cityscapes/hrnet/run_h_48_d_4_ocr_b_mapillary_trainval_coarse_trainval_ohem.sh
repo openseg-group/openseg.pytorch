@@ -19,7 +19,7 @@ BATCH_SIZE=8
 
 MODEL_NAME="hrnet_w48_ocr_b"
 LOSS_TYPE="fs_auxohemce_loss"
-CHECKPOINTS_NAME="${MODEL_NAME}_${BACKBONE}_${BATCH_SIZE}_${MAX_ITERS}_trainval_coarse_trainval_mapillary_pretrain_freeze_bn_"$2
+CHECKPOINTS_NAME="${MODEL_NAME}_${BACKBONE}_${BATCH_SIZE}_${MAX_ITERS}_trainval_coarse_trainval_mapillary_pretrain_freeze_bn_$(date +%F_%H-%M-%S)"
 LOG_FILE="./log/cityscapes/${CHECKPOINTS_NAME}.log"
 echo "Logging to $LOG_FILE"
 mkdir -p `dirname $LOG_FILE`

@@ -19,7 +19,7 @@ TEST_CONFIGS="configs/ade20k/${BACKBONE}_test.json"
 
 MODEL_NAME="wideb5_isanet"
 LOSS_TYPE="fs_auxce_loss"
-CHECKPOINTS_NAME="${MODEL_NAME}_${BACKBONE}_"$2
+CHECKPOINTS_NAME="${MODEL_NAME}_${BACKBONE}_$(date +%F_%H-%M-%S)"
 PRETRAINED_MODEL="./pretrained_model/wide_resnet38_ipabn_lr_256.pth.tar"
 MAX_ITERS=150000
 

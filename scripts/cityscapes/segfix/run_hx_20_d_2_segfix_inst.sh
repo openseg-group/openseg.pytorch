@@ -6,9 +6,7 @@ cd ../../../
 # check the enviroment info
 nvidia-smi
 export PYTHONPATH="$PWD":$PYTHONPATH
-${PYTHON} -m pip install yacs
-${PYTHON} -m pip install torchcontrib
-${PYTHON} -m pip install git+https://github.com/lucasb-eyer/pydensecrf.git
+
 DATA_DIR="${DATA_ROOT}/cityscapes"
 SAVE_DIR="${DATA_ROOT}/seg_result/cityscapes/"
 
@@ -41,7 +39,7 @@ MODEL_NAME="segfix_hrnet"
 LOSS_TYPE="segfix_loss"
 MAX_ITERS=20000
 
-CHECKPOINTS_NAME="${MODEL_NAME}_${BACKBONE}_${LOSS_TYPE}_inst_"$2
+CHECKPOINTS_NAME="${MODEL_NAME}_${BACKBONE}_${LOSS_TYPE}_inst_$(date +%F_%H-%M-%S)"
 LOG_FILE="./log/cityscapes/${CHECKPOINTS_NAME}.log"
 echo "Logging to $LOG_FILE"
 mkdir -p `dirname $LOG_FILE`

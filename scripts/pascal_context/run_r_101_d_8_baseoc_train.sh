@@ -7,10 +7,6 @@ cd ../../
 # check the enviroment info
 nvidia-smi
 
-${PYTHON} -m pip install yacs
-${PYTHON} -m pip install torchcontrib
-${PYTHON} -m pip install git+https://github.com/lucasb-eyer/pydensecrf.git
-
 export PYTHONPATH="$PWD":$PYTHONPATH
 
 DATA_DIR="${DATA_ROOT}/pascal_context"
@@ -22,7 +18,7 @@ CONFIGS_TEST="configs/pascal_context/R_101_D_8_TEST.json"
 
 MODEL_NAME="base_ocnet"
 LOSS_TYPE="fs_auxce_loss"
-CHECKPOINTS_NAME="${MODEL_NAME}_${BACKBONE}_"$2
+CHECKPOINTS_NAME="${MODEL_NAME}_${BACKBONE}_$(date +%F_%H-%M-%S)"
 LOG_FILE="./log/pascal_context/${CHECKPOINTS_NAME}.log"
 echo "Logging to $LOG_FILE"
 mkdir -p `dirname $LOG_FILE`

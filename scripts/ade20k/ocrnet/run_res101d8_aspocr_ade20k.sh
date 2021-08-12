@@ -6,10 +6,6 @@ cd ../../../
 
 # check the enviroment info
 nvidia-smi
-${PYTHON} -m pip install yacs
-${PYTHON} -m pip install torchcontrib
-${PYTHON} -m pip install git+https://github.com/lucasb-eyer/pydensecrf.git
-
 export PYTHONPATH="$PWD":$PYTHONPATH
 
 DATA_DIR="${DATA_ROOT}/ade20k"
@@ -20,7 +16,7 @@ CONFIGS_TEST="configs/ade20k/${BACKBONE}_test.json"
 
 MODEL_NAME="spatial_asp_ocrnet"
 LOSS_TYPE="fs_auxce_loss"
-CHECKPOINTS_NAME="${MODEL_NAME}_${BACKBONE}_"$2
+CHECKPOINTS_NAME="${MODEL_NAME}_${BACKBONE}_$(date +%F_%H-%M-%S)"
 PRETRAINED_MODEL="./pretrained_model/resnet101-imagenet.pth"
 MAX_ITERS=150000
 

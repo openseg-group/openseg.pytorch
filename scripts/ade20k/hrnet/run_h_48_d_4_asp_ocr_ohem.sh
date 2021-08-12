@@ -6,10 +6,6 @@ cd ../../../
 
 # check the enviroment info
 nvidia-smi
-${PYTHON} -m pip install yacs
-${PYTHON} -m pip install torchcontrib
-${PYTHON} -m pip install git+https://github.com/lucasb-eyer/pydensecrf.git
-
 export PYTHONPATH="$PWD":$PYTHONPATH
 
 DATA_DIR="${DATA_ROOT}/ade20k"
@@ -20,7 +16,7 @@ CONFIGS_TEST="configs/ade20k/H_48_D_4_TEST.json"
 
 MODEL_NAME="hrnet48_spatial_asp_ocr_c"
 LOSS_TYPE="fs_auxohemce_loss"
-CHECKPOINTS_NAME="${MODEL_NAME}_${BACKBONE}_ohem_"$2
+CHECKPOINTS_NAME="${MODEL_NAME}_${BACKBONE}_ohem_$(date +%F_%H-%M-%S)"
 PRETRAINED_MODEL="./pretrained_model/hrnetv2_w48_imagenet_pretrained.pth"
 MAX_ITERS=150000
 

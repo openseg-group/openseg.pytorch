@@ -5,11 +5,7 @@ cd ../../
 . config.profile
 
 # PYTHON="/data/anaconda/envs/pytorch1.7.1/bin/python"
-# DATA_ROOT=$3
-
-${PYTHON} -m pip install yacs
-${PYTHON} -m pip install torchcontrib
-${PYTHON} -m pip install git+https://github.com/lucasb-eyer/pydensecrf.git
+DATA_ROOT=$2
 
 export PYTHONPATH="$PWD":$PYTHONPATH
 
@@ -22,7 +18,7 @@ CONFIGS_TEST="configs/pascal_context/H_48_D_4_TEST.json"
 
 MODEL_NAME="hrnet_w48_ocr"
 LOSS_TYPE="fs_aux_rmi_loss"
-CHECKPOINTS_NAME="${MODEL_NAME}_rmi_paddle_"$2
+CHECKPOINTS_NAME="${MODEL_NAME}_rmi_paddle_$(date +%F_%H-%M-%S)"
 LOG_FILE="./log/pascal_context/${CHECKPOINTS_NAME}.log"
 echo "Logging to $LOG_FILE"
 mkdir -p `dirname $LOG_FILE`

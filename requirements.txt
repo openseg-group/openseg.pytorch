@@ -15,3 +15,7 @@ html5lib
 ninja
 torch>=1.7.0
 torchvision>=0.6.0
+timm
+einops
+git+https://github.com/lucasb-eyer/pydensecrf.git#egg=pydensecrf
+git+https://github.com/hsfzxjy/mocona@v0.1.0#egg=mocona
