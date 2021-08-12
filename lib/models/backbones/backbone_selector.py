@@ -5,7 +5,7 @@
 ## Copyright (c) 2019
 ##
 ## This source code is licensed under the MIT-style license found in the
-## LICENSE file in the root directory of this source tree 
+## LICENSE file in the root directory of this source tree
 ##+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
@@ -19,22 +19,23 @@ from lib.utils.tools.logger import Logger as Log
 
 
 class BackboneSelector(object):
-
     def __init__(self, configer):
         self.configer = configer
 
     def get_backbone(self, **params):
-        backbone = self.configer.get('network', 'backbone')
+        backbone = self.configer.get("network", "backbone")
 
         model = None
-        if ('resnet' in backbone or 'resnext' in backbone or 'resnest' in backbone) and 'senet' not in backbone:
+        if (
+            "resnet" in backbone or "resnext" in backbone or "resnest" in backbone
+        ) and "senet" not in backbone:
             model = ResNetBackbone(self.configer)(**params)
 
-        elif 'hrne' in backbone:
+        elif "hrne" in backbone:
             model = HRNetBackbone(self.configer)(**params)
 
         else:
-            Log.error('Backbone {} is invalid.'.format(backbone))
+            Log.error("Backbone {} is invalid.".format(backbone))
             exit(1)
 
         return model

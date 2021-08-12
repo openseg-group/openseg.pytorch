@@ -7,8 +7,7 @@ import torch.nn as nn
 from collections import OrderedDict
 from functools import partial
 
-from lib.models.tools.module_helper import ModuleHelper 
-
+from lib.models.tools.module_helper import ModuleHelper
 
 
 class GlobalAvgPool2d(nn.Module):
@@ -22,14 +21,16 @@ class GlobalAvgPool2d(nn.Module):
 
 
 class IdentityResidualBlock(nn.Module):
-    def __init__(self,
-                 in_channels,
-                 channels,
-                 stride=1,
-                 dilation=1,
-                 groups=1,
-                 bn_type=None,
-                 dropout=None):
+    def __init__(
+        self,
+        in_channels,
+        channels,
+        stride=1,
+        dilation=1,
+        groups=1,
+        bn_type=None,
+        dropout=None,
+    ):
         """Configurable identity-mapping residual block
 
         Parameters
@@ -66,29 +67,77 @@ class IdentityResidualBlock(nn.Module):
         self.bn1 = ModuleHelper.BNReLU(in_channels, bn_type=bn_type)
         if not is_bottleneck:
             layers = [
-                ("conv1", nn.Conv2d(in_channels, channels[0], 3, stride=stride, padding=dilation, bias=False,
-                                    dilation=dilation)),
+                (
+                    "conv1",
+                    nn.Conv2d(
+                        in_channels,
+                        channels[0],
+                        3,
+                        stride=stride,
+                        padding=dilation,
+                        bias=False,
+                        dilation=dilation,
+                    ),
+                ),
                 ("bn2", ModuleHelper.BNReLU(channels[0], bn_type=bn_type)),
-                ("conv2", nn.Conv2d(channels[0], channels[1], 3, stride=1, padding=dilation, bias=False,
-                                    dilation=dilation))
+                (
+                    "conv2",
+                    nn.Conv2d(
+                        channels[0],
+                        channels[1],
+                        3,
+                        stride=1,
+                        padding=dilation,
+                        bias=False,
+                        dilation=dilation,
+                    ),
+                ),
             ]
             if dropout is not None:
                 layers = layers[0:2] + [("dropout", dropout())] + layers[2:]
         else:
             layers = [
-                ("conv1", nn.Conv2d(in_channels, channels[0], 1, stride=stride, padding=0, bias=False)),
+                (
+                    "conv1",
+                    nn.Conv2d(
+                        in_channels,
+                        channels[0],
+                        1,
+                        stride=stride,
+                        padding=0,
+                        bias=False,
+                    ),
+                ),
                 ("bn2", ModuleHelper.BNReLU(channels[0], bn_type=bn_type)),
-                ("conv2", nn.Conv2d(channels[0], channels[1], 3, stride=1, padding=dilation, bias=False,
-                                    groups=groups, dilation=dilation)),
+                (
+                    "conv2",
+                    nn.Conv2d(
+                        channels[0],
+                        channels[1],
+                        3,
+                        stride=1,
+                        padding=dilation,
+                        bias=False,
+                        groups=groups,
+                        dilation=dilation,
+                    ),
+                ),
                 ("bn3", ModuleHelper.BNReLU(channels[1], bn_type=bn_type)),
-                ("conv3", nn.Conv2d(channels[1], channels[2], 1, stride=1, padding=0, bias=False))
+                (
+                    "conv3",
+                    nn.Conv2d(
+                        channels[1], channels[2], 1, stride=1, padding=0, bias=False
+                    ),
+                ),
             ]
             if dropout is not None:
                 layers = layers[0:4] + [("dropout", dropout())] + layers[4:]
         self.convs = nn.Sequential(OrderedDict(layers))
 
         if need_proj_conv:
-            self.proj_conv = nn.Conv2d(in_channels, channels[-1], 1, stride=stride, padding=0, bias=False)
+            self.proj_conv = nn.Conv2d(
+                in_channels, channels[-1], 1, stride=stride, padding=0, bias=False
+            )
 
     def forward(self, x):
         if hasattr(self, "proj_conv"):
@@ -105,11 +154,9 @@ class IdentityResidualBlock(nn.Module):
 
 
 class WiderResNetA2(nn.Module):
-    def __init__(self,
-                 structure=[3, 3, 6, 3, 1, 1],
-                 bn_type=None,
-                 classes=0,
-                 dilation=True):
+    def __init__(
+        self, structure=[3, 3, 6, 3, 1, 1], bn_type=None, classes=0, dilation=True
+    ):
         """Wider ResNet with pre-activation (identity mapping) blocks
 
         This variant uses down-sampling by max-pooling in the first two blocks and by strided convolution in the others.
@@ -134,13 +181,22 @@ class WiderResNetA2(nn.Module):
             raise ValueError("Expected a structure with six values")
 
         # Initial layers
-        self.mod1 = nn.Sequential(OrderedDict([
-            ("conv1", nn.Conv2d(3, 64, 3, stride=1, padding=1, bias=False))
-        ]))
+        self.mod1 = nn.Sequential(
+            OrderedDict(
+                [("conv1", nn.Conv2d(3, 64, 3, stride=1, padding=1, bias=False))]
+            )
+        )
 
         # Groups of residual blocks
         in_channels = 64
-        channels = [(128, 128), (256, 256), (512, 512), (512, 1024), (512, 1024, 2048), (1024, 2048, 4096)]
+        channels = [
+            (128, 128),
+            (256, 256),
+            (512, 512),
+            (512, 1024),
+            (512, 1024, 2048),
+            (1024, 2048, 4096),
+        ]
         for mod_id, num in enumerate(structure):
             # Create blocks for module
             blocks = []
@@ -164,22 +220,32 @@ class WiderResNetA2(nn.Module):
                 else:
                     drop = None
 
-                blocks.append((
-                    "block%d" % (block_id + 1),
-                    IdentityResidualBlock(in_channels, channels[mod_id], bn_type=bn_type, stride=stride, dilation=dil,
-                                          dropout=drop)
-                ))
+                blocks.append(
+                    (
+                        "block%d" % (block_id + 1),
+                        IdentityResidualBlock(
+                            in_channels,
+                            channels[mod_id],
+                            bn_type=bn_type,
+                            stride=stride,
+                            dilation=dil,
+                            dropout=drop,
+                        ),
+                    )
+                )
 
                 # Update channels and p_keep
                 in_channels = channels[mod_id][-1]
 
             # Create module
             if mod_id < 2:
-                self.add_module("pool%d" % (mod_id + 2), nn.MaxPool2d(3, stride=2, padding=1, ceil_mode=True))
+                self.add_module(
+                    "pool%d" % (mod_id + 2),
+                    nn.MaxPool2d(3, stride=2, padding=1, ceil_mode=True),
+                )
             self.add_module("mod%d" % (mod_id + 2), nn.Sequential(OrderedDict(blocks)))
 
         self.bn_out = ModuleHelper.BNReLU(in_channels, bn_type=bn_type)
-
 
     def forward(self, img):
         tuple_features = list()

@@ -27,9 +27,9 @@ class SegFix_HRNet(nn.Module):
         super(SegFix_HRNet, self).__init__()
         self.configer = configer
         self.backbone = BackboneSelector(configer).get_backbone()
-        backbone_name = self.configer.get('network', 'backbone')
+        backbone_name = self.configer.get("network", "backbone")
         width = int(backbone_name[-2:])
-        if 'hrnet2x' in backbone_name:
+        if "hrnet2x" in backbone_name:
             in_channels = width * 31
         else:
             in_channels = width * 15
@@ -40,37 +40,42 @@ class SegFix_HRNet(nn.Module):
         mid_channels = 256
 
         self.dir_head = nn.Sequential(
-            nn.Conv2d(in_channels,
-                      mid_channels,
-                      kernel_size=1,
-                      stride=1,
-                      padding=0,
-                      bias=False),
-            ModuleHelper.BNReLU(mid_channels,
-                                bn_type=self.configer.get(
-                                    'network', 'bn_type')),
-            nn.Conv2d(mid_channels,
-                      num_directions,
-                      kernel_size=1,
-                      stride=1,
-                      padding=0,
-                      bias=False))
+            nn.Conv2d(
+                in_channels,
+                mid_channels,
+                kernel_size=1,
+                stride=1,
+                padding=0,
+                bias=False,
+            ),
+            ModuleHelper.BNReLU(
+                mid_channels, bn_type=self.configer.get("network", "bn_type")
+            ),
+            nn.Conv2d(
+                mid_channels,
+                num_directions,
+                kernel_size=1,
+                stride=1,
+                padding=0,
+                bias=False,
+            ),
+        )
         self.mask_head = nn.Sequential(
-            nn.Conv2d(in_channels,
-                      mid_channels,
-                      kernel_size=1,
-                      stride=1,
-                      padding=0,
-                      bias=False),
-            ModuleHelper.BNReLU(mid_channels,
-                                bn_type=self.configer.get(
-                                    'network', 'bn_type')),
-            nn.Conv2d(mid_channels,
-                      num_masks,
-                      kernel_size=1,
-                      stride=1,
-                      padding=0,
-                      bias=False))
+            nn.Conv2d(
+                in_channels,
+                mid_channels,
+                kernel_size=1,
+                stride=1,
+                padding=0,
+                bias=False,
+            ),
+            ModuleHelper.BNReLU(
+                mid_channels, bn_type=self.configer.get("network", "bn_type")
+            ),
+            nn.Conv2d(
+                mid_channels, num_masks, kernel_size=1, stride=1, padding=0, bias=False
+            ),
+        )
 
     def forward(self, x_):
         x = self.backbone(x_)
@@ -78,10 +83,7 @@ class SegFix_HRNet(nn.Module):
 
         feat1 = x[0]
         for i in range(1, len(x)):
-            x[i] = F.interpolate(x[i],
-                                 size=(h, w),
-                                 mode='bilinear',
-                                 align_corners=True)
+            x[i] = F.interpolate(x[i], size=(h, w), mode="bilinear", align_corners=True)
 
         feats = torch.cat(x, 1)
         mask_map = self.mask_head(feats)

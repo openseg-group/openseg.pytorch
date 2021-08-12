@@ -11,7 +11,12 @@ import torch.utils.checkpoint as cp
 from collections import OrderedDict
 
 from lib.models.tools.module_helper import ModuleHelper
-from lib.extensions.dcn import ModulatedDeformConv, ModulatedDeformRoIPoolingPack, DeformConv 
+from lib.extensions.dcn import (
+    ModulatedDeformConv,
+    ModulatedDeformRoIPoolingPack,
+    DeformConv,
+)
+
 
 def conv3x3(in_planes, out_planes, stride=1, dilation=1):
     "3x3 convolution with padding"
@@ -22,21 +27,24 @@ def conv3x3(in_planes, out_planes, stride=1, dilation=1):
         stride=stride,
         padding=dilation,
         dilation=dilation,
-        bias=False)
+        bias=False,
+    )
 
 
 class BasicBlock(nn.Module):
     expansion = 1
 
-    def __init__(self,
-                 inplanes,
-                 planes,
-                 stride=1,
-                 dilation=1,
-                 downsample=None,
-                 style='pytorch',
-                 with_cp=False,
-                 bn_type=None):
+    def __init__(
+        self,
+        inplanes,
+        planes,
+        stride=1,
+        dilation=1,
+        downsample=None,
+        style="pytorch",
+        with_cp=False,
+        bn_type=None,
+    ):
         super(BasicBlock, self).__init__()
         self.conv1 = conv3x3(inplanes, planes, stride, dilation)
         self.bn1 = ModuleHelper.BatchNorm2d(bn_type=bn_type)(planes)
@@ -71,20 +79,22 @@ class BasicBlock(nn.Module):
 class Bottleneck(nn.Module):
     expansion = 4
 
-    def __init__(self,
-                 inplanes,
-                 planes,
-                 stride=1,
-                 dilation=1,
-                 downsample=None,
-                 style='pytorch',
-                 with_cp=False,
-                 with_dcn=False,
-                 num_deformable_groups=1,
-                 dcn_offset_lr_mult=0.1,
-                 use_regular_conv_on_stride=False,
-                 use_modulated_dcn=False,
-                 bn_type=None):
+    def __init__(
+        self,
+        inplanes,
+        planes,
+        stride=1,
+        dilation=1,
+        downsample=None,
+        style="pytorch",
+        with_cp=False,
+        with_dcn=False,
+        num_deformable_groups=1,
+        dcn_offset_lr_mult=0.1,
+        use_regular_conv_on_stride=False,
+        use_modulated_dcn=False,
+        bn_type=None,
+    ):
         """Bottleneck block.
         If style is "pytorch", the stride-two layer is the 3x3 conv layer,
         if it is "caffe", the stride-two layer is the first 1x1 conv layer.
@@ -94,15 +104,19 @@ class Bottleneck(nn.Module):
         conv2_stride = stride
 
         self.conv1 = nn.Conv2d(
-            inplanes, planes, kernel_size=1, stride=conv1_stride, bias=False)
+            inplanes, planes, kernel_size=1, stride=conv1_stride, bias=False
+        )
 
         self.with_dcn = with_dcn
         self.use_modulated_dcn = use_modulated_dcn
         if use_regular_conv_on_stride and stride > 1:
             self.with_dcn = False
         if self.with_dcn:
-            print("--->> use {}dcn in block where c_in={} and c_out={}".format(
-                'modulated ' if self.use_modulated_dcn else '', planes, inplanes))
+            print(
+                "--->> use {}dcn in block where c_in={} and c_out={}".format(
+                    "modulated " if self.use_modulated_dcn else "", planes, inplanes
+                )
+            )
             if use_modulated_dcn:
                 self.conv_offset_mask = nn.Conv2d(
                     planes,
@@ -110,13 +124,21 @@ class Bottleneck(nn.Module):
                     kernel_size=3,
                     stride=conv2_stride,
                     padding=dilation,
-                    dilation=dilation)
+                    dilation=dilation,
+                )
                 self.conv_offset_mask.lr_mult = dcn_offset_lr_mult
                 self.conv_offset_mask.zero_init = True
 
-                self.conv2 = ModulatedDeformConv(planes, planes, 3, stride=conv2_stride,
-                                          padding=dilation, dilation=dilation,
-                                          deformable_groups=num_deformable_groups, no_bias=True)
+                self.conv2 = ModulatedDeformConv(
+                    planes,
+                    planes,
+                    3,
+                    stride=conv2_stride,
+                    padding=dilation,
+                    dilation=dilation,
+                    deformable_groups=num_deformable_groups,
+                    no_bias=True,
+                )
             else:
                 self.conv2_offset = nn.Conv2d(
                     planes,
@@ -124,13 +146,20 @@ class Bottleneck(nn.Module):
                     kernel_size=3,
                     stride=conv2_stride,
                     padding=dilation,
-                    dilation=dilation)
+                    dilation=dilation,
+                )
                 self.conv2_offset.lr_mult = dcn_offset_lr_mult
                 self.conv2_offset.zero_init = True
 
-                self.conv2 = DeformConv(planes, planes, (3, 3), stride=conv2_stride,
-                    padding=dilation, dilation=dilation,
-                    num_deformable_groups=num_deformable_groups)
+                self.conv2 = DeformConv(
+                    planes,
+                    planes,
+                    (3, 3),
+                    stride=conv2_stride,
+                    padding=dilation,
+                    dilation=dilation,
+                    num_deformable_groups=num_deformable_groups,
+                )
         else:
             self.conv2 = nn.Conv2d(
                 planes,
@@ -139,13 +168,14 @@ class Bottleneck(nn.Module):
                 stride=conv2_stride,
                 padding=dilation,
                 dilation=dilation,
-                bias=False)
-
+                bias=False,
+            )
 
         self.bn1 = ModuleHelper.BatchNorm2d(bn_type=bn_type)(planes)
         self.bn2 = ModuleHelper.BatchNorm2d(bn_type=bn_type)(planes)
         self.conv3 = nn.Conv2d(
-            planes, planes * self.expansion, kernel_size=1, bias=False)
+            planes, planes * self.expansion, kernel_size=1, bias=False
+        )
         self.bn3 = ModuleHelper.BatchNorm2d(bn_type=bn_type)(planes * self.expansion)
         self.relu = nn.ReLU(inplace=False)
         self.relu_in = nn.ReLU(inplace=True)
@@ -155,7 +185,6 @@ class Bottleneck(nn.Module):
         self.with_cp = with_cp
 
     def forward(self, x):
-
         def _inner_forward(x):
             residual = x
 
@@ -174,11 +203,15 @@ class Bottleneck(nn.Module):
                     offset = self.conv2_offset(out)
                     # add bias to the offset to solve the bug of dilation rates within dcn.
                     dilation = self.conv2.dilation[0]
-                    bias_w = torch.cuda.FloatTensor([[-1, 0, 1], [-1, 0, 1], [-1, 0, 1]]) * (dilation - 1)
+                    bias_w = torch.cuda.FloatTensor(
+                        [[-1, 0, 1], [-1, 0, 1], [-1, 0, 1]]
+                    ) * (dilation - 1)
                     bias_h = bias_w.permute(1, 0)
                     bias_w.requires_grad = False
                     bias_h.requires_grad = False
-                    offset += torch.cat([bias_h.reshape(-1), bias_w.reshape(-1)]).view(1, -1, 1, 1)
+                    offset += torch.cat([bias_h.reshape(-1), bias_w.reshape(-1)]).view(
+                        1, -1, 1, 1
+                    )
                     out = self.conv2(out, offset)
             else:
                 out = self.conv2(out)
@@ -194,7 +227,6 @@ class Bottleneck(nn.Module):
             out = out + residual
             return out
 
-
         if self.with_cp and x.requires_grad:
             out = cp.checkpoint(_inner_forward, x)
         else:
@@ -205,19 +237,21 @@ class Bottleneck(nn.Module):
         return out
 
 
-def make_res_layer(block,
-                   inplanes,
-                   planes,
-                   blocks,
-                   stride=1,
-                   dilation=1,
-                   style='pytorch',
-                   with_cp=False,
-                   with_dcn=False,
-                   dcn_offset_lr_mult=0.1,
-                   use_regular_conv_on_stride=False,
-                   use_modulated_dcn=False,
-                   bn_type=None):
+def make_res_layer(
+    block,
+    inplanes,
+    planes,
+    blocks,
+    stride=1,
+    dilation=1,
+    style="pytorch",
+    with_cp=False,
+    with_dcn=False,
+    dcn_offset_lr_mult=0.1,
+    use_regular_conv_on_stride=False,
+    use_modulated_dcn=False,
+    bn_type=None,
+):
     downsample = None
     if stride != 1 or inplanes != planes * block.expansion:
         downsample = nn.Sequential(
@@ -226,7 +260,8 @@ def make_res_layer(block,
                 planes * block.expansion,
                 kernel_size=1,
                 stride=stride,
-                bias=False),
+                bias=False,
+            ),
             ModuleHelper.BatchNorm2d(bn_type=bn_type)(planes * block.expansion),
         )
 
@@ -244,13 +279,26 @@ def make_res_layer(block,
             dcn_offset_lr_mult=dcn_offset_lr_mult,
             use_regular_conv_on_stride=use_regular_conv_on_stride,
             use_modulated_dcn=use_modulated_dcn,
-            bn_type=bn_type))
+            bn_type=bn_type,
+        )
+    )
     inplanes = planes * block.expansion
     for i in range(1, blocks):
         layers.append(
-            block(inplanes, planes, 1, dilation, style=style, with_cp=with_cp, with_dcn=with_dcn, 
-                  dcn_offset_lr_mult=dcn_offset_lr_mult, use_regular_conv_on_stride=use_regular_conv_on_stride,
-                  use_modulated_dcn=use_modulated_dcn, bn_type=bn_type))
+            block(
+                inplanes,
+                planes,
+                1,
+                dilation,
+                style=style,
+                with_cp=with_cp,
+                with_dcn=with_dcn,
+                dcn_offset_lr_mult=dcn_offset_lr_mult,
+                use_regular_conv_on_stride=use_regular_conv_on_stride,
+                use_modulated_dcn=use_modulated_dcn,
+                bn_type=bn_type,
+            )
+        )
 
     return nn.Sequential(*layers)
 
@@ -275,11 +323,8 @@ class DCNResNet(nn.Module):
         with_cp (bool): Use checkpoint or not. Using checkpoint will save some
             memory while slowing down the training speed.
     """
-    def __init__(self,
-                 block,
-                 layers,
-                 deep_base=True,
-                 bn_type=None):
+
+    def __init__(self, block, layers, deep_base=True, bn_type=None):
         super(DCNResNet, self).__init__()
         # if depth not in self.arch_settings:
         #     raise KeyError('invalid depth {} for resnet'.format(depth))
@@ -288,76 +333,113 @@ class DCNResNet(nn.Module):
         # stage_blocks = stage_blocks[:num_stages]
         # assert len(strides) == len(dilations) == num_stages
         # assert max(out_indices) < num_stages
-        self.style = 'pytorch'
+        self.style = "pytorch"
         self.inplanes = 128 if deep_base else 64
         if deep_base:
-            self.resinit = nn.Sequential(OrderedDict([
-                ('conv1', nn.Conv2d(3, 64, kernel_size=3, stride=2, padding=1, bias=False)),
-                ('bn1', ModuleHelper.BatchNorm2d(bn_type=bn_type)(64)),
-                ('relu1', nn.ReLU(inplace=False)),
-                ('conv2', nn.Conv2d(64, 64, kernel_size=3, stride=1, padding=1, bias=False)),
-                ('bn2', ModuleHelper.BatchNorm2d(bn_type=bn_type)(64)),
-                ('relu2', nn.ReLU(inplace=False)),
-                ('conv3', nn.Conv2d(64, 128, kernel_size=3, stride=1, padding=1, bias=False)),
-                ('bn3', ModuleHelper.BatchNorm2d(bn_type=bn_type)(self.inplanes)),
-                ('relu3', nn.ReLU(inplace=False))]
-            ))
+            self.resinit = nn.Sequential(
+                OrderedDict(
+                    [
+                        (
+                            "conv1",
+                            nn.Conv2d(
+                                3, 64, kernel_size=3, stride=2, padding=1, bias=False
+                            ),
+                        ),
+                        ("bn1", ModuleHelper.BatchNorm2d(bn_type=bn_type)(64)),
+                        ("relu1", nn.ReLU(inplace=False)),
+                        (
+                            "conv2",
+                            nn.Conv2d(
+                                64, 64, kernel_size=3, stride=1, padding=1, bias=False
+                            ),
+                        ),
+                        ("bn2", ModuleHelper.BatchNorm2d(bn_type=bn_type)(64)),
+                        ("relu2", nn.ReLU(inplace=False)),
+                        (
+                            "conv3",
+                            nn.Conv2d(
+                                64, 128, kernel_size=3, stride=1, padding=1, bias=False
+                            ),
+                        ),
+                        (
+                            "bn3",
+                            ModuleHelper.BatchNorm2d(bn_type=bn_type)(self.inplanes),
+                        ),
+                        ("relu3", nn.ReLU(inplace=False)),
+                    ]
+                )
+            )
         else:
-            self.resinit = nn.Sequential(OrderedDict([
-                ('conv1', nn.Conv2d(3, 64, kernel_size=7, stride=2, padding=3, bias=False)),
-                ('bn1', ModuleHelper.BatchNorm2d(bn_type=bn_type)(self.inplanes)),
-                ('relu1', nn.ReLU(inplace=False))]
-            ))
+            self.resinit = nn.Sequential(
+                OrderedDict(
+                    [
+                        (
+                            "conv1",
+                            nn.Conv2d(
+                                3, 64, kernel_size=7, stride=2, padding=3, bias=False
+                            ),
+                        ),
+                        (
+                            "bn1",
+                            ModuleHelper.BatchNorm2d(bn_type=bn_type)(self.inplanes),
+                        ),
+                        ("relu1", nn.ReLU(inplace=False)),
+                    ]
+                )
+            )
         self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
 
         self.layer1 = make_res_layer(
-                block,
-                self.inplanes,
-                64,
-                layers[0],
-                style=self.style,
-                with_dcn=False,
-                use_modulated_dcn=False,
-                bn_type=bn_type)
+            block,
+            self.inplanes,
+            64,
+            layers[0],
+            style=self.style,
+            with_dcn=False,
+            use_modulated_dcn=False,
+            bn_type=bn_type,
+        )
 
         self.layer2 = make_res_layer(
-                block,
-                256,
-                128,
-                layers[1],
-                stride=2,
-                style=self.style,
-                with_dcn=False,
-                use_modulated_dcn=False,
-                bn_type=bn_type)
+            block,
+            256,
+            128,
+            layers[1],
+            stride=2,
+            style=self.style,
+            with_dcn=False,
+            use_modulated_dcn=False,
+            bn_type=bn_type,
+        )
 
         self.layer3 = make_res_layer(
-                block,
-                512,
-                256,
-                layers[2],
-                stride=2,
-                style=self.style,
-                with_dcn=True,
-                use_modulated_dcn=False,
-                bn_type=bn_type)
+            block,
+            512,
+            256,
+            layers[2],
+            stride=2,
+            style=self.style,
+            with_dcn=True,
+            use_modulated_dcn=False,
+            bn_type=bn_type,
+        )
 
         self.layer4 = make_res_layer(
-                block,
-                1024,
-                512,
-                layers[3],
-                stride=2,
-                style=self.style,
-                with_dcn=True,
-                use_modulated_dcn=False,
-                bn_type=bn_type)
-
+            block,
+            1024,
+            512,
+            layers[3],
+            stride=2,
+            style=self.style,
+            with_dcn=True,
+            use_modulated_dcn=False,
+            bn_type=bn_type,
+        )
 
     def forward(self, x):
         x = self.resinit(x)
         x = self.maxpool(x)
-        
+
         x = self.layer1(x)
         x = self.layer2(x)
         x = self.layer3(x)
@@ -366,9 +448,7 @@ class DCNResNet(nn.Module):
         return x
 
 
-
 class DCNResNetModels(object):
-
     def __init__(self, configer):
         self.configer = configer
 
@@ -377,12 +457,19 @@ class DCNResNetModels(object):
         Args:
             pretrained (bool): If True, returns a model pre-trained on Places
         """
-        model = DCNResNet(Bottleneck, [3, 4, 6, 3], deep_base=True,
-                       bn_type=self.configer.get('network', 'bn_type'), **kwargs)
-        model = ModuleHelper.load_model(model, 
-                                        all_match=False, 
-                                        pretrained=self.configer.get('network', 'pretrained'),
-                                        network="dcnet")
+        model = DCNResNet(
+            Bottleneck,
+            [3, 4, 6, 3],
+            deep_base=True,
+            bn_type=self.configer.get("network", "bn_type"),
+            **kwargs
+        )
+        model = ModuleHelper.load_model(
+            model,
+            all_match=False,
+            pretrained=self.configer.get("network", "pretrained"),
+            network="dcnet",
+        )
         return model
 
     def deepbase_dcn_resnet101(self, **kwargs):
@@ -390,10 +477,17 @@ class DCNResNetModels(object):
         Args:
             pretrained (bool): If True, returns a model pre-trained on Places
         """
-        model = DCNResNet(Bottleneck, [3, 4, 23, 3], deep_base=True,
-                       bn_type=self.configer.get('network', 'bn_type'), **kwargs)
-        model = ModuleHelper.load_model(model, 
-                                        all_match=False, 
-                                        pretrained=self.configer.get('network', 'pretrained'),
-                                        network="dcnet")
+        model = DCNResNet(
+            Bottleneck,
+            [3, 4, 23, 3],
+            deep_base=True,
+            bn_type=self.configer.get("network", "bn_type"),
+            **kwargs
+        )
+        model = ModuleHelper.load_model(
+            model,
+            all_match=False,
+            pretrained=self.configer.get("network", "pretrained"),
+            network="dcnet",
+        )
         return model
