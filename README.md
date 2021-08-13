@@ -124,6 +124,13 @@ Please consider citing our work if you find it helps you,
   journal={arXiv preprint arXiv:2007.04269},
   year={2020}
 }
+
+@article{YuanFHZCW21,
+  title={HRT: High-Resolution Transformer for Dense Prediction},
+  author={Yuhui Yuan and Rao Fu and Lang Huang and Chao Zhang and Xilin Chen and Jingdong Wang},
+  booktitle={arXiv},
+  year={2021}
+}
 ```
 
 ## Acknowledgment
