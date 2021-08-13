@@ -14,6 +14,9 @@
 
 ## News
 
+- 2021/08/13 We have released the implementation for [HRFormer](https://github.com/HRNet/HRFormer) and the combination of HRFormer and OCR achieves better semantic segmentation performance.
+
+
 - 2021/03/12 The late ACCPET is finally here, our "OCNet: Object context network for scene parsing" has been accepted by IJCV-2021, which consists of two of our previous technical reports: [OCNet](https://arxiv.org/pdf/1809.00916.pdf) and [ISA](https://arxiv.org/abs/1907.12273.pdf). Congratulations to all the co-authors!
 
 
