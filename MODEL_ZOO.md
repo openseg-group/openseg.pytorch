@@ -93,7 +93,7 @@ OCR | HRNet-W48 | Train | Val | 150000 | 16 | Yes | No | No | 44.62 | [Log](http
 OCR | HRNet-W48 | Train | Val | 150000 | 16 | Yes | Yes | Yes | 46.19 | same as above | scripts/ade20k/hrnet/run_h_48_d_4_ocr_ohem.sh |
 OCR | HRNet-W48 (Paddle) | Train | Val | 150000 | 16 | Yes | No | No | --- | [Log]() / [Model]() | scripts/ade20k/hrnet/run_h_48_d_4_ocr_ohem_paddle.sh |
 OCR | HRNet-W48 (Paddle) | Train | Val | 150000 | 16 | Yes | Yes | Yes | --- | same as above | scripts/ade20k/hrnet/run_h_48_d_4_ocr_ohem_paddle.sh |
-OCR+RMI | HRNet-W48 (Paddle) | Train | Val | 150000 | 16 | Yes | No | No | 46.59 | [Log]() / [Model]() | scripts/ade20k/hrnet/run_h_48_d_4_ocr_rmi_paddle.sh |
+OCR+RMI | HRNet-W48 (Paddle) | Train | Val | 150000 | 16 | Yes | No | No | 46.59 | [Log](https://github.com/openseg-group/openseg.pytorch/releases/download/v1.0/ade20k_hrnet_w48_ocr_hrnet48_rmi_paddle.log) / [Model](https://github.com/openseg-group/openseg.pytorch/releases/download/v1.0/ade20k_hrnet_w48_ocr_hrnet48_rmi_paddle_latest.pth) | scripts/ade20k/hrnet/run_h_48_d_4_ocr_rmi_paddle.sh |
 OCR+RMI | HRNet-W48 (Paddle) | Train | Val | 150000 | 16 | Yes | Yes | Yes | 47.98 | same as above | scripts/ade20k/hrnet/run_h_48_d_4_ocr_rmi_paddle.sh |
 
 
