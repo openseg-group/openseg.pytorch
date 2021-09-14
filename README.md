@@ -14,6 +14,9 @@
 
 ## News
 
+- 2021/09/14 [MMSegmentation](https://github.com/open-mmlab/mmsegmentation) has supported our ISANet and refer to [ISANet](https://github.com/open-mmlab/mmsegmentation/tree/master/configs/isanet) for more details.
+
+
 - 2021/08/13 We have released the implementation for [HRFormer](https://github.com/HRNet/HRFormer) and the combination of HRFormer and OCR achieves better semantic segmentation performance.
 
 
