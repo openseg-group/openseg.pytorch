@@ -14,6 +14,8 @@
 
 ## News
 
+- 2022/03/09 [MLSeg](https://github.com/openseg-group/MLSeg) is a more effective formulation of general segmentation problem and improves various SOTA segmentation methods across multiple benchmarks.
+
 - 2021/09/14 [MMSegmentation](https://github.com/open-mmlab/mmsegmentation) has supported our ISANet and refer to [ISANet](https://github.com/open-mmlab/mmsegmentation/tree/master/configs/isanet) for more details.
 
 
