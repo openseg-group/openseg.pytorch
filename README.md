@@ -14,9 +14,9 @@
 
 ## News
 
-- 2022/08/06 [HDETR](https://github.com/HDETR) is a general and effective scheme to improve DETRs for various fundamental vision tasks.
+- 2022/08/07 [HDETR](https://github.com/HDETR) is a general and effective scheme to improve DETRs for various fundamental vision tasks. [H-Deformable-DETR](https://github.com/HDETR/H-Deformable-DETR) (**strong results on COCO object detection**)  [H-PETR-3D](https://github.com/HDETR/H-PETR-3D) (**strong results on nuScenes**)  [H-PETR-Pose](https://github.com/HDETR/H-PETR-Pose) (**strong results on COCO pose estimation**)
 
-- 2022/03/09 [MLSeg](https://github.com/openseg-group/MLSeg) is a more effective formulation of general segmentation problem and improves various SOTA segmentation methods across multiple benchmarks.
+- 2022/03/09 [RankSeg](https://github.com/openseg-group/RankSeg) is a more effective formulation of general segmentation problem and improves various SOTA segmentation methods across multiple benchmarks.
 
 - 2021/09/14 [MMSegmentation](https://github.com/open-mmlab/mmsegmentation) has supported our ISANet and refer to [ISANet](https://github.com/open-mmlab/mmsegmentation/tree/master/configs/isanet) for more details.
 
